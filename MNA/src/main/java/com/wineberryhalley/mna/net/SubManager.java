@@ -20,7 +20,6 @@ import java.util.Random;
 
 import static androidx.annotation.RestrictTo.Scope.LIBRARY;
 
-@RestrictTo(LIBRARY)
 public class SubManager {
     protected SubManager(){
 
