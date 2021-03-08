@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.wineberryhalley.mnaapp">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MNAApp">
+
+        <meta-data
+            android:name="com.mna.hot"
+            android:value="aHR0cHM6Ly9jb25zb2xlLndpbmViZXJyeWhhbGxleS5jbG91ZC9hZG1pbi9hZHNraXQvYXBpL2luZGV4LnBocA=="
+            />
+
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
