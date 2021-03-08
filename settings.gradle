@@ -1,4 +1,3 @@
-include ':unity-ads'
 include ':MNA'
 include ':app'
 rootProject.name = "MNA app"
