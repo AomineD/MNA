@@ -29,17 +29,23 @@ public class UnityMNA extends AdMNA {
         context = ChalaEdChala.context;
         config(adMNA);
 
-try {
-    initializeListener = (InitializeListener) activity;
-}catch (Exception e){
 
-}
 
         try {
             activity = AdManager.getActivity();
+
+            try {
+                initializeListener = (InitializeListener) activity;
+            }catch (Exception e){
+
+            }
+
         }  catch (Exception e) {
 
         }
+
+
+
         if (!initialized && !getting) {
             UnityAds.addListener(new IUnityAdsListener() {
                 @Override
