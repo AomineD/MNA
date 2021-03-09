@@ -19,6 +19,8 @@ import com.wineberryhalley.mna.base.MListener;
 import com.wineberryhalley.mna.base.RewardListener;
 import com.wineberryhalley.mna.base.UnityListener;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class UnityMNA extends AdMNA {
     private Context context;
     private static boolean initialized = false;
@@ -57,7 +59,7 @@ public class UnityMNA extends AdMNA {
 
                     c_un_count++;
 
-                    if(c_un_count > 3) {
+                    if(c_un_count > 3 && !initialized) {
                         initialized = true;
 
 
@@ -459,6 +461,15 @@ private boolean isInitialized(){
         if(AdManager.testAds){
             Log.e(TAG, "isInitialized: initialized "+(initialized && activity != null) + " activity "+(activity != null) );
         }
+
+        if(activity == null){
+            try {
+                activity = AdManager.getActivity();
+            } catch (Exception e) {
+
+            }
+        }
+
         return initialized && activity != null;
 }
 
