@@ -50,11 +50,14 @@ public class UnityMNA extends AdMNA {
             UnityAds.addListener(new IUnityAdsListener() {
                 @Override
                 public void onUnityAdsReady(String s) {
+
+                    initialized = true;
+                    UnityAds.removeListener(this);
+
                     if(initializeListener != null){
                         initializeListener.OnInitialized();
                     }
-                    initialized = true;
-                    UnityAds.removeListener(this);
+
                 }
 
 
@@ -71,11 +74,12 @@ public class UnityMNA extends AdMNA {
 
                 @Override
                 public void onUnityAdsError(UnityAds.UnityAdsError unityAdsError, String s) {
+
+                    //Log.e("MAIN", "onUnityAdsError: "+s );
+                    getting = false;
                     if(initializeListener != null){
                         initializeListener.OnInitializedError(s);
                     }
-                    //Log.e("MAIN", "onUnityAdsError: "+s );
-                    getting = false;
                 }
             });
             // Initialize the SDK:
