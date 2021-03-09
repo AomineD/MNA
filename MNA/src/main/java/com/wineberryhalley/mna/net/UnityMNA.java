@@ -50,14 +50,16 @@ public class UnityMNA extends AdMNA {
             UnityAds.addListener(new IUnityAdsListener() {
                 @Override
                 public void onUnityAdsReady(String s) {
+                    if(AdManager.testAds){
+                        Log.e(TAG, "onUnityAdsReady: "+s );
+                    }
 
                     initialized = true;
-                    UnityAds.removeListener(this);
+
 
                     if(initializeListener != null){
                         initializeListener.OnInitialized();
                     }
-
                 }
 
 
