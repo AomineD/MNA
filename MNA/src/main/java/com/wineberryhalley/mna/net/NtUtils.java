@@ -61,11 +61,11 @@ this.intre = a;
 
     private View banner_container;
     private OnNativeLoadInterface intre;
-    private String idsnat;
-    private ArrayList<View> clickables = new ArrayList<>();
+    private final String idsnat;
+    private final ArrayList<View> clickables = new ArrayList<>();
     private NativeAd nativeAd;
     private NativeBannerAd nativeBannerAd;
-    private Context context;
+    private final Context context;
 
 
     public interface OnNativeLoadInterface {

@@ -246,7 +246,6 @@ public class SubManager {
     /** BANNER NATIVO **/
 
     public void showBannerNativeIn(BannerNativeMNA nm){
-        if(AdManager.network == TypeNetwork.AUDIENCE) {
             ArrayList<AudienceMNA> mna = getArrayOf(TypeAd.BANNER_NATIVO);
             if (mna.size() > 0) {
                 int get = getIndex();
@@ -257,11 +256,10 @@ public class SubManager {
 
                 mna.get(get).showBannerNativeIn(nm);
             }
-        }
+
     }
 
     public void showBannerNativeIn(BannerNativeMNA nm, MListener listener){
-        if(AdManager.network == TypeNetwork.AUDIENCE) {
             ArrayList<AudienceMNA> mna = getArrayOf(TypeAd.BANNER_NATIVO);
             if (mna.size() > 0) {
                 int get = getIndex();
@@ -272,7 +270,7 @@ public class SubManager {
 
                 mna.get(get).showBannerNativeIn(nm, listener);
             }
-        }
+
     }
 
     /** =======================================================> **/
@@ -280,7 +278,6 @@ public class SubManager {
     /** NATIVO **/
 
     public void showNativeIn(NativeMNA nm){
-        if(AdManager.network == TypeNetwork.AUDIENCE) {
             ArrayList<AudienceMNA> mna = getArrayOf(TypeAd.NATIVO);
             if (mna.size() > 0) {
                 int get = getIndex();
@@ -291,11 +288,10 @@ public class SubManager {
 
                 mna.get(get).showNativeIn(nm);
             }
-        }
+
     }
 
     public void showNativeIn(NativeMNA nm, MListener listener){
-        if(AdManager.network == TypeNetwork.AUDIENCE) {
             ArrayList<AudienceMNA> mna = getArrayOf(TypeAd.NATIVO);
 
             if (mna.size() > 0) {
@@ -307,7 +303,7 @@ public class SubManager {
 
                 mna.get(get).showNativeIn(nm, listener);
             }
-        }
+
     }
 
     /** =======================================================> **/

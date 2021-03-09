@@ -1,5 +1,6 @@
 package com.wineberryhalley.mna.net;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -159,21 +160,25 @@ public class AdMNA implements DelayListener {
     }
 
     public TypeAd getType(){
-        int a = Integer.parseInt(ad_type);
-        switch (a){
-            case 0:
-                return TypeAd.BANNER;
-            case 1:
-                return TypeAd.INTERSTICIAL;
-            case 2:
-                return TypeAd.REWARD;
+        if(ad_type != null && TextUtils.isDigitsOnly(ad_type)) {
+            int a = Integer.parseInt(ad_type);
+            switch (a) {
+                case 0:
+                    return TypeAd.BANNER;
+                case 1:
+                    return TypeAd.INTERSTICIAL;
+                case 2:
+                    return TypeAd.REWARD;
 
-        }
+            }
 
-        if(a > 2 && a < 6){
-            return TypeAd.BANNER_NATIVO;
+            if (a > 2 && a < 6) {
+                return TypeAd.BANNER_NATIVO;
+            } else {
+                return TypeAd.NATIVO;
+            }
         }else{
-            return TypeAd.NATIVO;
+            return null;
         }
     }
 

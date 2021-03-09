@@ -72,7 +72,7 @@ queue = Volley.newRequestQueue(context);
             @Override
             public void onResponse(String responsea) {
 
-             //    Log.e("MAIN", "onResponse: "+responsea );
+           //     Log.e("MAIN", "onResponse: "+responsea );
                 try {
                     JSONObject response = new JSONObject(responsea);
                    // Log.e("MAIN", "onResponse: "+response.has("status") );
@@ -90,6 +90,11 @@ queue = Volley.newRequestQueue(context);
                         }
                         AdManager.network = network;
                             ArrayList<AdMNA> array =  configAds(response.getJSONArray("data"));
+
+                            if(response.has("native_ads")){
+                                array.addAll(configAds(response.getJSONArray("native_ads")));
+                            }
+
                             AdManager.addAds(array);
 
                    OnLoad();
