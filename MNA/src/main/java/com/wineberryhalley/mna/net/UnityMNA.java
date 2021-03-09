@@ -36,7 +36,7 @@ public class UnityMNA extends AdMNA {
             UnityAds.addListener(new IUnityAdsListener() {
                 @Override
                 public void onUnityAdsReady(String s) {
-                    //    Log.e("MAIN", "onUnityAdsReady: "+s );
+                        Log.e("MAIN", "onUnityAdsReady: ready" );
                     initialized = true;
                     UnityAds.removeListener(this);
                 }
@@ -267,7 +267,9 @@ public class UnityMNA extends AdMNA {
     @Override
     public void showInterstitialAd(InterstitialListener listener) {
 
-
+        if(AdManager.testAds) {
+            Log.e(TAG, "showInterstitialAd: first "+(isInitialized())+" second: "+(UnityAds.isReady (getValue())) );
+        }
             if (isInitialized() && UnityAds.isReady (getValue())) {
 
                 UnityAds.addListener(new UnityListener(getType()){
@@ -423,6 +425,9 @@ return  new BannerView(activity, getValue(), size);
 }
 
 private boolean isInitialized(){
+        if(AdManager.testAds){
+            Log.e(TAG, "isInitialized: initialized "+(initialized && activity != null) + " activity "+(activity != null) );
+        }
         return initialized && activity != null;
 }
 
