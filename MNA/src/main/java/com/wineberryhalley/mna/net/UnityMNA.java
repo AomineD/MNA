@@ -294,6 +294,7 @@ public class UnityMNA extends AdMNA {
                 });
                 UnityAds.show (activity, getValue());
             }else if(isInitialized() && !UnityAds.isReady (getValue())){
+                listener.OnError("still not load "+getName());
                 UnityAds.load(getValue(), new IUnityAdsLoadListener() {
                     @Override
                     public void onUnityAdsAdLoaded(String s) {
