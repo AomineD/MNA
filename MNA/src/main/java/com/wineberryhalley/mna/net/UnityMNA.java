@@ -13,6 +13,7 @@ import com.unity3d.services.banners.BannerErrorInfo;
 import com.unity3d.services.banners.BannerView;
 import com.unity3d.services.banners.UnityBannerSize;
 import com.wineberryhalley.mna.base.DelayListener;
+import com.wineberryhalley.mna.base.InitializeListener;
 import com.wineberryhalley.mna.base.InterstitialListener;
 import com.wineberryhalley.mna.base.MListener;
 import com.wineberryhalley.mna.base.RewardListener;
@@ -23,9 +24,16 @@ public class UnityMNA extends AdMNA {
     private static boolean initialized = false;
     private static boolean getting = false;
     Activity activity = null;
+    InitializeListener initializeListener;
     public UnityMNA(AdMNA adMNA) {
         context = ChalaEdChala.context;
         config(adMNA);
+
+try {
+    initializeListener = (InitializeListener) activity;
+}catch (Exception e){
+
+}
 
         try {
             activity = AdManager.getActivity();
@@ -36,7 +44,9 @@ public class UnityMNA extends AdMNA {
             UnityAds.addListener(new IUnityAdsListener() {
                 @Override
                 public void onUnityAdsReady(String s) {
-                        Log.e("MAIN", "onUnityAdsReady: ready" );
+                    if(initializeListener != null){
+                        initializeListener.OnInitialized();
+                    }
                     initialized = true;
                     UnityAds.removeListener(this);
                 }
@@ -44,6 +54,7 @@ public class UnityMNA extends AdMNA {
 
                 @Override
                 public void onUnityAdsStart(String s) {
+                  if(AdManager.testAds)
                     Log.e(TAG, "onUnityAdsStart: "+s );
                 }
 
@@ -54,7 +65,10 @@ public class UnityMNA extends AdMNA {
 
                 @Override
                 public void onUnityAdsError(UnityAds.UnityAdsError unityAdsError, String s) {
-                    Log.e("MAIN", "onUnityAdsError: "+s );
+                    if(initializeListener != null){
+                        initializeListener.OnInitializedError(s);
+                    }
+                    //Log.e("MAIN", "onUnityAdsError: "+s );
                     getting = false;
                 }
             });
