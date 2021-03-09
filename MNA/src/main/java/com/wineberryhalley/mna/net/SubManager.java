@@ -255,6 +255,7 @@ public class SubManager {
                 }
 
                 mna.get(get).showBannerNativeIn(nm);
+                saveIndex();
             }
 
     }
@@ -269,6 +270,7 @@ public class SubManager {
                 }
 
                 mna.get(get).showBannerNativeIn(nm, listener);
+                saveIndex();
             }
 
     }
@@ -287,6 +289,7 @@ public class SubManager {
                 }
 
                 mna.get(get).showNativeIn(nm);
+                saveIndex();
             }
 
     }
@@ -302,6 +305,7 @@ public class SubManager {
                 }
 
                 mna.get(get).showNativeIn(nm, listener);
+                saveIndex();
             }
 
     }
