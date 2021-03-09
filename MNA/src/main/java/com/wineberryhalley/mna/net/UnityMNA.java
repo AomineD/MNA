@@ -23,6 +23,7 @@ public class UnityMNA extends AdMNA {
     private Context context;
     private static boolean initialized = false;
     private static boolean getting = false;
+    private static int c_un_count = 0;
     Activity activity = null;
     InitializeListener initializeListener;
     public UnityMNA(AdMNA adMNA) {
@@ -54,11 +55,15 @@ public class UnityMNA extends AdMNA {
                         Log.e(TAG, "onUnityAdsReady: "+s );
                     }
 
-                    initialized = true;
+                    c_un_count++;
+
+                    if(c_un_count > 3) {
+                        initialized = true;
 
 
-                    if(initializeListener != null){
-                        initializeListener.OnInitialized();
+                        if (initializeListener != null) {
+                            initializeListener.OnInitialized();
+                        }
                     }
                 }
 
