@@ -96,11 +96,14 @@ queue = Volley.newRequestQueue(context);
                             }
 
                             AdManager.addAds(array);
-if(AdManager.network == TypeNetwork.UNITYADS){
-    UnityMNA.initialize();
-}
+
                    OnLoad();
                         isLoaded = true;
+                        if(AdManager.network == TypeNetwork.UNITYADS){
+                            UnityMNA.initialize();
+                        }else{
+                            AdMNA.initializeNormal();
+                        }
                         //Log.e("MAIN", "onResponse: "+response.toString() );
                     }else{
                         OnError(response.getString("data"));

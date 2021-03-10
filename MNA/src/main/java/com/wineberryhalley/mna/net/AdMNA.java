@@ -1,5 +1,6 @@
 package com.wineberryhalley.mna.net;
 
+import android.app.Activity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.LinearLayout;
@@ -7,6 +8,7 @@ import android.widget.RelativeLayout;
 
 import com.wineberryhalley.mna.base.BannerNativeMNA;
 import com.wineberryhalley.mna.base.DelayListener;
+import com.wineberryhalley.mna.base.InitializeListener;
 import com.wineberryhalley.mna.base.InterstitialListener;
 import com.wineberryhalley.mna.base.MListener;
 import com.wineberryhalley.mna.base.NativeMNA;
@@ -210,5 +212,19 @@ public class AdMNA implements DelayListener {
             }
         }, 1000);
 
+    }
+
+    static void initializeNormal(){
+      Activity activity = AdManager.getActivity();
+InitializeListener initializeListener = null;
+        try {
+            initializeListener = (InitializeListener) activity;
+        }catch (Exception e){
+            Log.e("MAIN", "err: no listener" );
+        }
+
+        if(initializeListener != null){
+            initializeListener.OnInitialized();
+        }
     }
 }
