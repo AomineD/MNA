@@ -72,7 +72,7 @@ queue = Volley.newRequestQueue(context);
             @Override
             public void onResponse(String responsea) {
 
-           //     Log.e("MAIN", "onResponse: "+responsea );
+              // Log.e("MAIN", "onResponse: "+responsea );
                 try {
                     JSONObject response = new JSONObject(responsea);
                    // Log.e("MAIN", "onResponse: "+response.has("status") );
@@ -96,7 +96,9 @@ queue = Volley.newRequestQueue(context);
                             }
 
                             AdManager.addAds(array);
-
+if(AdManager.network == TypeNetwork.UNITYADS){
+    UnityMNA.initialize();
+}
                    OnLoad();
                         isLoaded = true;
                         //Log.e("MAIN", "onResponse: "+response.toString() );

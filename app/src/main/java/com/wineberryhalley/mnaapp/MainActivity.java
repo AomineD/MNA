@@ -2,6 +2,7 @@ package com.wineberryhalley.mnaapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,13 +11,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wineberryhalley.mna.base.BannerNativeMNA;
+import com.wineberryhalley.mna.base.InitializeListener;
 import com.wineberryhalley.mna.base.InterstitialListener;
 import com.wineberryhalley.mna.base.MListener;
 import com.wineberryhalley.mna.base.NativeMNA;
 import com.wineberryhalley.mna.base.RewardListener;
 import com.wineberryhalley.mna.net.AdManager;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements InitializeListener {
 
     private View showIntersUn, showIntersFrec;
     private TextView txt;
@@ -47,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         showIntersFrec.setOnClickListener(clickInterstitialFrec());
         final LinearLayout lin = findViewById(R.id.linlay);
         AdManager.get().test(true);
-
+/*
         if(AdManager.get().checkIfLoad()){
             load(lin);
          //   Toast.makeText(this, "Cargo", Toast.LENGTH_SHORT).show();
@@ -64,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
       }
   });
 
-        }
+        }*/
 
     }
 
@@ -183,5 +185,15 @@ AdManager.get().manage().showInterstitialAd(new InterstitialListener(){
             AdManager.get().manage().showNativeIn(a);
 
         }
+    }
+
+    @Override
+    public void OnInitialized() {
+        startActivity(new Intent(this, SecondActivity.class));
+    }
+
+    @Override
+    public void OnInitializedError(String error) {
+        Log.e("MAIN", "OnInitializedError: "+error );
     }
 }

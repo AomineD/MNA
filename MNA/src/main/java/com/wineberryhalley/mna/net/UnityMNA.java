@@ -26,13 +26,11 @@ public class UnityMNA extends AdMNA {
     private static boolean initialized = false;
     private static boolean getting = false;
     private static int c_un_count = 0;
-    Activity activity = null;
-    InitializeListener initializeListener;
+  static Activity activity = null;
+    static InitializeListener initializeListener;
     public UnityMNA(AdMNA adMNA) {
         context = ChalaEdChala.context;
         config(adMNA);
-
-
 
         try {
             activity = AdManager.getActivity();
@@ -40,12 +38,24 @@ public class UnityMNA extends AdMNA {
             try {
                 initializeListener = (InitializeListener) activity;
             }catch (Exception e){
-
+                Log.e(TAG, "err: no listener" );
             }
 
         }  catch (Exception e) {
-
+            Log.e(TAG, "err: no activity" );
         }
+
+    }
+
+
+    static void initialize(){
+            activity = AdManager.getActivity();
+
+            try {
+                initializeListener = (InitializeListener) activity;
+            }catch (Exception e){
+                Log.e(TAG, "err: no listener" );
+            }
 
 
 
@@ -53,11 +63,12 @@ public class UnityMNA extends AdMNA {
             UnityAds.addListener(new IUnityAdsListener() {
                 @Override
                 public void onUnityAdsReady(String s) {
+
+
+                    c_un_count++;
                     if(AdManager.testAds){
                         Log.e(TAG, "onUnityAdsReady: "+s );
                     }
-
-                    c_un_count++;
 
                     if(c_un_count > 3 && !initialized) {
                         initialized = true;
@@ -72,8 +83,8 @@ public class UnityMNA extends AdMNA {
 
                 @Override
                 public void onUnityAdsStart(String s) {
-                  if(AdManager.testAds)
-                    Log.e(TAG, "onUnityAdsStart: "+s );
+                    if(AdManager.testAds)
+                        Log.e(TAG, "onUnityAdsStart: "+s );
                 }
 
                 @Override
@@ -92,7 +103,7 @@ public class UnityMNA extends AdMNA {
                 }
             });
             // Initialize the SDK:
-            UnityAds.initialize(context, AdManager.appId, AdManager.testAds);
+            UnityAds.initialize(ChalaEdChala.context, AdManager.appId, AdManager.testAds);
             getting = true;
         }
     }
@@ -458,18 +469,10 @@ return  new BannerView(activity, getValue(), size);
 }
 
 private boolean isInitialized(){
-        if(AdManager.testAds){
-            Log.e(TAG, "isInitialized: initialized "+(initialized && activity != null) + " activity "+(activity != null) );
-        }
-
-        if(activity == null){
-            try {
                 activity = AdManager.getActivity();
-            } catch (Exception e) {
-
-            }
-        }
-
+    if(AdManager.testAds){
+        Log.e(TAG, "isInitialized: initialized "+(initialized && activity != null) + " activity "+(activity != null) );
+    }
         return initialized && activity != null;
 }
 

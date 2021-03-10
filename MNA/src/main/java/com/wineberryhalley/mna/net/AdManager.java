@@ -1,8 +1,10 @@
 package com.wineberryhalley.mna.net;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.facebook.ads.AdSettings;
+import com.wineberryhalley.mna.base.MNApp;
 import com.wineberryhalley.mna.base.TypeNetwork;
 
 import java.lang.reflect.Field;
@@ -58,29 +60,14 @@ if(subManager == null){
 
 static String appId = "";
 
-    static Activity getActivity() throws NoSuchFieldException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        Class activityThreadClass = Class.forName("android.app.ActivityThread");
-        Object activityThread = activityThreadClass.getMethod("currentActivityThread").invoke(null);
-        Field activitiesField = activityThreadClass.getDeclaredField("mActivities");
-        activitiesField.setAccessible(true);
+    static Activity getActivity() {
 
-        Map<Object, Object> activities = (Map<Object, Object>) activitiesField.get(activityThread);
-        if (activities == null)
+        if (MNApp.mnApp != null && MNApp.mnApp.getCurrent() != null) {
+return MNApp.mnApp.getCurrent();
+        } else {
+            // Log.e("MAIN", "getActivity: paso" );
             return null;
-
-        for (Object activityRecord : activities.values()) {
-            Class activityRecordClass = activityRecord.getClass();
-            Field pausedField = activityRecordClass.getDeclaredField("paused");
-            pausedField.setAccessible(true);
-            if (!pausedField.getBoolean(activityRecord)) {
-                Field activityField = activityRecordClass.getDeclaredField("activity");
-                activityField.setAccessible(true);
-                Activity activity = (Activity) activityField.get(activityRecord);
-                return activity;
-            }
         }
-
-        return null;
     }
 
 }

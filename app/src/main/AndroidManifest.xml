@@ -3,17 +3,18 @@
     package="com.wineberryhalley.mnaapp">
 
     <application
+        android:name="com.wineberryhalley.mna.base.MNApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MNAApp">
+        <activity android:name=".SecondActivity"></activity>
 
         <meta-data
             android:name="com.mna.hot"
-            android:value="aHR0cHM6Ly9jb25zb2xlLndpbmViZXJyeWhhbGxleS5jbG91ZC9hZG1pbi9hZHNraXQvYXBpL2luZGV4LnBocA=="
-            />
+            android:value="aHR0cHM6Ly9jb25zb2xlLndpbmViZXJyeWhhbGxleS5jbG91ZC9hZG1pbi9hZHNraXQvYXBpL2luZGV4LnBocA==" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
