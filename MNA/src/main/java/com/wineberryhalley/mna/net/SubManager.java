@@ -2,10 +2,9 @@ package com.wineberryhalley.mna.net;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-
-import androidx.annotation.RestrictTo;
 
 import com.wineberryhalley.mna.base.BannerNativeMNA;
 import com.wineberryhalley.mna.base.InterstitialListener;
@@ -16,9 +15,6 @@ import com.wineberryhalley.mna.base.TypeAd;
 import com.wineberryhalley.mna.base.TypeNetwork;
 
 import java.util.ArrayList;
-import java.util.Random;
-
-import static androidx.annotation.RestrictTo.Scope.LIBRARY;
 
 public class SubManager {
     protected SubManager(){
@@ -66,6 +62,19 @@ public class SubManager {
 
     }
 
+    private AdmobMNA getOfTypeAdmob(TypeAd typeAd){
+        AdmobMNA admobMNA = null;
+        for (AdMNA ad :
+                ads) {
+            if(ad.getType() == typeAd) {
+                admobMNA = new AdmobMNA(ad);
+                break;
+            }
+        }
+        return admobMNA;
+
+    }
+
     protected ArrayList<AdMNA> ads = new ArrayList<>();
 /** BANNER AD **/
     public void showBannerAd(LinearLayout linearLayout){
@@ -91,6 +100,16 @@ public class SubManager {
             }
             if(unityMNA != null)
                 unityMNA.showBannerAd(linearLayout);
+        }else if(AdManager.network == TypeNetwork.ADMOB){
+            AdmobMNA admobMNA = null;
+            for (AdMNA ad :
+                    ads) {
+                if(ad.getType() == TypeAd.BANNER) {
+                    admobMNA = new AdmobMNA(ad);
+                }
+            }
+            if(admobMNA != null)
+                admobMNA.showBannerAd(linearLayout);
         }
 
     }
@@ -126,6 +145,22 @@ public class SubManager {
             else{
                 listener.OnError("No banners");
             }
+        }else if(AdManager.network == TypeNetwork.ADMOB){
+
+            AdmobMNA admobMNA = null;
+            for (AdMNA ad :
+                    ads) {
+                if(ad.getType() == TypeAd.BANNER) {
+                    admobMNA = new AdmobMNA(ad);
+                    break;
+                }
+            }
+            if(admobMNA != null)
+                admobMNA.showBannerAd(linearLayout, listener);
+            else{
+                listener.OnError("No banners");
+            }
+
         }
 
     }
@@ -141,6 +176,10 @@ public class SubManager {
             UnityMNA unityMNA = getOfTypeUnity(TypeAd.BANNER);
             if(unityMNA != null)
                 unityMNA.showBannerAd(relativeLayout);
+        }else if(AdManager.network == TypeNetwork.ADMOB){
+            AdmobMNA admobMNA = getOfTypeAdmob(TypeAd.BANNER);
+            if(admobMNA != null)
+                admobMNA.showBannerAd(relativeLayout);
         }
 
     }
@@ -164,6 +203,16 @@ public class SubManager {
                 listener.OnError("No banners");
 
             }
+        }else if(AdManager.network == TypeNetwork.ADMOB){
+
+            AdmobMNA admobMNA = getOfTypeAdmob(TypeAd.BANNER);
+            if (admobMNA != null)
+                admobMNA.showBannerAd(relativeLayout, listener);
+            else {
+                listener.OnError("No banners");
+
+            }
+
         }
     }
 
@@ -189,6 +238,14 @@ public class SubManager {
                 listener.OnError("No interstitial");
 
             }
+        }else if(AdManager.network == TypeNetwork.ADMOB){
+            AdmobMNA admobMNA = getOfTypeAdmob(TypeAd.INTERSTICIAL);
+            if (admobMNA != null)
+                admobMNA.showInterstitalAdFrecuency(frec, listener);
+            else {
+                listener.OnError("No interstitial");
+
+            }
         }
     }
 
@@ -207,6 +264,15 @@ public class SubManager {
             UnityMNA unityMNA  = getOfTypeUnity(TypeAd.INTERSTICIAL);
             if (unityMNA != null)
                 unityMNA.showInterstitialAd(listener);
+            else {
+                listener.OnError("No interstitial");
+
+            }
+        }else if(AdManager.network == TypeNetwork.ADMOB){
+
+            AdmobMNA admobMNA  = getOfTypeAdmob(TypeAd.INTERSTICIAL);
+            if (admobMNA != null)
+                admobMNA.showInterstitialAd(listener);
             else {
                 listener.OnError("No interstitial");
 
@@ -239,6 +305,16 @@ public class SubManager {
                 rewardListener.OnError("No interstitial");
 
             }
+        }else if(AdManager.network == TypeNetwork.ADMOB){
+
+            AdmobMNA admobMNA = getOfTypeAdmob(TypeAd.REWARD);
+            if (admobMNA != null)
+                admobMNA.showRewardedAd(rewardListener);
+            else {
+                rewardListener.OnError("No interstitial");
+
+            }
+
         }
     }
 
@@ -280,6 +356,13 @@ public class SubManager {
     /** NATIVO **/
 
     public void showNativeIn(NativeMNA nm){
+        if(AdManager.network == TypeNetwork.ADMOB){
+            AdmobMNA admobMNA = getOfTypeAdmob(TypeAd.NATIVO);
+
+            admobMNA.showNativeIn(nm);
+        }else{
+
+
             ArrayList<AudienceMNA> mna = getArrayOf(TypeAd.NATIVO);
             if (mna.size() > 0) {
                 int get = getIndex();
@@ -291,10 +374,17 @@ public class SubManager {
                 mna.get(get).showNativeIn(nm);
                 saveIndex();
             }
-
+        }
     }
 
     public void showNativeIn(NativeMNA nm, MListener listener){
+        if(AdManager.network == TypeNetwork.ADMOB){
+
+            AdmobMNA admobMNA = getOfTypeAdmob(TypeAd.NATIVO);
+
+            admobMNA.showNativeIn(nm, listener);
+
+        }else {
             ArrayList<AudienceMNA> mna = getArrayOf(TypeAd.NATIVO);
 
             if (mna.size() > 0) {
@@ -307,7 +397,7 @@ public class SubManager {
                 mna.get(get).showNativeIn(nm, listener);
                 saveIndex();
             }
-
+        }
     }
 
     /** =======================================================> **/

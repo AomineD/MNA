@@ -82,7 +82,18 @@ queue = Volley.newRequestQueue(context);
 
 
                     //
-                        TypeNetwork network = response.getString("type").equals("1") ? TypeNetwork.AUDIENCE : TypeNetwork.UNITYADS;
+                        TypeNetwork network = TypeNetwork.AUDIENCE;
+                     switch (response.getString("type")){
+                         case "1":
+                             network = TypeNetwork.AUDIENCE;
+                             break;
+                         case "2":
+                             network = TypeNetwork.UNITYADS;
+                             break;
+                         case "3":
+                             network = TypeNetwork.ADMOB;
+                             break;
+                     }
                       id_network = response.getString("type");
                        // Log.e("MAIN", "onResponse: "+network.name() );
                         if(network != TypeNetwork.AUDIENCE && response.has("app_id")){
@@ -104,7 +115,7 @@ queue = Volley.newRequestQueue(context);
                         }else{
                             AdMNA.initializeNormal();
                         }
-                        //Log.e("MAIN", "onResponse: "+response.toString() );
+                        Log.e("MAIN", "onResponse: "+response.toString() );
                     }else{
                         OnError(response.getString("data"));
                     }

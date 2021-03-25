@@ -3,7 +3,9 @@
     package="com.wineberryhalley.mna">
 <uses-permission android:name="android.permission.INTERNET"/>
     <application>
-
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713"/>
         <provider
             android:name=".net.ChalaEdChala"
             android:authorities="${applicationId}.c"

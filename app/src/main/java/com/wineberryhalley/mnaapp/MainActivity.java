@@ -189,7 +189,9 @@ AdManager.get().manage().showInterstitialAd(new InterstitialListener(){
 
     @Override
     public void OnInitialized() {
-        startActivity(new Intent(this, SecondActivity.class));
+        Log.e("MAIN", "OnInitialized: alv" );
+        load(findViewById(R.id.linlay));
+        //startActivity(new Intent(this, SecondActivity.class));
     }
 
     @Override

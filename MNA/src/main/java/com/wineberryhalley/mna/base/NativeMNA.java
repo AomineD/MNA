@@ -34,13 +34,22 @@ public class NativeMNA extends LinearLayout {
 
 
     private View ah;
-    public View getView(){
+    public View getView(TypeNetwork typeNetwork){
+        ah = null;
+        if(typeNetwork == TypeNetwork.ADMOB){
+
+            ah =  LayoutInflater.from(getContext()).inflate(R.layout.mna_native_ad_admob, (ViewGroup) getRootView(), false);
+            ah.setVisibility(GONE);
+            addView(ah);
+        }else{
+            ah =  LayoutInflater.from(getContext()).inflate(R.layout.mna_native_ad_facebook, (ViewGroup) getRootView(), false);
+            ah.setVisibility(GONE);
+            addView(ah);
+        }
         return ah;
     }
+
     private void config(){
-      ah = null;
-        ah =  LayoutInflater.from(getContext()).inflate(R.layout.mna_native_ad_facebook, (ViewGroup) getRootView(), false);
- ah.setVisibility(GONE);
-   addView(ah);
+
     }
 }
