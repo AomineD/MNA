@@ -232,6 +232,7 @@ adView.setAdListener(new AdListener(){
                 }
             });
         }else{
+            listener.OnError("No activity to show intersticial");
 trySetActivity();
         }
         }
@@ -278,6 +279,7 @@ trySetActivity();
                     }
                 });
             }else{
+                listener.OnError("No activity to show intersticial");
                 trySetActivity();
             }
         }else{
@@ -331,6 +333,7 @@ trySetActivity();
                 }
             });
         }else{
+            rewardListener.OnError("No activity to show reward");
             trySetActivity();
         }
 
