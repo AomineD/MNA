@@ -356,7 +356,7 @@ public class SubManager {
     /** NATIVO **/
 
     public void showNativeIn(NativeMNA nm){
-        if(AdManager.network == TypeNetwork.ADMOB){
+        if(AdManager.natives_network == TypeNetwork.ADMOB){
             AdmobMNA admobMNA = getOfTypeAdmob(TypeAd.NATIVO);
 
             admobMNA.showNativeIn(nm);
@@ -378,7 +378,7 @@ public class SubManager {
     }
 
     public void showNativeIn(NativeMNA nm, MListener listener){
-        if(AdManager.network == TypeNetwork.ADMOB){
+        if(AdManager.natives_network == TypeNetwork.ADMOB){
 
             AdmobMNA admobMNA = getOfTypeAdmob(TypeAd.NATIVO);
 

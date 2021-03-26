@@ -27,6 +27,7 @@ if(subManager == null){
 
 
     static TypeNetwork network;
+    static TypeNetwork natives_network;
 
     public static AdManager get(){
         return new AdManager();

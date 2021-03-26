@@ -82,19 +82,10 @@ queue = Volley.newRequestQueue(context);
 
 
                     //
-                        TypeNetwork network = TypeNetwork.AUDIENCE;
-                     switch (response.getString("type")){
-                         case "1":
-                             network = TypeNetwork.AUDIENCE;
-                             break;
-                         case "2":
-                             network = TypeNetwork.UNITYADS;
-                             break;
-                         case "3":
-                             network = TypeNetwork.ADMOB;
-                             break;
-                     }
+                        TypeNetwork  network = getOf(response.getString("type"));
+                        AdManager.natives_network = getOf(response.getString("native_type"));
                       id_network = response.getString("type");
+
                        // Log.e("MAIN", "onResponse: "+network.name() );
                         if(network != TypeNetwork.AUDIENCE && response.has("app_id")){
                             AdManager.appId = response.getString("app_id");
@@ -308,5 +299,21 @@ a.put("get_ads", "a");
         }
 
         return (ArrayList<T>) adMNAS;
+    }
+
+    private TypeNetwork getOf(String response) {
+        TypeNetwork network = TypeNetwork.AUDIENCE;
+        switch (response){
+            case "1":
+                network = TypeNetwork.AUDIENCE;
+                break;
+            case "2":
+                network = TypeNetwork.UNITYADS;
+                break;
+            case "3":
+                network = TypeNetwork.ADMOB;
+                break;
+        }
+        return network;
     }
 }
