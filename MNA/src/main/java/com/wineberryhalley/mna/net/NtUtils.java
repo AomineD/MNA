@@ -526,7 +526,7 @@ loadBannerAgain();
 
         // These assets aren't guaranteed to be in every UnifiedNativeAd, so it's important to
         // check before trying to display them.
-        Log.e(TAG, "populateUnifiedNativeAdView: "+nativeAd.getBody() );
+      //  Log.e(TAG, "populateUnifiedNativeAdView: "+nativeAd.getBody() );
         if (nativeAd.getBody() == null) {
             adView.getBodyView().setVisibility(View.INVISIBLE);
         } else {
