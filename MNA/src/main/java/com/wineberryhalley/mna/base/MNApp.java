@@ -38,7 +38,7 @@ public class MNApp extends Application implements Application.ActivityLifecycleC
 
     @Override
     public void onActivityResumed(@NonNull Activity activity) {
-        Log.e(TAG, "onActivityCreated: "+activity.getClass().getSimpleName() );
+     //   Log.e(TAG, "onActivityCreated: "+activity.getClass().getSimpleName() );
         current = activity;
     }
 
