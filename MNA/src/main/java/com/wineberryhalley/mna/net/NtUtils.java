@@ -64,7 +64,7 @@ this.intre = a;
     }
 
     public void into(NativeMNA bn){
-        this.banner_container = bn.getView(AdManager.network);
+        this.banner_container = bn.getView(AdManager.natives_network);
     }
 
     private View banner_container;
