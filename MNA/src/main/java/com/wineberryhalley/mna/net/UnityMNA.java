@@ -342,7 +342,7 @@ public class UnityMNA extends AdMNA {
                     }
                 });
                 if(testAds){
-                    Log.e(TAG, "showInterstitialAd: showing interstitial"+getType().name()+" value: "+getValue() );
+                    Log.e(TAG, "showInterstitialAd: showing interstitial "+getType().name()+" value: "+getValue()+" in activity "+activity.getClass().getCanonicalName() );
                 }
                 UnityAds.show (activity, getValue());
             }else if(isInitialized() && !UnityAds.isReady (getValue())){
