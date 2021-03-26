@@ -115,7 +115,7 @@ queue = Volley.newRequestQueue(context);
                         }else{
                             AdMNA.initializeNormal();
                         }
-                        Log.e("MAIN", "onResponse: "+response.toString() );
+                     //   Log.e("MAIN", "onResponse: "+response.toString() );
                     }else{
                         OnError(response.getString("data"));
                     }

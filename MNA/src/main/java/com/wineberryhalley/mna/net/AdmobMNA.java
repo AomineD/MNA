@@ -24,6 +24,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
+import com.wineberryhalley.mna.R;
 import com.wineberryhalley.mna.base.InterstitialListener;
 import com.wineberryhalley.mna.base.MListener;
 import com.wineberryhalley.mna.base.NativeMNA;
@@ -34,6 +35,9 @@ public class AdmobMNA extends AdMNA{
     static Activity activity = null;
     public AdmobMNA(AdMNA adMNA){
         context = ChalaEdChala.context;
+        if(AdManager.testAds){
+           adMNA.setValue(configAdsTestAdmob(adMNA));
+        }
         config(adMNA);
         try {
             activity = AdManager.getActivity();
@@ -44,7 +48,25 @@ public class AdmobMNA extends AdMNA{
             Log.e(TAG, "err: no activity" );
         }
     }
-private String TAG = "MAIN";
+
+    private String configAdsTestAdmob(AdMNA adMNA) {
+
+   switch (adMNA.getType()){
+       case BANNER:
+           return context.getString(R.string.banner_ad_test_admob);
+       case INTERSTICIAL:
+           return context.getString(R.string.interstitial_ad_test_admob);
+       case REWARD:
+           return context.getString(R.string.reward_ad_test_admob);
+       case NATIVO:
+           return context.getString(R.string.native_ad_test_admob);
+
+   }
+
+   return "";
+    }
+
+    private String TAG = "MAIN";
 
 
     @Override

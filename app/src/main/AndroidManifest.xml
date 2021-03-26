@@ -10,7 +10,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MNAApp">
-        <activity android:name=".SecondActivity"></activity>
+
+        <activity android:name=".SecondActivity">
+
+        </activity>
 
         <meta-data
             android:name="com.mna.hot"
