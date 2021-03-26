@@ -227,4 +227,18 @@ InitializeListener initializeListener = null;
             initializeListener.OnInitialized();
         }
     }
+
+    static void initializeError(String erno){
+        Activity activity = AdManager.getActivity();
+        InitializeListener initializeListener = null;
+        try {
+            initializeListener = (InitializeListener) activity;
+        }catch (Exception e){
+            Log.e("MAIN", "err: no listener" );
+        }
+
+        if(initializeListener != null){
+            initializeListener.OnInitializedError(erno);
+        }
+    }
 }

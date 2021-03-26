@@ -59,8 +59,8 @@ OnShow();
     @Override
     public void onUnityAdsFinish(String s, UnityAds.FinishState finishState) {
         if(typeAd == TypeAd.INTERSTICIAL) {
-            UnityAds.removeListener(this);
             OnClosed();
+            UnityAds.removeListener(this);
         }else if(typeAd == TypeAd.REWARD){
             if(finishState == UnityAds.FinishState.COMPLETED){
                 OnReward();

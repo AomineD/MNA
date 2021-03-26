@@ -283,6 +283,8 @@ a.put("get_ads", "a");
         Log.e(TAG, "OnError: "+erno );
         if(l != null)
             l.OnError(erno);
+
+        AdMNA.initializeError(erno);
     }
 
     private<T> ArrayList<T> configAds(JSONArray objectArray) throws JSONException {

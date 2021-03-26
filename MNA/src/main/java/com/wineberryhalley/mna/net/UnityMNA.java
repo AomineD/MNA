@@ -21,6 +21,8 @@ import com.wineberryhalley.mna.base.UnityListener;
 
 import java.lang.reflect.InvocationTargetException;
 
+import static com.wineberryhalley.mna.net.AdManager.testAds;
+
 public class UnityMNA extends AdMNA {
     private Context context;
     private static boolean initialized = false;
@@ -66,7 +68,7 @@ public class UnityMNA extends AdMNA {
 
 
                     c_un_count++;
-                    if(AdManager.testAds){
+                    if(testAds){
                         Log.e(TAG, "onUnityAdsReady: "+s );
                     }
 
@@ -83,7 +85,7 @@ public class UnityMNA extends AdMNA {
 
                 @Override
                 public void onUnityAdsStart(String s) {
-                    if(AdManager.testAds)
+                    if(testAds)
                         Log.e(TAG, "onUnityAdsStart: "+s );
                 }
 
@@ -103,7 +105,7 @@ public class UnityMNA extends AdMNA {
                 }
             });
             // Initialize the SDK:
-            UnityAds.initialize(ChalaEdChala.context, AdManager.appId, AdManager.testAds);
+            UnityAds.initialize(ChalaEdChala.context, AdManager.appId, testAds);
             getting = true;
         }
     }
@@ -311,10 +313,11 @@ public class UnityMNA extends AdMNA {
     @Override
     public void showInterstitialAd(InterstitialListener listener) {
 
-        if(AdManager.testAds) {
-            Log.e(TAG, "showInterstitialAd: first "+(isInitialized())+" second: "+(UnityAds.isReady (getValue())) );
+        if(testAds) {
+        //    Log.e(TAG, "showInterstitialAd: first "+(isInitialized())+" second: "+(UnityAds.isReady (getValue())) );
         }
             if (isInitialized() && UnityAds.isReady (getValue())) {
+
 
                 UnityAds.addListener(new UnityListener(getType()){
                     @Override
@@ -338,6 +341,9 @@ public class UnityMNA extends AdMNA {
                         listener.OnError(fail);
                     }
                 });
+                if(testAds){
+                    Log.e(TAG, "showInterstitialAd: showing interstitial"+getType().name()+" value: "+getValue() );
+                }
                 UnityAds.show (activity, getValue());
             }else if(isInitialized() && !UnityAds.isReady (getValue())){
                 listener.OnError("still not load "+getName());
@@ -470,7 +476,7 @@ return  new BannerView(activity, getValue(), size);
 
 private boolean isInitialized(){
                 activity = AdManager.getActivity();
-    if(AdManager.testAds){
+    if(testAds){
         Log.e(TAG, "isInitialized: initialized "+(initialized && activity != null) + " activity "+(activity != null) );
     }
         return initialized && activity != null;
