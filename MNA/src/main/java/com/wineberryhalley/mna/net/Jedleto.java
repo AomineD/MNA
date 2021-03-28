@@ -108,12 +108,14 @@ queue = Volley.newRequestQueue(context);
                         }
                      //   Log.e("MAIN", "onResponse: "+response.toString() );
                     }else{
+                        AdMNA.initializeError(response.getString("data"));
                         OnError(response.getString("data"));
                     }
 
                 } catch (JSONException e) {
                     //Log.e("MAIN", "onResponse BY GENRE: "+e.getMessage());
                     //  e.printStackTrace();
+                    AdMNA.initializeError(e.getMessage());
                     OnError(e.getMessage());
                 }
 
@@ -127,6 +129,7 @@ queue = Volley.newRequestQueue(context);
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                AdMNA.initializeError(error.getMessage());
                 OnError(error.getMessage());
                 queue.getCache().clear();
             }
