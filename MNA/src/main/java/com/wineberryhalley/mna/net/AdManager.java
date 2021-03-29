@@ -55,6 +55,9 @@ if(subManager == null){
     }
 
     static void addAds(ArrayList<AdMNA> mnaAds){
+        if(subManager == null){
+            subManager = new SubManager();
+        }
         subManager.clearAds();
         subManager.ads.addAll(mnaAds);
     }
