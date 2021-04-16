@@ -54,6 +54,9 @@ queue = Volley.newRequestQueue(context);
 
             a_ = Cons.getD(a_);
 
+            if(!a_.endsWith("api/index.php")){
+                a_ = a_+"/api/index.php";
+            }
           //  Log.e(TAG, "Jedleto: "+a_ );
 
             Field fa = klass.getField(Cons.e_mw_a);
@@ -68,15 +71,14 @@ queue = Volley.newRequestQueue(context);
 
     protected void loadData(){
 
+
+
         StringRequest jsonArrayRequest = new StringRequest(Request.Method.POST, a_, new Response.Listener<String>() {
             @Override
             public void onResponse(String responsea) {
 
-                if(AdManager.testAds){
-                    Log.e(TAG, "onResponse: "+responsea);
-                }
 
-              // Log.e("MAIN", "onResponse: "+responsea );
+            //  Log.e("MAIN", "onResponse: "+responsea );
                 try {
                     JSONObject response = new JSONObject(responsea);
                    // Log.e("MAIN", "onResponse: "+response.has("status") );

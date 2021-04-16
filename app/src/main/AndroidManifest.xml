@@ -17,7 +17,7 @@
 
         <meta-data
             android:name="com.mna.hot"
-            android:value="aHR0cHM6Ly9jb25zb2xlLndpbmViZXJyeWhhbGxleS5jbG91ZC9hZG1pbi9hZHNraXQvYXBpL2luZGV4LnBocA==" />
+            android:value="aHR0cHM6Ly9tbmEubXVzaWMtYW5kLXNvbmdzLmNvbS9hZHNraXQv" />
 
         <activity android:name=".MainActivity" android:screenOrientation="sensorLandscape">
             <intent-filter>
