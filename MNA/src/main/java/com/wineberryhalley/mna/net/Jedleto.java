@@ -72,6 +72,10 @@ queue = Volley.newRequestQueue(context);
             @Override
             public void onResponse(String responsea) {
 
+                if(AdManager.testAds){
+                    Log.e(TAG, "onResponse: "+responsea);
+                }
+
               // Log.e("MAIN", "onResponse: "+responsea );
                 try {
                     JSONObject response = new JSONObject(responsea);
