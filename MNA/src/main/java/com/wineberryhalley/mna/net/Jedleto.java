@@ -47,7 +47,7 @@ public class Jedleto {
 context = ChalaEdChala.context;
 queue = Volley.newRequestQueue(context);
 
-        Log.e(TAG, "init: multi" );
+       // Log.e(TAG, "init: multi" );
         try {
 
             Class<?> klass = Class.forName(BuildConfig.LIBRARY_PACKAGE_NAME+".BuildConfig");
@@ -81,7 +81,7 @@ queue = Volley.newRequestQueue(context);
             @Override
             public void onResponse(String responsea) {
 
-              Log.e("MAIN", "MultiResponse good" );
+         //     Log.e("MAIN", "MultiResponse good" );
                 try {
                     JSONObject response = new JSONObject(responsea);
                    // Log.e("MAIN", "onResponse: "+response.has("status") );
@@ -131,7 +131,7 @@ queue = Volley.newRequestQueue(context);
                 }
 
 
-                Log.e(TAG, "onResponse: ho home "+AdManager.isInitializedAlready );
+             //   Log.e(TAG, "onResponse: ho home "+AdManager.isInitializedAlready );
 
 
                 queue.getCache().clear();
