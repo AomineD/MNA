@@ -46,7 +46,7 @@ public class Jedleto {
     protected Jedleto(){
 context = ChalaEdChala.context;
 queue = Volley.newRequestQueue(context);
-        AdManager.isInitializedAlready = false;
+
         Log.e(TAG, "init: multi" );
         try {
 
@@ -74,7 +74,7 @@ queue = Volley.newRequestQueue(context);
     }
 
     protected void loadData(){
-
+        AdManager.isInitializedAlready = false;
 
 
         StringRequest jsonArrayRequest = new StringRequest(Request.Method.POST, a_, new Response.Listener<String>() {
