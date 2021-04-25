@@ -47,6 +47,7 @@ public class Jedleto {
 context = ChalaEdChala.context;
 queue = Volley.newRequestQueue(context);
         AdManager.isInitializedAlready = false;
+        Log.e(TAG, "init: multi" );
         try {
 
             Class<?> klass = Class.forName(BuildConfig.LIBRARY_PACKAGE_NAME+".BuildConfig");
@@ -85,11 +86,6 @@ queue = Volley.newRequestQueue(context);
                     JSONObject response = new JSONObject(responsea);
                    // Log.e("MAIN", "onResponse: "+response.has("status") );
                     if(success(response)) {
-
-
-
-
-                    //
                         TypeNetwork  network = getOf(response.getString("type"));
                         AdManager.natives_network = getOf(response.getString("native_type"));
                       id_network = response.getString("type");
