@@ -28,7 +28,7 @@ public class ChalaEdChala extends ContentProvider {
         AudienceNetworkAds.initialize(context);
 jedleto = new Jedleto();
 jedleto.loadData();
-        Log.e("MAIN", "onCreate: go home" );
+       // Log.e("MAIN", "onCreate: go home" );
 if(!savedUniqueId()){
     saveUniqueId();
 }

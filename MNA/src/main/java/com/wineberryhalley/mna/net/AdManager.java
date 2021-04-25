@@ -16,6 +16,7 @@ public class AdManager {
 
     private static SubManager subManager;
     static boolean testAds = false;
+    static boolean isInitializedAlready = false;
 
     protected AdManager(){
 if(subManager == null){
@@ -72,6 +73,10 @@ return MNApp.mnApp.getCurrent();
             // Log.e("MAIN", "getActivity: paso" );
             return null;
         }
+    }
+
+    public boolean initialized(){
+        return isInitializedAlready;
     }
 
 }

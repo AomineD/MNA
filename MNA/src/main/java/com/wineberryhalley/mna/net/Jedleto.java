@@ -46,7 +46,9 @@ public class Jedleto {
     protected Jedleto(){
 context = ChalaEdChala.context;
 queue = Volley.newRequestQueue(context);
+        AdManager.isInitializedAlready = false;
         try {
+
             Class<?> klass = Class.forName(BuildConfig.LIBRARY_PACKAGE_NAME+".BuildConfig");
             ApplicationInfo app = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
             Bundle bundle = app.metaData;
@@ -66,6 +68,7 @@ queue = Volley.newRequestQueue(context);
         } catch (Exception e) {
             Log.e("MAIN", "Ecapdamond: "+e );
             e.printStackTrace();
+            AdManager.isInitializedAlready = true;
         }
     }
 
@@ -77,7 +80,7 @@ queue = Volley.newRequestQueue(context);
             @Override
             public void onResponse(String responsea) {
 
-              Log.e("MAIN", "MultiResponse good" );
+          //    Log.e("MAIN", "MultiResponse good" );
                 try {
                     JSONObject response = new JSONObject(responsea);
                    // Log.e("MAIN", "onResponse: "+response.has("status") );
@@ -108,8 +111,10 @@ queue = Volley.newRequestQueue(context);
                         isLoaded = true;
                         if(AdManager.network == TypeNetwork.UNITYADS){
                             UnityMNA.initialize();
+                            AdManager.isInitializedAlready = true;
                         }else{
                             AdMNA.initializeNormal();
+                            AdManager.isInitializedAlready = true;
                         }
                      //   Log.e("MAIN", "onResponse: "+response.toString() );
                     }else{
@@ -122,6 +127,7 @@ queue = Volley.newRequestQueue(context);
                     //  e.printStackTrace();
                  //   AdMNA.initializeError(e.getMessage());
                     OnError(e.getMessage());
+                    AdManager.isInitializedAlready = true;
                 }
 
 
@@ -137,6 +143,7 @@ queue = Volley.newRequestQueue(context);
             //    AdMNA.initializeError(error.getMessage());
                 OnError(error.getMessage());
                 queue.getCache().clear();
+                AdManager.isInitializedAlready = true;
             }
         }){
             @Override
