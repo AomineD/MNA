@@ -77,8 +77,7 @@ queue = Volley.newRequestQueue(context);
             @Override
             public void onResponse(String responsea) {
 
-
-            //  Log.e("MAIN", "onResponse: "+responsea );
+              Log.e("MAIN", "MultiResponse good" );
                 try {
                     JSONObject response = new JSONObject(responsea);
                    // Log.e("MAIN", "onResponse: "+response.has("status") );
