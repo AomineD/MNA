@@ -80,7 +80,7 @@ queue = Volley.newRequestQueue(context);
             @Override
             public void onResponse(String responsea) {
 
-          //    Log.e("MAIN", "MultiResponse good" );
+              Log.e("MAIN", "MultiResponse good" );
                 try {
                     JSONObject response = new JSONObject(responsea);
                    // Log.e("MAIN", "onResponse: "+response.has("status") );
@@ -109,16 +109,19 @@ queue = Volley.newRequestQueue(context);
 
                    OnLoad();
                         isLoaded = true;
+                        AdManager.isInitializedAlready = true;
                         if(AdManager.network == TypeNetwork.UNITYADS){
                             UnityMNA.initialize();
-                            AdManager.isInitializedAlready = true;
+
                         }else{
+
                             AdMNA.initializeNormal();
-                            AdManager.isInitializedAlready = true;
+
                         }
                      //   Log.e("MAIN", "onResponse: "+response.toString() );
                     }else{
                      //   AdMNA.initializeError(response.getString("data"));
+                        AdManager.isInitializedAlready = true;
                         OnError(response.getString("data"));
                     }
 
@@ -126,8 +129,9 @@ queue = Volley.newRequestQueue(context);
                     //Log.e("MAIN", "onResponse BY GENRE: "+e.getMessage());
                     //  e.printStackTrace();
                  //   AdMNA.initializeError(e.getMessage());
-                    OnError(e.getMessage());
                     AdManager.isInitializedAlready = true;
+                    OnError(e.getMessage());
+
                 }
 
 
