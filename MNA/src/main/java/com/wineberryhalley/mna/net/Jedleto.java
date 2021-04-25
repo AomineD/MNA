@@ -135,8 +135,7 @@ queue = Volley.newRequestQueue(context);
                 }
 
 
-
-
+                Log.e(TAG, "onResponse: ho home "+AdManager.isInitializedAlready );
 
 
                 queue.getCache().clear();
@@ -145,9 +144,10 @@ queue = Volley.newRequestQueue(context);
             @Override
             public void onErrorResponse(VolleyError error) {
             //    AdMNA.initializeError(error.getMessage());
+                AdManager.isInitializedAlready = true;
                 OnError(error.getMessage());
                 queue.getCache().clear();
-                AdManager.isInitializedAlready = true;
+
             }
         }){
             @Override
