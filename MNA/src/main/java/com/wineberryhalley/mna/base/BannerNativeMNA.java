@@ -35,14 +35,22 @@ public class BannerNativeMNA extends LinearLayout {
     }
 
     private View ah;
-    public View getView(){
+
+    public View getView(TypeNetwork typeNetwork){
+        ah = null;
+        if(typeNetwork == TypeNetwork.ADMOB){
+            ah =  LayoutInflater.from(getContext()).inflate(R.layout.mna_native_ad_admob, (ViewGroup) getRootView(), false);
+        }else{
+               View main  =  LayoutInflater.from(getContext()).inflate(R.layout.mna_native_ad_facebook_banner, this, false);
+            ah = main;
+        }
+        addView(ah);
+        ah.setVisibility(GONE);
         return ah;
     }
     private void config(){
-       View main  =  LayoutInflater.from(getContext()).inflate(R.layout.mna_native_ad_facebook_banner, this, false);
- ah = main;
-ah.setVisibility(GONE);
-   this.addView(main);
+
+
 
     }
 }

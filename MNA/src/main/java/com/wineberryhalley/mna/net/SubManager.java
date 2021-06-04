@@ -322,6 +322,11 @@ public class SubManager {
     /** BANNER NATIVO **/
 
     public void showBannerNativeIn(BannerNativeMNA nm){
+        if(AdManager.natives_network == TypeNetwork.ADMOB){
+            AdmobMNA admobMNA = getOfTypeAdmob(TypeAd.NATIVO);
+
+            admobMNA.showBannerNativeIn(nm);
+        }else {
             ArrayList<AudienceMNA> mna = getArrayOf(TypeAd.BANNER_NATIVO);
             if (mna.size() > 0) {
                 int get = getIndex();
@@ -333,10 +338,15 @@ public class SubManager {
                 mna.get(get).showBannerNativeIn(nm);
                 saveIndex();
             }
-
+        }
     }
 
     public void showBannerNativeIn(BannerNativeMNA nm, MListener listener){
+        if(AdManager.natives_network == TypeNetwork.ADMOB){
+            AdmobMNA admobMNA = getOfTypeAdmob(TypeAd.NATIVO);
+
+            admobMNA.showBannerNativeIn(nm, listener);
+        }else {
             ArrayList<AudienceMNA> mna = getArrayOf(TypeAd.BANNER_NATIVO);
             if (mna.size() > 0) {
                 int get = getIndex();
@@ -348,7 +358,7 @@ public class SubManager {
                 mna.get(get).showBannerNativeIn(nm, listener);
                 saveIndex();
             }
-
+        }
     }
 
     /** =======================================================> **/
@@ -475,6 +485,14 @@ public class SubManager {
     }
 
     public boolean hasBannerNativeAds(){
+      if(AdManager.natives_network == TypeNetwork.ADMOB) {
+          for (AdMNA ad :
+                  ads) {
+if(ad.getType() == TypeAd.NATIVO){
+    return true;
+}
+          }
+      }
         boolean has = false;
         for (AdMNA ad:
                 ads) {

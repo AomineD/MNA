@@ -178,13 +178,13 @@ AdManager.get().manage().showInterstitialAd(new InterstitialListener(){
 
         }
 
-        if(AdManager.get().manage().hasNativeAds()){
+    /*    if(AdManager.get().manage().hasNativeAds()){
 
             NativeMNA a = findViewById(R.id.native_ad);
 
             AdManager.get().manage().showNativeIn(a);
 
-        }
+        }*/
     }
 
     @Override

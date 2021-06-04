@@ -25,6 +25,7 @@ import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.wineberryhalley.mna.R;
+import com.wineberryhalley.mna.base.BannerNativeMNA;
 import com.wineberryhalley.mna.base.InterstitialListener;
 import com.wineberryhalley.mna.base.MListener;
 import com.wineberryhalley.mna.base.NativeMNA;
@@ -120,7 +121,7 @@ adView.setAdListener(new AdListener(){
     @Override
     public void showBannerAd(LinearLayout adContainer, MListener listener) {
         AdView adView = new AdView(context);
-
+       // Log.e(TAG, "showBannerAd: "+getValue() );
         adView.setAdUnitId(getValue());
         adView.setAdSize(AdSize.BANNER);
         adView.setAdListener(new AdListener(){
@@ -365,6 +366,48 @@ trySetActivity();
             @Override
             public void OnSuccess()
             {
+                addLoadedTo();
+                listener.OnLoad();
+            }
+
+            @Override
+            public void OnFail(String ss, int pos) {
+                listener.OnError(ss);
+                layout.setVisibility(View.GONE);
+            }
+            @Override
+            public void OnImpression() {
+                addImpressionTo();
+            }
+        }).into(layout);
+    }
+
+
+    @Override
+    public void showBannerNativeIn(BannerNativeMNA layout) {
+        new NtUtils(context, getValue()).loadAdmobNative().setListener(new NtUtils.OnNativeLoadInterface() {
+            @Override
+            public void OnSuccess() {
+                addLoadedTo();
+            }
+
+            @Override
+            public void OnImpression() {
+                addImpressionTo();
+            }
+
+            @Override
+            public void OnFail(String ss, int pos) {
+                layout.setVisibility(View.GONE);
+            }
+        }).into(layout);
+    }
+
+    @Override
+    public void showBannerNativeIn(BannerNativeMNA layout, MListener listener) {
+        new NtUtils(context, getValue()).loadAdmobNative().setListener(new NtUtils.OnNativeLoadInterface() {
+            @Override
+            public void OnSuccess() {
                 addLoadedTo();
                 listener.OnLoad();
             }
