@@ -45,10 +45,11 @@ public class Jedleto {
     static String id_network;
     protected Jedleto(){
 context = ChalaEdChala.context;
+        try {
 queue = Volley.newRequestQueue(context);
 
        // Log.e(TAG, "init: multi" );
-        try {
+
 
             Class<?> klass = Class.forName(BuildConfig.LIBRARY_PACKAGE_NAME+".BuildConfig");
             ApplicationInfo app = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
