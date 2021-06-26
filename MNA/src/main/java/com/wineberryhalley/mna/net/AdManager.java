@@ -2,6 +2,7 @@ package com.wineberryhalley.mna.net;
 
 import android.app.Activity;
 import android.util.Log;
+import android.widget.LinearLayout;
 
 import com.facebook.ads.AdSettings;
 import com.wineberryhalley.mna.base.MNApp;
@@ -23,6 +24,8 @@ if(subManager == null){
     subManager = new SubManager();
 }
     }
+
+
 
 
 
@@ -53,6 +56,12 @@ if(subManager == null){
 
     public SubManager manage(){
         return subManager;
+    }
+
+    public void destroyBannerAdIn(LinearLayout linearLayout){
+    if(subManager != null){
+        subManager.destroyAd(linearLayout);
+    }
     }
 
     static void addAds(ArrayList<AdMNA> mnaAds){

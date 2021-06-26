@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.ads.AdView;
+import com.mopub.mobileads.MoPubView;
 import com.wineberryhalley.mna.base.BannerNativeMNA;
 import com.wineberryhalley.mna.base.InterstitialListener;
 import com.wineberryhalley.mna.base.MListener;
@@ -75,6 +77,19 @@ public class SubManager {
 
     }
 
+    private MopubMNA getOfTypeMoPub(TypeAd typeAd){
+        MopubMNA mopubMNA = null;
+        for (AdMNA ad :
+                ads) {
+            if(ad.getType() == typeAd) {
+                mopubMNA = new MopubMNA(ad);
+                break;
+            }
+        }
+        return mopubMNA;
+
+    }
+
     protected ArrayList<AdMNA> ads = new ArrayList<>();
 /** BANNER AD **/
     public void showBannerAd(LinearLayout linearLayout){
@@ -110,6 +125,16 @@ public class SubManager {
             }
             if(admobMNA != null)
                 admobMNA.showBannerAd(linearLayout);
+        }else if(AdManager.network == TypeNetwork.MOPUB){
+            MopubMNA mopubMNA = null;
+            for (AdMNA ad :
+                    ads) {
+                if(ad.getType() == TypeAd.BANNER) {
+                    mopubMNA = new MopubMNA(ad);
+                }
+            }
+            if(mopubMNA != null)
+                mopubMNA.showBannerAd(linearLayout);
         }
 
     }
@@ -161,6 +186,22 @@ public class SubManager {
                 listener.OnError("No banners");
             }
 
+        }else if(AdManager.network == TypeNetwork.MOPUB){
+
+            MopubMNA mopubMNA = null;
+            for (AdMNA ad :
+                    ads) {
+                if(ad.getType() == TypeAd.BANNER) {
+                    mopubMNA = new MopubMNA(ad);
+                    break;
+                }
+            }
+            if(mopubMNA != null)
+                mopubMNA.showBannerAd(linearLayout, listener);
+            else{
+                listener.OnError("No banners");
+            }
+
         }
 
     }
@@ -180,6 +221,16 @@ public class SubManager {
             AdmobMNA admobMNA = getOfTypeAdmob(TypeAd.BANNER);
             if(admobMNA != null)
                 admobMNA.showBannerAd(relativeLayout);
+        }else if(AdManager.network == TypeNetwork.MOPUB){
+            MopubMNA mopubMNA = null;
+            for (AdMNA ad :
+                    ads) {
+                if(ad.getType() == TypeAd.BANNER) {
+                    mopubMNA = new MopubMNA(ad);
+                }
+            }
+            if(mopubMNA != null)
+                mopubMNA.showBannerAd(relativeLayout);
         }
 
     }
@@ -208,6 +259,16 @@ public class SubManager {
             AdmobMNA admobMNA = getOfTypeAdmob(TypeAd.BANNER);
             if (admobMNA != null)
                 admobMNA.showBannerAd(relativeLayout, listener);
+            else {
+                listener.OnError("No banners");
+
+            }
+
+        }else if(AdManager.network == TypeNetwork.MOPUB){
+
+            MopubMNA mopubMNA = getOfTypeMoPub(TypeAd.BANNER);
+            if (mopubMNA != null)
+                mopubMNA.showBannerAd(relativeLayout, listener);
             else {
                 listener.OnError("No banners");
 
@@ -246,6 +307,14 @@ public class SubManager {
                 listener.OnError("No interstitial");
 
             }
+        }else if(AdManager.network == TypeNetwork.MOPUB){
+            MopubMNA mopubMNA = getOfTypeMoPub(TypeAd.INTERSTICIAL);
+            if (mopubMNA != null)
+                mopubMNA.showInterstitalAdFrecuency(frec, listener);
+            else {
+                listener.OnError("No interstitial");
+
+            }
         }
     }
 
@@ -273,6 +342,15 @@ public class SubManager {
             AdmobMNA admobMNA  = getOfTypeAdmob(TypeAd.INTERSTICIAL);
             if (admobMNA != null)
                 admobMNA.showInterstitialAd(listener);
+            else {
+                listener.OnError("No interstitial");
+
+            }
+        }else if(AdManager.network == TypeNetwork.MOPUB){
+
+            MopubMNA mopubMNA  = getOfTypeMoPub(TypeAd.INTERSTICIAL);
+            if (mopubMNA != null)
+                mopubMNA.showInterstitialAd(listener);
             else {
                 listener.OnError("No interstitial");
 
@@ -310,6 +388,16 @@ public class SubManager {
             AdmobMNA admobMNA = getOfTypeAdmob(TypeAd.REWARD);
             if (admobMNA != null)
                 admobMNA.showRewardedAd(rewardListener);
+            else {
+                rewardListener.OnError("No interstitial");
+
+            }
+
+        } else if(AdManager.network == TypeNetwork.MOPUB){
+
+            MopubMNA mopubMNA = getOfTypeMoPub(TypeAd.REWARD);
+            if (mopubMNA != null)
+                mopubMNA.showRewardedAd(rewardListener);
             else {
                 rewardListener.OnError("No interstitial");
 
@@ -370,7 +458,15 @@ public class SubManager {
             AdmobMNA admobMNA = getOfTypeAdmob(TypeAd.NATIVO);
 
             admobMNA.showNativeIn(nm);
-        }else{
+        }
+        else if(AdManager.natives_network == TypeNetwork.MOPUB){
+
+            MopubMNA mopubMNA = getOfTypeMoPub(TypeAd.NATIVO);
+
+            mopubMNA.showNativeIn(nm);
+
+        }
+        else{
 
 
             ArrayList<AudienceMNA> mna = getArrayOf(TypeAd.NATIVO);
@@ -394,7 +490,13 @@ public class SubManager {
 
             admobMNA.showNativeIn(nm, listener);
 
-        }else {
+        }else if(AdManager.natives_network == TypeNetwork.MOPUB){
+
+            MopubMNA mopubMNA = getOfTypeMoPub(TypeAd.NATIVO);
+
+            mopubMNA.showNativeIn(nm, listener);
+
+        } else {
             ArrayList<AudienceMNA> mna = getArrayOf(TypeAd.NATIVO);
 
             if (mna.size() > 0) {
@@ -415,6 +517,7 @@ public class SubManager {
 
 
     protected void clearAds(){
+        if(ads != null && ads.size() > 0)
         ads.clear();
     }
 
@@ -519,5 +622,30 @@ if(ad.getType() == TypeAd.NATIVO){
     static void resetIndex(){
         SharedPreferences preferences = ChalaEdChala.context.getSharedPreferences("mna-pref", Context.MODE_PRIVATE);
         preferences.edit().putInt("key_ind_ex", 0).apply();
+    }
+
+     void destroyAd(LinearLayout lin){
+
+        if(lin != null && lin.getChildCount() > 0){
+            for (int i = 0; i < lin.getChildCount(); i++) {
+                View v = lin.getChildAt(i);
+                if(v instanceof MoPubView){
+                    MoPubView moPubView = (MoPubView) v;
+                    moPubView.destroy();
+                }else if(v instanceof AdView){
+                    AdView ad = (AdView) v;
+                    ad.destroy();
+                }else if(v instanceof com.facebook.ads.AdView){
+                    com.facebook.ads.AdView ad = (com.facebook.ads.AdView) v;
+                    ad.destroy();
+                }
+            }
+            if(lin.getChildCount() > 0)
+            lin.removeAllViews();
+        }
+    }
+
+    public boolean isMoPub(){
+        return AdManager.network == TypeNetwork.MOPUB;
     }
 }

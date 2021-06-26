@@ -12,6 +12,14 @@
     <string name="native_ad_test_admob">ca-app-pub-3940256099942544/1044960115</string>
 
 
+    <string name="banner_ad_test_mopub">b195f8dd8ded45fe847ad89ed1d016da</string>
+    <string name="interstitial_ad_test_mopub">24534e1901884e398f1253216226017e</string>
+    <string name="reward_ad_test_mopub">920b6145fb1546cf8b5cf2ac34638bb7</string>
+    <string name="native_ad_test_mopub">76a3fefaced247959582d2d2df6f4757</string>
+
+
+    <string name="com_mopub_nativeads_sponsored_by">Sponsored by %s</string>
+
     <color name="white_nt">#FFFFFF</color>
     <color name="black_nt">#000000</color>
     <color name="blacksp">#212121</color>

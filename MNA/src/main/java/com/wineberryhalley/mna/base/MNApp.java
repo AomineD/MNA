@@ -8,6 +8,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.mopub.common.MoPub;
+import com.wineberryhalley.mna.net.AdManager;
+import com.wineberryhalley.mna.net.MopubMNA;
+
 public class MNApp extends Application implements Application.ActivityLifecycleCallbacks {
 
     public static MNApp mnApp;
@@ -40,16 +44,23 @@ public class MNApp extends Application implements Application.ActivityLifecycleC
     public void onActivityResumed(@NonNull Activity activity) {
      //   Log.e(TAG, "onActivityCreated: "+activity.getClass().getSimpleName() );
         current = activity;
+        if(AdManager.get().initialized() && AdManager.get().manage().isMoPub()){
+            MoPub.onResume(activity);
+        }
     }
 
     @Override
     public void onActivityPaused(@NonNull Activity activity) {
-
+        if(AdManager.get().initialized() && AdManager.get().manage().isMoPub()){
+            MoPub.onPause(activity);
+        }
     }
 
     @Override
     public void onActivityStopped(@NonNull Activity activity) {
-
+        if(AdManager.get().initialized() && AdManager.get().manage().isMoPub()){
+            MoPub.onStop(activity);
+        }
     }
 
     @Override
@@ -59,6 +70,7 @@ public class MNApp extends Application implements Application.ActivityLifecycleC
 
     @Override
     public void onActivityDestroyed(@NonNull Activity activity) {
+
 
     }
 }

@@ -91,11 +91,13 @@ public class MainActivity extends AppCompatActivity implements InitializeListene
         };
     }
 
+    private String TAG ="MAIN";
     private void showBanner(LinearLayout lin){
+       // Log.e("MAIN", "showBanner: " );
         AdManager.get().manage().showBannerAd(lin, new MListener(){
             @Override
             public void OnLoad() {
-
+           //     Log.e(TAG, "OnLoad: loaded" );
             }
 
             @Override
@@ -169,22 +171,35 @@ AdManager.get().manage().showInterstitialAd(new InterstitialListener(){
         if(AdManager.get().manage().hasBannerAds())
             showBanner(lin);
 
-
+/*
         if(AdManager.get().manage().hasBannerNativeAds()){
 
             BannerNativeMNA a = findViewById(R.id.native_banner);
 
             AdManager.get().manage().showBannerNativeIn(a);
 
-        }
+        }*/
 
-    /*    if(AdManager.get().manage().hasNativeAds()){
+     if(AdManager.get().manage().hasNativeAds()){
 
             NativeMNA a = findViewById(R.id.native_ad);
 
-            AdManager.get().manage().showNativeIn(a);
+            AdManager.get().manage().showNativeIn(a, new MListener(){
+                @Override
+                public void OnLoad() {
+                    super.OnLoad();
+                    Log.e(TAG, "Native: ");
+                }
 
-        }*/
+                @Override
+                public void OnError(String erno) {
+                    super.OnError(erno);
+                    Log.e(TAG, "OnError: "+erno );
+                }
+            });
+
+        }
+
     }
 
     @Override

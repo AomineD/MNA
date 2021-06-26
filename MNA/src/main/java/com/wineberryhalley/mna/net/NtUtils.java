@@ -1,15 +1,23 @@
 package com.wineberryhalley.mna.net;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.GpsSatellite;
+import android.location.GpsStatus;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
 
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdError;
@@ -23,20 +31,28 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.nativead.NativeAdOptions;
 import com.google.android.gms.ads.nativead.NativeAdView;
+import com.mopub.nativeads.AdapterHelper;
+import com.mopub.nativeads.MoPubNative;
+import com.mopub.nativeads.MoPubStaticNativeAdRenderer;
+import com.mopub.nativeads.NativeErrorCode;
+import com.mopub.nativeads.RequestParameters;
+import com.mopub.nativeads.ViewBinder;
 import com.squareup.picasso.Picasso;
 import com.wineberryhalley.mna.R;
 import com.wineberryhalley.mna.base.BannerNativeMNA;
 import com.wineberryhalley.mna.base.NativeMNA;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.Locale;
 
 public class NtUtils {
-    
-    public static NtUtils getInstance(Context c, String ad_unit){
+
+    public static NtUtils getInstance(Context c, String ad_unit) {
         return new NtUtils(c, ad_unit);
     }
 
-    public static NtUtils getInstance(Context c, String ad_unit, OnNativeLoadInterface a){
+    public static NtUtils getInstance(Context c, String ad_unit, OnNativeLoadInterface a) {
         return new NtUtils(c, ad_unit, a);
     }
 
@@ -50,20 +66,20 @@ public class NtUtils {
     protected NtUtils(Context c, String ad_unit, OnNativeLoadInterface a) {
         this.context = c;
         this.idsnat = ad_unit;
-this.intre = a;
+        this.intre = a;
 
     }
 
-    public NtUtils setListener(OnNativeLoadInterface a){
+    public NtUtils setListener(OnNativeLoadInterface a) {
         this.intre = a;
         return this;
     }
 
-    public void into(BannerNativeMNA bn){
+    public void into(BannerNativeMNA bn) {
         this.banner_container = bn.getView(AdManager.natives_network);
     }
 
-    public void into(NativeMNA bn){
+    public void into(NativeMNA bn) {
         this.banner_container = bn.getView(AdManager.natives_network);
     }
 
@@ -81,81 +97,82 @@ this.intre = a;
         void OnSuccess();
 
         void OnFail(String ss, int pos);
+
         void OnImpression();
     }
 
 
-    protected NtUtils loadAds(){
+    protected NtUtils loadAds() {
 
         nativeAd = new NativeAd(context, idsnat);
         nativeAd.buildLoadAdConfig().withAdListener(new NativeAdListener() {
-                @Override
-                public void onMediaDownloaded(Ad ad) {
+            @Override
+            public void onMediaDownloaded(Ad ad) {
 
-                }
+            }
 
-                @Override
-                public void onError(Ad ad, AdError adError) {
-
-
-                    if(AdManager.testAds)
-                        Log.e("MAIN", "NATIVOS onError: "+adError.getErrorMessage() + " el index => 0");
-
-                    if (intre != null)
-                        intre.OnFail(adError.getErrorMessage() + " el index => 0", 0);
+            @Override
+            public void onError(Ad ad, AdError adError) {
 
 
-                }
+                if (AdManager.testAds)
+                    Log.e("MAIN", "NATIVOS onError: " + adError.getErrorMessage() + " el index => 0");
 
-                @Override
-                public void onAdLoaded(Ad ad) {
-                    if(banner_container != null)
+                if (intre != null)
+                    intre.OnFail(adError.getErrorMessage() + " el index => 0", 0);
+
+
+            }
+
+            @Override
+            public void onAdLoaded(Ad ad) {
+                if (banner_container != null)
                     populateNativeIn();
-                    if (intre != null) {
-                        intre.OnSuccess();
-                    }
-
-                    if(AdManager.testAds){
-                        Log.e("MAIN", "NATIVOS onAdLoaded: 0");
-                    }
+                if (intre != null) {
+                    intre.OnSuccess();
                 }
 
-                @Override
-                public void onAdClicked(Ad ad) {
-
+                if (AdManager.testAds) {
+                    Log.e("MAIN", "NATIVOS onAdLoaded: 0");
                 }
+            }
 
-                @Override
-                public void onLoggingImpression(Ad ad) {
-                    if (intre != null) {
-                        intre.OnImpression();
-                    }
+            @Override
+            public void onAdClicked(Ad ad) {
+
+            }
+
+            @Override
+            public void onLoggingImpression(Ad ad) {
+                if (intre != null) {
+                    intre.OnImpression();
                 }
-            }).build();
+            }
+        }).build();
         nativeAd.loadAd();
-           
 
-            if(AdManager.testAds)
-                Log.e("MAIN", "loadAds: loading native 0");
-        
+
+        if (AdManager.testAds)
+            Log.e("MAIN", "loadAds: loading native 0");
+
         return this;
     }
 
-    protected NtUtils loadAdmobNative(){
+    protected NtUtils loadAdmobNative() {
         AdLoader adLoader = new AdLoader.Builder(context, idsnat)
                 .forNativeAd(new com.google.android.gms.ads.nativead.NativeAd.OnNativeAdLoadedListener() {
                     @Override
                     public void onNativeAdLoaded(com.google.android.gms.ads.nativead.NativeAd nativeAd) {
-                        if(nativeAdView == null){
+                        if (nativeAdView == null) {
                             nativeAdView = (NativeAdView) banner_container;
                         }
-populateUnifiedNativeAdView(nativeAd, nativeAdView);
+                        populateUnifiedNativeAdView(nativeAd, nativeAdView);
                     }
                 })
-                .withAdListener(new AdListener(){
+                .withAdListener(new AdListener() {
                     @Override
                     public void onAdFailedToLoad(LoadAdError loadAdError) {
-                        if(intre != null){
+                        if (intre != null) {
                             intre.OnFail(loadAdError.getMessage(), 0);
                         }
                     }
@@ -163,7 +180,7 @@ populateUnifiedNativeAdView(nativeAd, nativeAdView);
                     @Override
                     public void onAdLoaded() {
                         super.onAdLoaded();
-                        if(intre != null){
+                        if (intre != null) {
                             intre.OnSuccess();
                         }
                     }
@@ -171,7 +188,7 @@ populateUnifiedNativeAdView(nativeAd, nativeAdView);
                     @Override
                     public void onAdImpression() {
                         super.onAdImpression();
-                        if(intre != null){
+                        if (intre != null) {
                             intre.OnImpression();
                         }
                     }
@@ -183,6 +200,87 @@ populateUnifiedNativeAdView(nativeAd, nativeAdView);
                 .build();
         adLoader.loadAd(new AdRequest.Builder().build());
         return this;
+    }
+
+    protected NtUtils loadMoPubNative() {
+
+        MoPubNative moPubNative = new MoPubNative(context, idsnat, new MoPubNative.MoPubNativeNetworkListener() {
+            @Override
+            public void onNativeLoad(com.mopub.nativeads.NativeAd nativeAd) {
+                if (intre != null) {
+                    intre.OnSuccess();
+                }
+
+                populateNativeMopub(nativeAd);
+            }
+
+            @Override
+            public void onNativeFail(NativeErrorCode nativeErrorCode) {
+                if (intre != null) {
+                    intre.OnFail("Native err: " + nativeErrorCode.getIntCode(), 0);
+                }
+            }
+        });
+     //   Log.e(TAG, "loadMoPubNative: "+idsnat );
+
+        ViewBinder viewBinder = new ViewBinder.Builder(R.layout.mna_native_ad_mopub)
+                .mainImageId(R.id.native_main_image)
+                .iconImageId(R.id.native_icon_image)
+                .titleId(R.id.native_title)
+                .textId(R.id.native_text)
+                .privacyInformationIconImageId(R.id.native_privacy_information_icon_image)
+                .build();
+
+        MoPubStaticNativeAdRenderer moPubStaticNativeAdRenderer = new MoPubStaticNativeAdRenderer(viewBinder);
+
+        moPubNative.registerAdRenderer(moPubStaticNativeAdRenderer);
+
+        EnumSet<RequestParameters.NativeAdAsset> desiredAssets = EnumSet.of(
+                RequestParameters.NativeAdAsset.TITLE,
+                RequestParameters.NativeAdAsset.TEXT,
+                RequestParameters.NativeAdAsset.CALL_TO_ACTION_TEXT,
+                RequestParameters.NativeAdAsset.MAIN_IMAGE,
+                RequestParameters.NativeAdAsset.ICON_IMAGE,
+                RequestParameters.NativeAdAsset.STAR_RATING
+        );
+
+        RequestParameters mRequestParameters = new RequestParameters.Builder()
+                .desiredAssets(desiredAssets)
+                .build();
+
+        moPubNative.makeRequest(mRequestParameters);
+
+       // Log.e(TAG, "loadMoPubNative: a" );
+
+        return this;
+    }
+
+    private void populateNativeMopub(com.mopub.nativeads.NativeAd nativeAd) {
+        AdapterHelper adapterHelper = new AdapterHelper(context, 0, 3);
+
+
+        View v = adapterHelper.getAdView(null, nativeAdView, nativeAd, new ViewBinder.Builder(0).build());
+        // Set the native event listeners (onImpression, and onClick).
+        nativeAd.setMoPubNativeEventListener(new com.mopub.nativeads.NativeAd.MoPubNativeEventListener() {
+            @Override
+            public void onImpression(View view) {
+                if(intre != null){
+                    intre.OnImpression();
+                }
+            }
+
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        // Add the ad view to our view hierarchy
+        RelativeLayout parentView = (RelativeLayout) banner_container;
+
+        parentView.setVisibility(View.VISIBLE);
+        parentView.addView(v);
+        Log.e(TAG, "populateNativeMopub: a" );
     }
 
     private void loadBannerAgain(){

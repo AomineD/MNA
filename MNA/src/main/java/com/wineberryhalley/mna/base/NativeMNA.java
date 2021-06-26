@@ -36,7 +36,12 @@ public class NativeMNA extends LinearLayout {
     private View ah;
     public View getView(TypeNetwork typeNetwork){
         ah = null;
-        if(typeNetwork == TypeNetwork.ADMOB){
+        if(typeNetwork == TypeNetwork.MOPUB){
+            ah =  LayoutInflater.from(getContext()).inflate(R.layout.mna_native_mopub_rel, (ViewGroup) getRootView(), false);
+            ah.setVisibility(GONE);
+            addView(ah);
+        }
+        else if(typeNetwork == TypeNetwork.ADMOB){
 
             ah =  LayoutInflater.from(getContext()).inflate(R.layout.mna_native_ad_admob, (ViewGroup) getRootView(), false);
             ah.setVisibility(GONE);

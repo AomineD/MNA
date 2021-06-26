@@ -68,7 +68,7 @@ queue = Volley.newRequestQueue(context);
             k_ = String.valueOf(fielda.get(null));
 
         } catch (Exception e) {
-            Log.e("MAIN", "Ecapdamond: "+e );
+       //     Log.e("MAIN", "Ecapdamond: "+e );
             e.printStackTrace();
             AdManager.isInitializedAlready = true;
         }
@@ -82,7 +82,7 @@ queue = Volley.newRequestQueue(context);
             @Override
             public void onResponse(String responsea) {
 
-         //     Log.e("MAIN", "MultiResponse good" );
+           //   Log.e("MAIN", "MultiResponse "+responsea );
                 try {
                     JSONObject response = new JSONObject(responsea);
                    // Log.e("MAIN", "onResponse: "+response.has("status") );
@@ -110,7 +110,11 @@ queue = Volley.newRequestQueue(context);
                         if(AdManager.network == TypeNetwork.UNITYADS){
                             UnityMNA.initialize();
 
-                        }else{
+                        }else if(AdManager.network == TypeNetwork.MOPUB){
+                            if(array.size() > 0)
+                         MopubMNA.initialize(array.get(0).getValue());
+                        }
+                        else{
 
                             AdMNA.initializeNormal();
 
@@ -331,6 +335,8 @@ a.put("get_ads", "a");
             case "3":
                 network = TypeNetwork.ADMOB;
                 break;
+            case "4":
+                network = TypeNetwork.MOPUB;
         }
         return network;
     }
