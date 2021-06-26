@@ -29,6 +29,7 @@ import com.unity3d.services.banners.BannerErrorInfo;
 import com.unity3d.services.banners.BannerView;
 import com.unity3d.services.banners.UnityBannerSize;
 import com.wineberryhalley.mna.R;
+import com.wineberryhalley.mna.base.BannerNativeMNA;
 import com.wineberryhalley.mna.base.DelayListener;
 import com.wineberryhalley.mna.base.InitializeListener;
 import com.wineberryhalley.mna.base.InterstitialListener;
@@ -526,6 +527,49 @@ rewardListener.onReward();
     public void OnReady() {
 
 
+    }
+
+
+    @Override
+    public void showBannerNativeIn(BannerNativeMNA layout) {
+      //  Log.e(TAG, "showBannerNativeIn: a" );
+        new NtUtils(context, getValue()).loadMoPubNative().setListener(new NtUtils.OnNativeLoadInterface() {
+            @Override
+            public void OnSuccess() {
+                addLoadedTo();
+            }
+
+            @Override
+            public void OnImpression() {
+                addImpressionTo();
+            }
+
+            @Override
+            public void OnFail(String ss, int pos) {
+                layout.setVisibility(View.GONE);
+            }
+        }).into(layout);
+    }
+
+    @Override
+    public void showBannerNativeIn(BannerNativeMNA layout, MListener listener) {
+        new NtUtils(context, getValue()).loadMoPubNative().setListener(new NtUtils.OnNativeLoadInterface() {
+            @Override
+            public void OnSuccess() {
+                addLoadedTo();
+                listener.OnLoad();
+            }
+
+            @Override
+            public void OnFail(String ss, int pos) {
+                listener.OnError(ss);
+                layout.setVisibility(View.GONE);
+            }
+            @Override
+            public void OnImpression() {
+                addImpressionTo();
+            }
+        }).into(layout);
     }
 
 private BannerView getSmallBanner(Activity activity){

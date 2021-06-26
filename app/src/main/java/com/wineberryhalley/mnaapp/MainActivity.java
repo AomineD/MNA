@@ -171,14 +171,16 @@ AdManager.get().manage().showInterstitialAd(new InterstitialListener(){
         if(AdManager.get().manage().hasBannerAds())
             showBanner(lin);
 
-/*
+
+      //  Log.e(TAG, "load: "+(AdManager.get().manage().hasBannerNativeAds()) );
+
         if(AdManager.get().manage().hasBannerNativeAds()){
 
             BannerNativeMNA a = findViewById(R.id.native_banner);
 
             AdManager.get().manage().showBannerNativeIn(a);
 
-        }*/
+        }
 
      if(AdManager.get().manage().hasNativeAds()){
 

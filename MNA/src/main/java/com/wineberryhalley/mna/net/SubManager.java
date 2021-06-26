@@ -410,7 +410,12 @@ public class SubManager {
     /** BANNER NATIVO **/
 
     public void showBannerNativeIn(BannerNativeMNA nm){
-        if(AdManager.natives_network == TypeNetwork.ADMOB){
+        if(AdManager.natives_network == TypeNetwork.MOPUB){
+            MopubMNA mopubMNA = getOfTypeMoPub(TypeAd.NATIVO);
+
+            mopubMNA.showBannerNativeIn(nm);
+        }
+        else if(AdManager.natives_network == TypeNetwork.ADMOB){
             AdmobMNA admobMNA = getOfTypeAdmob(TypeAd.NATIVO);
 
             admobMNA.showBannerNativeIn(nm);
@@ -430,7 +435,13 @@ public class SubManager {
     }
 
     public void showBannerNativeIn(BannerNativeMNA nm, MListener listener){
-        if(AdManager.natives_network == TypeNetwork.ADMOB){
+
+        if(AdManager.natives_network == TypeNetwork.MOPUB){
+            MopubMNA mopubMNA = getOfTypeMoPub(TypeAd.NATIVO);
+
+            mopubMNA.showBannerNativeIn(nm, listener);
+        }
+        else if(AdManager.natives_network == TypeNetwork.ADMOB){
             AdmobMNA admobMNA = getOfTypeAdmob(TypeAd.NATIVO);
 
             admobMNA.showBannerNativeIn(nm, listener);

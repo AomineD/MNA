@@ -280,7 +280,7 @@ public class NtUtils {
 
         parentView.setVisibility(View.VISIBLE);
         parentView.addView(v);
-        Log.e(TAG, "populateNativeMopub: a" );
+    //    Log.e(TAG, "populateNativeMopub: a" );
     }
 
     private void loadBannerAgain(){
