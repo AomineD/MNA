@@ -35,13 +35,6 @@ public class NativeMNA extends LinearLayout {
 
     private View ah;
 
-    public String getIdentifier(){
-        return index;
-    }
-    private String index = "";
-    public void setIdentifier(String inde){
-        this.index = inde;
-    }
 
     public View getView(TypeNetwork typeNetwork){
         ah = null;

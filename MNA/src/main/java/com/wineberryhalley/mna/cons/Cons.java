@@ -28,14 +28,5 @@ public class Cons {
     return text1;
     }
 
-    public static ArrayList<String> natives_identifiers = new ArrayList<>();
 
-    public static boolean alreadyLoaded(String id){
-        return natives_identifiers.contains(id);
-    }
-
-
-    public static void clearIdentifiers(){
-        natives_identifiers.clear();
-    }
 }

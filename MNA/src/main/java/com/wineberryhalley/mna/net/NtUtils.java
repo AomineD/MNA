@@ -56,6 +56,7 @@ import java.util.Locale;
 import java.util.Random;
 
 import static com.wineberryhalley.mna.net.AdManager.nativesLoaded;
+import static com.wineberryhalley.mna.net.AdManager.testAds;
 
 public class NtUtils {
 
@@ -150,18 +151,15 @@ this.sizeAdmobNative = size;
 
     public NtUtils into(BannerNativeMNA bn) {
         this.banner_container = bn.getView(AdManager.natives_network);
-        position = bn.getIdentifier();
         return this;
     }
 
     public NtUtils into(NativeMNA bn) {
         this.banner_container = bn.getView(AdManager.natives_network);
-        position = bn.getIdentifier();
         return this;
     }
 
     private View banner_container;
-    private String position = "";
     private NativeAdView nativeAdView;
     private OnNativeLoadInterface intre2;
 
@@ -246,11 +244,8 @@ this.sizeAdmobNative = size;
 nativeAds.add(nativeAd);
 if(idTryingToShow.contains(nativeAd.getPlacementId())){
 
-    if(Cons.alreadyLoaded(position)) {
         showAudienceNative(nativeAd.getPlacementId());
         idTryingToShow.remove(nativeAd.getPlacementId());
-    Cons.natives_identifiers.add(position);
-    }
  //   Log.e(TAG, "onMediaDownloaded: si" );
 }
 
@@ -503,12 +498,9 @@ if(nativeLoadeds >= idsAudience.size()){
         for (NativeAd ad:
              nativeAds) {
             if(ad.getPlacementId().equalsIgnoreCase(id)){
-          if(!Cons.alreadyLoaded(position)) {
               populateNativeIn(ad);
               show = true;
-              Cons.natives_identifiers.add(position);
               break;
-          }
             }
         }
 
@@ -526,12 +518,10 @@ if(nativeLoadeds >= idsAudience.size()){
         for (NativeBannerAd ad:
                 nativeBannerAds) {
             if(ad.getPlacementId().equalsIgnoreCase(id)){
-                if(!Cons.alreadyLoaded(position)) {
-                    Cons.natives_identifiers.add(position);
                     populateBannerNativeIn(ad);
                     show = true;
                     break;
-                }
+
             }
         }
 
@@ -546,13 +536,12 @@ if(nativeLoadeds >= idsAudience.size()){
             return;
         }
 
-        if (!Cons.alreadyLoaded(position)) {
+
             int indx = new Random().nextInt(nativeAds_admob.size());
             com.google.android.gms.ads.nativead.NativeAd random = nativeAds_admob.get(indx);
 
             populateUnifiedNativeAdView(random);
-            Cons.natives_identifiers.add(position);
-        }
+
     }
 
     public void showMoPubNative() {
@@ -560,12 +549,10 @@ if(nativeLoadeds >= idsAudience.size()){
             return;
         }
         // Log.e(TAG, "showMoPubNative: "+nativeAds_MoPub.size() );
-        if (!Cons.alreadyLoaded(position)) {
             int indx = new Random().nextInt(nativeAds_MoPub.size());
             com.mopub.nativeads.NativeAd random = nativeAds_MoPub.get(indx);
             populateNativeMopub(random);
-            Cons.natives_identifiers.add(position);
-        }
+
     }
 
 
@@ -624,11 +611,9 @@ if(nativeLoadeds >= idsAudience.size()){
                     banner_nativo_count++;
 
                         if (idTryingToShow.contains(nativeBannerAd.getPlacementId())) {
-                            if(Cons.alreadyLoaded(position)) {
                             populateBannerNativeIn(nativeBannerAd);
                             idTryingToShow.remove(nativeBannerAd.getPlacementId());
-                            Cons.natives_identifiers.add(position);
-                        }
+
                     }
                     if(banner_nativo_count >= idsBannerNative.size()){
                         if (intre != null) {
@@ -865,8 +850,16 @@ banner_container.setVisibility(View.VISIBLE);
              return;
                         }
 
+
+
          NativeAdView adView = nativeAdView;
         adView.setVisibility(View.VISIBLE);
+
+       TextView t = adView.findViewById(R.id.ad_headline);
+       if(t != null && !t.getText().toString().isEmpty()){
+           return;
+       }
+
         adView.setMediaView(adView.findViewById(R.id.ad_media));
 
 
@@ -943,33 +936,7 @@ banner_container.setVisibility(View.VISIBLE);
 
         adView.setNativeAd(nativeAd);
 
-        // Get the video controller for the ad. One will always be provided, even if the ad doesn't
-        // have a video asset.
-       /*VideoController vc = nativeAd.getVideoController();
 
-        // Updates the UI to say whether or not this ad has a video asset.
-        if (vc.hasVideoContent()) {
-            videoStatus.setText(String.format(Locale.getDefault(),
-                    "Video status: Ad contains a %.2f:1 video asset.",
-                    vc.getAspectRatio()));
-
-            // Create a new VideoLifecycleCallbacks object and pass it to the VideoController. The
-            // VideoController will call methods on this object when events occur in the video
-            // lifecycle.
-            vc.setVideoLifecycleCallbacks(new VideoController.VideoLifecycleCallbacks() {
-                @Override
-                public void onVideoEnd() {
-                    // Publishers should allow native ads to complete video playback before
-                    // refreshing or replacing them with another ad in the same UI location.
-                    refresh.setEnabled(true);
-                    videoStatus.setText("Video status: Video playback has ended.");
-                    super.onVideoEnd();
-                }
-            });
-        } else {
-            videoStatus.setText("Video status: Ad does not contain a video asset.");
-            refresh.setEnabled(true);
-        }*/
     }
 
     private String TAG = "MAIN";

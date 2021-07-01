@@ -34,13 +34,6 @@ public class BannerNativeMNA extends LinearLayout {
         config();
     }
 
-    public String getIdentifier(){
-        return index;
-    }
-    private String index = "";
-    public void setIdentifier(String inde){
-        this.index = inde;
-    }
 
 
     private View ah;
