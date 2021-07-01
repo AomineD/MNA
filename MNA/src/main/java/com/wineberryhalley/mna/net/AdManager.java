@@ -18,6 +18,7 @@ public class AdManager {
     private static SubManager subManager;
     static boolean testAds = false;
     static boolean isInitializedAlready = false;
+    static TypeNetwork mediation_mopub;
 
     protected AdManager(){
 if(subManager == null){
@@ -30,6 +31,8 @@ if(subManager == null){
 
 
 
+    static NtUtils ntUtils;
+    static NtUtils ntUtilsBannerNat;
     static TypeNetwork network;
     static TypeNetwork natives_network;
 
@@ -52,6 +55,7 @@ if(subManager == null){
     public void test(boolean isTestAds){
         testAds = isTestAds;
         AdSettings.setDebugBuild(AdManager.testAds);
+       // Log.e("MAIN", "test: "+testAds );
     }
 
     public SubManager manage(){

@@ -111,8 +111,10 @@ queue = Volley.newRequestQueue(context);
                             UnityMNA.initialize();
 
                         }else if(AdManager.network == TypeNetwork.MOPUB){
-                            if(array.size() > 0)
+                                  if(array.size() > 0)
                          MopubMNA.initialize(array.get(0).getValue());
+                        }else if(AdManager.network == TypeNetwork.APPLOVIN){
+                            AppLovinMNA.initialize();
                         }
                         else{
 
@@ -337,6 +339,23 @@ a.put("get_ads", "a");
                 break;
             case "4":
                 network = TypeNetwork.MOPUB;
+                break;
+            case "5":
+                network = TypeNetwork.APPLOVIN;
+                break;
+        }
+        return network;
+    }
+
+    private TypeNetwork getMediation(String response) {
+        TypeNetwork network = TypeNetwork.ADMOB;
+        switch (response){
+            case "0":
+                network = TypeNetwork.ADMOB;
+                break;
+            case "1":
+                network = TypeNetwork.AUDIENCE;
+                break;
         }
         return network;
     }

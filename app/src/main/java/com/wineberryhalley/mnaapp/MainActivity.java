@@ -17,6 +17,7 @@ import com.wineberryhalley.mna.base.MListener;
 import com.wineberryhalley.mna.base.NativeMNA;
 import com.wineberryhalley.mna.base.RewardListener;
 import com.wineberryhalley.mna.net.AdManager;
+import com.wineberryhalley.mna.net.NtUtils;
 
 public class MainActivity extends AppCompatActivity implements InitializeListener {
 
@@ -49,24 +50,6 @@ public class MainActivity extends AppCompatActivity implements InitializeListene
         showIntersFrec.setOnClickListener(clickInterstitialFrec());
         final LinearLayout lin = findViewById(R.id.linlay);
         AdManager.get().test(true);
-/*
-        if(AdManager.get().checkIfLoad()){
-            load(lin);
-         //   Toast.makeText(this, "Cargo", Toast.LENGTH_SHORT).show();
-        }else{
-  AdManager.get().load().reload().setListener(new MListener(){
-      @Override
-      public void OnLoad() {
-         load(lin);
-      }
-
-      @Override
-      public void OnError(String erno) {
-          Log.e("MAIN", "OnError: "+erno );
-      }
-  });
-
-        }*/
 
     }
 
@@ -97,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements InitializeListene
         AdManager.get().manage().showBannerAd(lin, new MListener(){
             @Override
             public void OnLoad() {
-           //     Log.e(TAG, "OnLoad: loaded" );
+                Log.e(TAG, "OnLoad: loaded" );
             }
 
             @Override
@@ -172,41 +155,67 @@ AdManager.get().manage().showInterstitialAd(new InterstitialListener(){
             showBanner(lin);
 
 
+
       //  Log.e(TAG, "load: "+(AdManager.get().manage().hasBannerNativeAds()) );
 
-        if(AdManager.get().manage().hasBannerNativeAds()){
 
-            BannerNativeMNA a = findViewById(R.id.native_banner);
 
-            AdManager.get().manage().showBannerNativeIn(a);
 
-        }
-
-     if(AdManager.get().manage().hasNativeAds()){
-
-            NativeMNA a = findViewById(R.id.native_ad);
-
-            AdManager.get().manage().showNativeIn(a, new MListener(){
-                @Override
-                public void OnLoad() {
-                    super.OnLoad();
-                    Log.e(TAG, "Native: ");
-                }
-
-                @Override
-                public void OnError(String erno) {
-                    super.OnError(erno);
-                    Log.e(TAG, "OnError: "+erno );
-                }
-            });
-
-        }
 
     }
 
     @Override
     public void OnInitialized() {
         Log.e("MAIN", "OnInitialized: alv" );
+        AdManager.get().manage().loadNatives(new NtUtils.OnNativeLoadInterface() {
+            @Override
+            public void OnSuccess() {
+              //  Log.e(TAG, "load: a" );
+                if(AdManager.get().manage().hasNativeAds()){
+
+                    NativeMNA a = findViewById(R.id.native_ad);
+
+                    AdManager.get().manage().showNativeIn(a);
+
+                }
+            }
+
+            @Override
+            public void OnFail(String ss, int pos) {
+                Log.e(TAG, "nativos: "+ss );
+               // load(findViewById(R.id.linlay));
+            }
+
+            @Override
+            public void OnImpression() {
+
+            }
+        });
+
+
+        AdManager.get().manage().loadBannerNatives(new NtUtils.OnNativeLoadInterface() {
+            @Override
+            public void OnSuccess() {
+                if(AdManager.get().manage().hasBannerNativeAds()){
+
+                    BannerNativeMNA a = findViewById(R.id.native_banner);
+
+                    AdManager.get().manage().showBannerNativeIn(a);
+
+                }
+            }
+
+            @Override
+            public void OnFail(String ss, int pos) {
+                Log.e(TAG, "OnFail: "+ss );
+            }
+
+            @Override
+            public void OnImpression() {
+
+            }
+        });
+
         load(findViewById(R.id.linlay));
         //startActivity(new Intent(this, SecondActivity.class));
     }

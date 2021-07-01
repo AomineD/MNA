@@ -3,12 +3,21 @@ package com.wineberryhalley.mna.net;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 
+import com.applovin.mediation.MaxAd;
+import com.applovin.mediation.MaxAdFormat;
+import com.applovin.mediation.MaxAdViewAdListener;
+import com.applovin.mediation.MaxError;
+import com.applovin.mediation.ads.MaxAdView;
+import com.applovin.sdk.AppLovinSdk;
+import com.applovin.sdk.AppLovinSdkConfiguration;
+import com.applovin.sdk.AppLovinSdkUtils;
 import com.mopub.common.MoPub;
 import com.mopub.common.MoPubReward;
 import com.mopub.common.SdkConfiguration;
@@ -18,16 +27,6 @@ import com.mopub.mobileads.MoPubInterstitial;
 import com.mopub.mobileads.MoPubRewardedAdListener;
 import com.mopub.mobileads.MoPubRewardedAds;
 import com.mopub.mobileads.MoPubView;
-import com.mopub.nativeads.MoPubNative;
-import com.mopub.nativeads.MoPubRecyclerAdapter;
-import com.mopub.nativeads.MoPubStaticNativeAdRenderer;
-import com.mopub.nativeads.ViewBinder;
-import com.unity3d.ads.IUnityAdsListener;
-import com.unity3d.ads.IUnityAdsLoadListener;
-import com.unity3d.ads.UnityAds;
-import com.unity3d.services.banners.BannerErrorInfo;
-import com.unity3d.services.banners.BannerView;
-import com.unity3d.services.banners.UnityBannerSize;
 import com.wineberryhalley.mna.R;
 import com.wineberryhalley.mna.base.BannerNativeMNA;
 import com.wineberryhalley.mna.base.DelayListener;
@@ -36,26 +35,24 @@ import com.wineberryhalley.mna.base.InterstitialListener;
 import com.wineberryhalley.mna.base.MListener;
 import com.wineberryhalley.mna.base.NativeMNA;
 import com.wineberryhalley.mna.base.RewardListener;
-import com.wineberryhalley.mna.base.UnityListener;
 
 import java.util.Set;
 
 import static com.mopub.common.logging.MoPubLog.LogLevel.DEBUG;
 import static com.mopub.common.logging.MoPubLog.LogLevel.INFO;
-import static com.wineberryhalley.mna.net.AdManager.ntUtils;
 import static com.wineberryhalley.mna.net.AdManager.testAds;
 
-public class MopubMNA extends AdMNA {
+public class AppLovinMNA extends AdMNA {
     private Context context;
     private static boolean initialized = false;
     private static boolean getting = false;
     private static int c_un_count = 0;
   static Activity activity = null;
     static InitializeListener initializeListener;
-    public MopubMNA(AdMNA adMNA) {
+    public AppLovinMNA(AdMNA adMNA) {
         context = ChalaEdChala.context;
         if(AdManager.testAds){
-            adMNA.setValue(configAdsTestMoPub(adMNA));
+          //  adMNA.setValue(configAdsTestMoPub(adMNA));
         }
         config(adMNA);
 
@@ -92,7 +89,7 @@ public class MopubMNA extends AdMNA {
     }
 
 
-    static void initialize(String adunit){
+    static void initialize(){
             activity = AdManager.getActivity();
 
             try {
@@ -105,25 +102,21 @@ public class MopubMNA extends AdMNA {
 
         if (!initialized && !getting && activity != null) {
 
-            SdkConfiguration.Builder sdkConfiguration = new SdkConfiguration.Builder(adunit);
-
-            if (testAds) {
-                sdkConfiguration.withLogLevel(DEBUG);
-            } else {
-                sdkConfiguration.withLogLevel(INFO);
-            }
-
-            MoPub.initializeSdk(activity, sdkConfiguration.build(), new SdkInitializationListener() {
+            AppLovinSdk.getInstance( activity ).setMediationProvider( "max" );
+            AppLovinSdk.getInstance(activity).getSettings().setCreativeDebuggerEnabled(testAds);
+            AppLovinSdk.initializeSdk( activity, new AppLovinSdk.SdkInitializationListener() {
                 @Override
-                public void onInitializationFinished() {
-                 if(initializeListener != null){
-               //      Log.e(TAG, "onInitializationFinished: "+adunit );
+                public void onSdkInitialized(final AppLovinSdkConfiguration configuration)
+                {
+                    // AppLovin SDK is initialized, start loading ads
+                    if(initializeListener != null){
+                        //      Log.e(TAG, "onInitializationFinished: "+adunit );
 
-                     initializeListener.OnInitialized();
-                 }
-                 initialized = true;
+                        initializeListener.OnInitialized();
+                    }
+                    initialized = true;
                 }
-            });
+            } );
       getting = true;
         }
     }
@@ -133,38 +126,64 @@ public class MopubMNA extends AdMNA {
         if (isInitialized()) {
 
 
-            MoPubView adView = new MoPubView(activity);
-            adView.setAdSize(MoPubView.MoPubAdSize.HEIGHT_50);
-            adView.setTesting(testAds);
-            adView.setBannerAdListener(new MoPubView.BannerAdListener() {
+          MaxAdView adView = new MaxAdView( getValue(), activity );
+            adView.setListener(new MaxAdViewAdListener() {
                 @Override
-                public void onBannerLoaded(@NonNull MoPubView moPubView) {
+                public void onAdExpanded(MaxAd ad) {
+
+                }
+
+                @Override
+                public void onAdCollapsed(MaxAd ad) {
+
+                }
+
+                @Override
+                public void onAdLoaded(MaxAd ad) {
 addLoadedTo();
 addImpressionTo();
                 }
 
                 @Override
-                public void onBannerFailed(MoPubView moPubView, MoPubErrorCode moPubErrorCode) {
+                public void onAdDisplayed(MaxAd ad) {
 
                 }
 
                 @Override
-                public void onBannerClicked(MoPubView moPubView) {
+                public void onAdHidden(MaxAd ad) {
 
                 }
 
                 @Override
-                public void onBannerExpanded(MoPubView moPubView) {
+                public void onAdClicked(MaxAd ad) {
 
                 }
 
                 @Override
-                public void onBannerCollapsed(MoPubView moPubView) {
+                public void onAdLoadFailed(String adUnitId, MaxError error) {
+
+                }
+
+                @Override
+                public void onAdDisplayFailed(MaxAd ad, MaxError error) {
 
                 }
             });
-            // Request a banner ad:
-            adView.setAdUnitId(getValue());
+
+            // Stretch to the width of the screen for banners to be fully functional
+            int width = ViewGroup.LayoutParams.MATCH_PARENT;
+
+            // Banner height on phones and tablets is 50 and 90, respectively
+            // Get the adaptive banner height.
+            int heightDp = MaxAdFormat.BANNER.getAdaptiveSize( activity ).getHeight();
+            int heightPx = AppLovinSdkUtils.dpToPx( activity, heightDp );
+
+
+            adView.setLayoutParams( new FrameLayout.LayoutParams( width, heightPx ) );
+
+
+
+            // Load the ad
             adView.loadAd();
             adContainer.addView(adView);
 
@@ -239,43 +258,69 @@ addImpressionTo();
 
     @Override
     public void showBannerAd(LinearLayout adContainer, MListener listener) {
-
+        //Log.e(TAG, "showBannerAd: a "+isInitialized() );
         if (isInitialized()) {
 
 
-            MoPubView adView = new MoPubView(activity);
-            adView.setAdSize(MoPubView.MoPubAdSize.HEIGHT_50);
-            adView.setTesting(testAds);
-            adView.setBannerAdListener(new MoPubView.BannerAdListener() {
+            MaxAdView adView = new MaxAdView( getValue(), activity );
+            adView.setListener(new MaxAdViewAdListener() {
                 @Override
-                public void onBannerLoaded(@NonNull MoPubView moPubView) {
+                public void onAdExpanded(MaxAd ad) {
+
+                }
+
+                @Override
+                public void onAdCollapsed(MaxAd ad) {
+
+                }
+
+                @Override
+                public void onAdLoaded(MaxAd ad) {
                     addLoadedTo();
                     addImpressionTo();
                     listener.OnLoad();
                 }
 
                 @Override
-                public void onBannerFailed(MoPubView moPubView, MoPubErrorCode moPubErrorCode) {
-listener.OnError("Mopub err code: "+moPubErrorCode.getIntCode());
-                }
-
-                @Override
-                public void onBannerClicked(MoPubView moPubView) {
+                public void onAdDisplayed(MaxAd ad) {
 
                 }
 
                 @Override
-                public void onBannerExpanded(MoPubView moPubView) {
+                public void onAdHidden(MaxAd ad) {
 
                 }
 
                 @Override
-                public void onBannerCollapsed(MoPubView moPubView) {
+                public void onAdClicked(MaxAd ad) {
+
+                }
+
+                @Override
+                public void onAdLoadFailed(String adUnitId, MaxError error) {
+listener.OnError(error.getMessage());
+                }
+
+                @Override
+                public void onAdDisplayFailed(MaxAd ad, MaxError error) {
 
                 }
             });
-            // Request a banner ad:
-            adView.setAdUnitId(getValue());
+
+            // Stretch to the width of the screen for banners to be fully functional
+            int width = ViewGroup.LayoutParams.MATCH_PARENT;
+
+            // Banner height on phones and tablets is 50 and 90, respectively
+            // Get the adaptive banner height.
+            int heightDp = MaxAdFormat.BANNER.getAdaptiveSize( activity ).getHeight();
+            int heightPx = AppLovinSdkUtils.dpToPx( activity, heightDp );
+
+
+            adView.setLayoutParams( new FrameLayout.LayoutParams( width, heightPx ) );
+
+
+
+            // Load the ad
             adView.loadAd();
             adContainer.addView(adView);
 
@@ -483,9 +528,7 @@ rewardListener.onReward();
 
     @Override
     public void showNativeIn(NativeMNA layout) {
-if(ntUtils != null){
-    ntUtils.into(layout).showMoPubNative();
-}
+
     }
 
 
@@ -500,9 +543,7 @@ if(ntUtils != null){
     @Override
     public void showBannerNativeIn(BannerNativeMNA layout) {
       //  Log.e(TAG, "showBannerNativeIn: a" );
-        if(ntUtils != null){
-            ntUtils.into(layout).showMoPubNative();
-        }
+
     }
 
 

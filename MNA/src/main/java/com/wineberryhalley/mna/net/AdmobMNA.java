@@ -31,6 +31,8 @@ import com.wineberryhalley.mna.base.MListener;
 import com.wineberryhalley.mna.base.NativeMNA;
 import com.wineberryhalley.mna.base.RewardListener;
 
+import static com.wineberryhalley.mna.net.AdManager.ntUtils;
+
 public class AdmobMNA extends AdMNA{
     private Context context;
     static Activity activity = null;
@@ -343,85 +345,20 @@ trySetActivity();
 
     @Override
     public void showNativeIn(NativeMNA layout) {
-        new NtUtils(context, getValue()).loadAdmobNative().setListener(new NtUtils.OnNativeLoadInterface() {
-            @Override
-            public void OnSuccess() {
-                addLoadedTo();
-            }
+        if(ntUtils != null){
+            ntUtils.into(layout).showAdmobNative();
+        }
 
-            @Override
-            public void OnFail(String ss, int pos) {
-                layout.setVisibility(View.GONE);
-            }
-            @Override
-            public void OnImpression() {
-                addImpressionTo();
-            }
-        }).into(layout);
     }
 
-    @Override
-    public void showNativeIn(NativeMNA layout, MListener listener) {
-        new NtUtils(context, getValue()).loadAdmobNative().setListener(new NtUtils.OnNativeLoadInterface() {
-            @Override
-            public void OnSuccess()
-            {
-                addLoadedTo();
-                listener.OnLoad();
-            }
-
-            @Override
-            public void OnFail(String ss, int pos) {
-                listener.OnError(ss);
-                layout.setVisibility(View.GONE);
-            }
-            @Override
-            public void OnImpression() {
-                addImpressionTo();
-            }
-        }).into(layout);
-    }
 
 
     @Override
     public void showBannerNativeIn(BannerNativeMNA layout) {
-        new NtUtils(context, getValue()).loadAdmobNative().setListener(new NtUtils.OnNativeLoadInterface() {
-            @Override
-            public void OnSuccess() {
-                addLoadedTo();
-            }
-
-            @Override
-            public void OnImpression() {
-                addImpressionTo();
-            }
-
-            @Override
-            public void OnFail(String ss, int pos) {
-                layout.setVisibility(View.GONE);
-            }
-        }).into(layout);
+        if(ntUtils != null){
+            ntUtils.into(layout).showAdmobNative();
+        }
     }
 
-    @Override
-    public void showBannerNativeIn(BannerNativeMNA layout, MListener listener) {
-        new NtUtils(context, getValue()).loadAdmobNative().setListener(new NtUtils.OnNativeLoadInterface() {
-            @Override
-            public void OnSuccess() {
-                addLoadedTo();
-                listener.OnLoad();
-            }
-
-            @Override
-            public void OnFail(String ss, int pos) {
-                listener.OnError(ss);
-                layout.setVisibility(View.GONE);
-            }
-            @Override
-            public void OnImpression() {
-                addImpressionTo();
-            }
-        }).into(layout);
-    }
 
 }

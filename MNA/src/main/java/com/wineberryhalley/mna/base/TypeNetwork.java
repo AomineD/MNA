@@ -4,5 +4,6 @@ public enum TypeNetwork {
     AUDIENCE,
     UNITYADS,
     ADMOB,
-    MOPUB
+    MOPUB,
+    APPLOVIN
 }

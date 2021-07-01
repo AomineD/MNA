@@ -28,14 +28,14 @@
 
         </com.wineberryhalley.mna.base.BannerNativeMNA>
 
-        <com.wineberryhalley.mna.base.NativeMNA
-            android:layout_width="match_parent"
-            android:layout_marginTop="10dp"
-            android:id="@+id/native_ad"
+    <com.wineberryhalley.mna.base.NativeMNA
+        android:id="@+id/native_ad"
+        android:layout_width="match_parent"
+        android:layout_height="380dp"
 
-            android:layout_height="wrap_content">
+        android:layout_marginTop="10dp">
 
-        </com.wineberryhalley.mna.base.NativeMNA>
+    </com.wineberryhalley.mna.base.NativeMNA>
 
 
 

@@ -2,6 +2,7 @@ package com.wineberryhalley.mna.net;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -17,6 +18,9 @@ import com.wineberryhalley.mna.base.TypeAd;
 import com.wineberryhalley.mna.base.TypeNetwork;
 
 import java.util.ArrayList;
+
+import static com.wineberryhalley.mna.net.AdManager.ntUtils;
+import static com.wineberryhalley.mna.net.AdManager.ntUtilsBannerNat;
 
 public class SubManager {
     protected SubManager(){
@@ -87,6 +91,19 @@ public class SubManager {
             }
         }
         return mopubMNA;
+
+    }
+
+    private AppLovinMNA getOfTypeAppLovin(TypeAd typeAd){
+        AppLovinMNA appLovinMNA = null;
+        for (AdMNA ad :
+                ads) {
+            if(ad.getType() == typeAd) {
+                appLovinMNA = new AppLovinMNA(ad);
+                break;
+            }
+        }
+        return appLovinMNA;
 
     }
 
@@ -198,6 +215,15 @@ public class SubManager {
             }
             if(mopubMNA != null)
                 mopubMNA.showBannerAd(linearLayout, listener);
+            else{
+                listener.OnError("No banners");
+            }
+
+        }else if(AdManager.network == TypeNetwork.APPLOVIN){
+
+            AppLovinMNA appLovinMNA = getOfTypeAppLovin(TypeAd.BANNER);
+            if(appLovinMNA != null)
+                appLovinMNA.showBannerAd(linearLayout, listener);
             else{
                 listener.OnError("No banners");
             }
@@ -599,7 +625,7 @@ public class SubManager {
     }
 
     public boolean hasBannerNativeAds(){
-      if(AdManager.natives_network == TypeNetwork.ADMOB) {
+      if(AdManager.natives_network != TypeNetwork.AUDIENCE) {
           for (AdMNA ad :
                   ads) {
 if(ad.getType() == TypeAd.NATIVO){
@@ -658,5 +684,69 @@ if(ad.getType() == TypeAd.NATIVO){
 
     public boolean isMoPub(){
         return AdManager.network == TypeNetwork.MOPUB;
+    }
+
+
+    private int count = 3;
+    public SubManager setNativeCount(int c){
+count = c;
+        return this;
+    }
+
+
+
+    public void loadNatives(NtUtils.OnNativeLoadInterface listener){
+        if(AdManager.network == TypeNetwork.UNITYADS){
+            return;
+        }
+
+        if(hasNativeAds()){
+
+        switch (AdManager.network){
+            case AUDIENCE:
+                ArrayList<AudienceMNA> mna = getArrayOf(TypeAd.NATIVO);
+                if (mna.size() > 0) {
+
+                    ntUtils = NtUtils.getInstance(ChalaEdChala.context, mna, listener);
+                }
+                break;
+            case ADMOB:
+                AdmobMNA m = getOfTypeAdmob(TypeAd.NATIVO);
+
+                ntUtils = NtUtils.getAdmobInstance(ChalaEdChala.context, m, count,listener);
+                break;
+            case MOPUB:
+                MopubMNA moPub = getOfTypeMoPub(TypeAd.NATIVO);
+
+                ntUtils = NtUtils.getAdmobInstance(ChalaEdChala.context, moPub, count,listener);
+                break;
+        }
+        }
+
+
+        if(ntUtils != null){
+
+            ntUtils.loadGeneral(false);
+
+        }
+
+    }
+
+    public void loadBannerNatives(NtUtils.OnNativeLoadInterface listener){
+        if(hasBannerNativeAds()){
+            if (AdManager.network == TypeNetwork.AUDIENCE) {
+                ArrayList<AudienceMNA> mna = getArrayOf(TypeAd.BANNER_NATIVO);
+
+
+                if (mna.size() > 0) {
+                    if(ntUtilsBannerNat == null ){
+                        ntUtilsBannerNat = NtUtils.getInstance(ChalaEdChala.context, listener);
+                    }
+
+                    ntUtilsBannerNat.setBannerNatives(mna);
+                    ntUtilsBannerNat.loadGeneral(true);
+                }
+            }
+        }
     }
 }
