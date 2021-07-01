@@ -9,6 +9,7 @@ import com.wineberryhalley.mna.net.ChalaEdChala;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 public class Cons {
     public static final String a_b_aw = "e_cn";
@@ -25,5 +26,16 @@ public class Cons {
             e.printStackTrace();
         }
     return text1;
+    }
+
+    public static ArrayList<String> natives_identifiers = new ArrayList<>();
+
+    public static boolean alreadyLoaded(String id){
+        return natives_identifiers.contains(id);
+    }
+
+
+    public static void clearIdentifiers(){
+        natives_identifiers.clear();
     }
 }

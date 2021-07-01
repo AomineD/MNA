@@ -48,6 +48,7 @@ import com.wineberryhalley.mna.R;
 import com.wineberryhalley.mna.base.BannerNativeMNA;
 import com.wineberryhalley.mna.base.MNApp;
 import com.wineberryhalley.mna.base.NativeMNA;
+import com.wineberryhalley.mna.cons.Cons;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -149,15 +150,18 @@ this.sizeAdmobNative = size;
 
     public NtUtils into(BannerNativeMNA bn) {
         this.banner_container = bn.getView(AdManager.natives_network);
+        position = bn.getIdentifier();
         return this;
     }
 
     public NtUtils into(NativeMNA bn) {
         this.banner_container = bn.getView(AdManager.natives_network);
+        position = bn.getIdentifier();
         return this;
     }
 
     private View banner_container;
+    private String position = "";
     private NativeAdView nativeAdView;
     private OnNativeLoadInterface intre2;
 
@@ -229,10 +233,8 @@ this.sizeAdmobNative = size;
     
     protected NtUtils loadAds() {
 
-        nativeShowed = new ArrayList<>();
-
         for (int i = 0; i < idsAudience.size(); i++) {
-            nativeShowed.add(false);
+
 
             NativeAd   nativeAd = new NativeAd(context, idsAudience.get(i).getValue());
             int finalI = i;
@@ -244,8 +246,11 @@ this.sizeAdmobNative = size;
 nativeAds.add(nativeAd);
 if(idTryingToShow.contains(nativeAd.getPlacementId())){
 
-    showAudienceNative(nativeAd.getPlacementId());
-    idTryingToShow.remove(nativeAd.getPlacementId());
+    if(Cons.alreadyLoaded(position)) {
+        showAudienceNative(nativeAd.getPlacementId());
+        idTryingToShow.remove(nativeAd.getPlacementId());
+    Cons.natives_identifiers.add(position);
+    }
  //   Log.e(TAG, "onMediaDownloaded: si" );
 }
 
@@ -315,10 +320,7 @@ if(nativeLoadeds >= idsAudience.size()){
 
     protected NtUtils loadAdmobNative() {
 
-        nativeShowed = new ArrayList<>();
-        for (int i = 0; i < sizeAdmobNative; i++) {
-            nativeShowed.add(false);
-        }
+
   //      Log.e(TAG, "loadAdmobNative: "+idsnat.getValue() );
         AdLoader adLoader = new AdLoader.Builder(context, idsnat.getValue())
                 .forNativeAd(new com.google.android.gms.ads.nativead.NativeAd.OnNativeAdLoadedListener() {
@@ -378,9 +380,8 @@ if(nativeLoadeds >= idsAudience.size()){
 
     protected NtUtils loadMoPubNative() {
 
-        nativeShowed = new ArrayList<>();
         for (int i = 0; i < sizeAdmobNative; i++) {
-nativeShowed.add(false);
+
 
         MoPubNative moPubNative = new MoPubNative(context, idsnat.getValue(), new MoPubNative.MoPubNativeNetworkListener() {
             @Override
@@ -502,9 +503,12 @@ nativeShowed.add(false);
         for (NativeAd ad:
              nativeAds) {
             if(ad.getPlacementId().equalsIgnoreCase(id)){
-                populateNativeIn(ad);
-                show = true;
-                break;
+          if(!Cons.alreadyLoaded(position)) {
+              populateNativeIn(ad);
+              show = true;
+              Cons.natives_identifiers.add(position);
+              break;
+          }
             }
         }
 
@@ -522,9 +526,12 @@ nativeShowed.add(false);
         for (NativeBannerAd ad:
                 nativeBannerAds) {
             if(ad.getPlacementId().equalsIgnoreCase(id)){
-                populateBannerNativeIn(ad);
-                show = true;
-                break;
+                if(!Cons.alreadyLoaded(position)) {
+                    Cons.natives_identifiers.add(position);
+                    populateBannerNativeIn(ad);
+                    show = true;
+                    break;
+                }
             }
         }
 
@@ -539,25 +546,25 @@ nativeShowed.add(false);
             return;
         }
 
-        int indx = new Random().nextInt(nativeAds_admob.size());
-        if (!nativeShowed.get(indx)) {
+        if (!Cons.alreadyLoaded(position)) {
+            int indx = new Random().nextInt(nativeAds_admob.size());
             com.google.android.gms.ads.nativead.NativeAd random = nativeAds_admob.get(indx);
 
             populateUnifiedNativeAdView(random);
-            nativeShowed.set(indx, true);
+            Cons.natives_identifiers.add(position);
         }
     }
 
-    public void showMoPubNative(){
-        if(nativeAds_MoPub.size() < 1) {
+    public void showMoPubNative() {
+        if (nativeAds_MoPub.size() < 1) {
             return;
         }
-       // Log.e(TAG, "showMoPubNative: "+nativeAds_MoPub.size() );
-        int indx = new Random().nextInt(nativeAds_MoPub.size());
-        if (!nativeShowed.get(indx)) {
+        // Log.e(TAG, "showMoPubNative: "+nativeAds_MoPub.size() );
+        if (!Cons.alreadyLoaded(position)) {
+            int indx = new Random().nextInt(nativeAds_MoPub.size());
             com.mopub.nativeads.NativeAd random = nativeAds_MoPub.get(indx);
             populateNativeMopub(random);
-            nativeShowed.set(indx, true);
+            Cons.natives_identifiers.add(position);
         }
     }
 
@@ -615,9 +622,13 @@ nativeShowed.add(false);
 
                     nativeBannerAds.add(nativeBannerAd);
                     banner_nativo_count++;
-                    if(idTryingToShow.contains(nativeBannerAd.getPlacementId())){
-                        populateBannerNativeIn(nativeBannerAd);
-                        idTryingToShow.remove(nativeBannerAd.getPlacementId());
+
+                        if (idTryingToShow.contains(nativeBannerAd.getPlacementId())) {
+                            if(Cons.alreadyLoaded(position)) {
+                            populateBannerNativeIn(nativeBannerAd);
+                            idTryingToShow.remove(nativeBannerAd.getPlacementId());
+                            Cons.natives_identifiers.add(position);
+                        }
                     }
                     if(banner_nativo_count >= idsBannerNative.size()){
                         if (intre != null) {
@@ -846,7 +857,6 @@ banner_container.setVisibility(View.VISIBLE);
     }
 
 
-    private ArrayList<Boolean> nativeShowed = new ArrayList<>();
     public  void populateUnifiedNativeAdView(com.google.android.gms.ads.nativead.NativeAd nativeAd) {
         // Set the media view.
 
