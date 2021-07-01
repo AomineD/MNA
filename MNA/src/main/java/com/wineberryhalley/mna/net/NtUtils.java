@@ -54,6 +54,8 @@ import java.util.EnumSet;
 import java.util.Locale;
 import java.util.Random;
 
+import static com.wineberryhalley.mna.net.AdManager.nativesLoaded;
+
 public class NtUtils {
 
     public static NtUtils getInstance(Context c, OnNativeLoadInterface nativeLoadInterface) {
@@ -162,6 +164,7 @@ this.sizeAdmobNative = size;
     private OnNativeLoadInterface intre = new OnNativeLoadInterface() {
         @Override
         public void OnSuccess() {
+            nativesLoaded = true;
          if(intre2 != null){
              intre2.OnSuccess();
          }
@@ -499,6 +502,7 @@ if(nativeLoadeds >= idsAudience.size()){
         }
 
         if(!show){
+            banner_container.setVisibility(View.GONE);
             idTryingToShow.add(id);
         }
     }
@@ -518,6 +522,7 @@ if(nativeLoadeds >= idsAudience.size()){
         }
 
         if(!show){
+            banner_container.setVisibility(View.GONE);
             idTryingToShow.add(id);
         }
     }

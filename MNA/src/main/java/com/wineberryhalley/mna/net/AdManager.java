@@ -18,6 +18,7 @@ public class AdManager {
     private static SubManager subManager;
     static boolean testAds = false;
     static boolean isInitializedAlready = false;
+    static boolean nativesLoaded;
     static TypeNetwork mediation_mopub;
 
     protected AdManager(){
@@ -46,6 +47,10 @@ if(subManager == null){
 
     public Non load(){
         return new Non();
+    }
+
+    public boolean isNativesLoaded(){
+        return nativesLoaded;
     }
 
     public boolean checkIfLoad(){
