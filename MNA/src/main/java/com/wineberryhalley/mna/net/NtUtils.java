@@ -229,10 +229,12 @@ this.sizeAdmobNative = size;
     
     protected NtUtils loadAds() {
 
+        nativeShowed = new ArrayList<>();
+
         for (int i = 0; i < idsAudience.size(); i++) {
+            nativeShowed.add(false);
 
-
-     NativeAd   nativeAd = new NativeAd(context, idsAudience.get(i).getValue());
+            NativeAd   nativeAd = new NativeAd(context, idsAudience.get(i).getValue());
             int finalI = i;
             int finalI1 = i;
             nativeAd.buildLoadAdConfig().withAdListener(new NativeAdListener() {
@@ -313,7 +315,11 @@ if(nativeLoadeds >= idsAudience.size()){
 
     protected NtUtils loadAdmobNative() {
 
-        Log.e(TAG, "loadAdmobNative: "+idsnat.getValue() );
+        nativeShowed = new ArrayList<>();
+        for (int i = 0; i < sizeAdmobNative; i++) {
+            nativeShowed.add(false);
+        }
+  //      Log.e(TAG, "loadAdmobNative: "+idsnat.getValue() );
         AdLoader adLoader = new AdLoader.Builder(context, idsnat.getValue())
                 .forNativeAd(new com.google.android.gms.ads.nativead.NativeAd.OnNativeAdLoadedListener() {
                     @Override
@@ -372,9 +378,9 @@ if(nativeLoadeds >= idsAudience.size()){
 
     protected NtUtils loadMoPubNative() {
 
-
+        nativeShowed = new ArrayList<>();
         for (int i = 0; i < sizeAdmobNative; i++) {
-            
+nativeShowed.add(false);
 
         MoPubNative moPubNative = new MoPubNative(context, idsnat.getValue(), new MoPubNative.MoPubNativeNetworkListener() {
             @Override
@@ -487,6 +493,7 @@ if(nativeLoadeds >= idsAudience.size()){
      * **/
     private ArrayList<String> idTryingToShow = new ArrayList<>();
 
+
     public void showAudienceNative(String id){
         if(nativeAds.size() < 1){
             return;
@@ -527,22 +534,31 @@ if(nativeLoadeds >= idsAudience.size()){
         }
     }
 
-    public void showAdmobNative(){
-        if(nativeAds_admob.size() < 1) {
+    public void showAdmobNative() {
+        if (nativeAds_admob.size() < 1) {
             return;
         }
 
-        com.google.android.gms.ads.nativead.NativeAd random = nativeAds_admob.get(new Random().nextInt(nativeAds_admob.size()));
-        populateUnifiedNativeAdView(random);
+        int indx = new Random().nextInt(nativeAds_admob.size());
+        if (!nativeShowed.get(indx)) {
+            com.google.android.gms.ads.nativead.NativeAd random = nativeAds_admob.get(indx);
+
+            populateUnifiedNativeAdView(random);
+            nativeShowed.set(indx, true);
+        }
     }
 
     public void showMoPubNative(){
         if(nativeAds_MoPub.size() < 1) {
             return;
         }
-
-        com.mopub.nativeads.NativeAd random = nativeAds_MoPub.get(new Random().nextInt(nativeAds_MoPub.size()));
-        populateNativeMopub(random);
+       // Log.e(TAG, "showMoPubNative: "+nativeAds_MoPub.size() );
+        int indx = new Random().nextInt(nativeAds_MoPub.size());
+        if (!nativeShowed.get(indx)) {
+            com.mopub.nativeads.NativeAd random = nativeAds_MoPub.get(indx);
+            populateNativeMopub(random);
+            nativeShowed.set(indx, true);
+        }
     }
 
 
@@ -679,6 +695,9 @@ if(nativeLoadeds >= idsAudience.size()){
         action = banner_container.findViewById(R.id.callto);
         title_ad = banner_container.findViewById(R.id.title_ad);
         sponsor = banner_container.findViewById(R.id.sponsor_ad);
+        if(sponsor != null && !sponsor.getText().toString().isEmpty()){
+            return;
+        }
         desc_ad = banner_container.findViewById(R.id.sponsor_adw);
         //      normal_view = itemView.findViewById(R.id.normal_view);
 
@@ -699,6 +718,7 @@ if(nativeLoadeds >= idsAudience.size()){
 
         if (nativeAd != null && nativeAd.isAdLoaded()) {
             banner_container.setVisibility(View.VISIBLE);
+
             String title = nativeAd.getAdvertiserName();
             String provider = nativeAd.getSponsoredTranslation();
             String boton_action = nativeAd.getAdCallToAction();
@@ -758,6 +778,9 @@ final int colorbck = context.getResources().getColor(R.color.white_nt);
         action = banner_container.findViewById(R.id.callto);
         title_ad = banner_container.findViewById(R.id.title_ad);
         sponsor = banner_container.findViewById(R.id.sponsor_ad);
+        if(sponsor != null && !sponsor.getText().toString().isEmpty()){
+            return;
+        }
         desc_ad = banner_container.findViewById(R.id.sponsor_adw);
         //      normal_view = itemView.findViewById(R.id.normal_view);
 
@@ -823,8 +846,10 @@ banner_container.setVisibility(View.VISIBLE);
     }
 
 
+    private ArrayList<Boolean> nativeShowed = new ArrayList<>();
     public  void populateUnifiedNativeAdView(com.google.android.gms.ads.nativead.NativeAd nativeAd) {
         // Set the media view.
+
         nativeAdView = (NativeAdView) banner_container;
          if (nativeAdView == null) {
              return;
@@ -905,6 +930,7 @@ banner_container.setVisibility(View.VISIBLE);
 
         // This method tells the Google Mobile Ads SDK that you have finished populating your
         // native ad view with this native ad.
+
         adView.setNativeAd(nativeAd);
 
         // Get the video controller for the ad. One will always be provided, even if the ad doesn't
