@@ -417,6 +417,7 @@ if(nativeLoadeds >= idsAudience.size()){
                 .titleId(R.id.native_title)
                 .textId(R.id.native_text)
                 .privacyInformationIconImageId(R.id.native_privacy_information_icon_image)
+                .sponsoredTextId(R.id.native_sponsored_text_view)
                 .build();
 
         MoPubStaticNativeAdRenderer moPubStaticNativeAdRenderer = new MoPubStaticNativeAdRenderer(viewBinder);
