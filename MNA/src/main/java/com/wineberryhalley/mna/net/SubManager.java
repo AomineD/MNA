@@ -696,13 +696,13 @@ count = c;
 
 
     public void loadNatives(NtUtils.OnNativeLoadInterface listener){
-        if(AdManager.network == TypeNetwork.UNITYADS){
+        if(AdManager.natives_network == TypeNetwork.UNITYADS){
             return;
         }
 
         if(hasNativeAds()){
 
-        switch (AdManager.network){
+        switch (AdManager.natives_network){
             case AUDIENCE:
                 ArrayList<AudienceMNA> mna = getArrayOf(TypeAd.NATIVO);
                 if (mna.size() > 0) {
@@ -734,7 +734,7 @@ count = c;
 
     public void loadBannerNatives(NtUtils.OnNativeLoadInterface listener){
         if(hasBannerNativeAds()){
-            if (AdManager.network == TypeNetwork.AUDIENCE) {
+            if (AdManager.natives_network == TypeNetwork.AUDIENCE) {
                 ArrayList<AudienceMNA> mna = getArrayOf(TypeAd.BANNER_NATIVO);
 
 
