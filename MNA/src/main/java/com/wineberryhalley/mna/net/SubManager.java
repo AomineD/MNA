@@ -697,12 +697,14 @@ count = c;
 
 
     public void loadNatives(NtUtils.OnNativeLoadInterface listener){
+
+        if(AdManager.testAds)
+            Log.e("MAIN", "loadNatives: "+natives_network.name()+" "+hasNativeAds() );
+
         if(AdManager.natives_network == TypeNetwork.UNITYADS){
             return;
         }
 
-        if(AdManager.testAds)
-        Log.e("MAIN", "loadNatives: "+natives_network.name()+" "+hasNativeAds() );
         if(hasNativeAds()){
 
         switch (AdManager.natives_network){
