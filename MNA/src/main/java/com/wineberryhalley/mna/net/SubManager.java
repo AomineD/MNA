@@ -710,6 +710,11 @@ count = c;
         switch (AdManager.natives_network){
             case AUDIENCE:
                 ArrayList<AudienceMNA> mna = getArrayOf(TypeAd.NATIVO);
+
+if(AdManager.testAds){
+    Log.e("MAIN", "loadNatives: "+mna.size() );
+
+}
                 if (mna.size() > 0) {
 
                     ntUtils = NtUtils.getInstance(ChalaEdChala.context, mna, listener);

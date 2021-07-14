@@ -251,6 +251,7 @@ if(idTryingToShow.contains(nativeAd.getPlacementId())){
 
                 nativeLoadeds++;
 if(nativeLoadeds >= idsAudience.size()){
+    Log.e(TAG, "onMediaDownloaded: a si "+(intre != null));
     if (intre != null) {
         intre.OnSuccess();
 
@@ -262,13 +263,13 @@ if(nativeLoadeds >= idsAudience.size()){
             public void onError(Ad ad, AdError adError) {
                 nativeLoadeds++;
 
-                if(nativeLoadeds >= sizeAdmobNative){
+                if(nativeLoadeds >= idsAudience.size()){
                     if (intre != null && idsAudience.size() > 0) {
                         intre.OnSuccess();
                     }
                 }
 
-                if (AdManager.testAds)
+                if (testAds)
                     Log.e("MAIN", "NATIVOS onError: " + adError.getErrorMessage() + " el index => "+finalI+" "+idsAudience.get(finalI));
 
                 if (intre != null)
@@ -282,7 +283,7 @@ if(nativeLoadeds >= idsAudience.size()){
 
 
                 idsAudience.get(finalI1).addLoadedTo();
-                if (AdManager.testAds) {
+                if (testAds) {
                     Log.e("MAIN", "NATIVOS onAdLoaded: "+finalI);
                 }
             }
