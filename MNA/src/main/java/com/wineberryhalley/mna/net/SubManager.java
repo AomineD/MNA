@@ -698,9 +698,6 @@ count = c;
 
     public void loadNatives(NtUtils.OnNativeLoadInterface listener){
 
-        if(AdManager.testAds)
-            Log.e("MAIN", "loadNatives: "+natives_network.name()+" "+hasNativeAds() );
-
         if(AdManager.natives_network == TypeNetwork.UNITYADS){
             return;
         }
@@ -711,10 +708,6 @@ count = c;
             case AUDIENCE:
                 ArrayList<AudienceMNA> mna = getArrayOf(TypeAd.NATIVO);
 
-if(AdManager.testAds){
-    Log.e("MAIN", "loadNatives: "+mna.size() );
-
-}
                 if (mna.size() > 0) {
 
                     ntUtils = NtUtils.getInstance(ChalaEdChala.context, mna, listener);

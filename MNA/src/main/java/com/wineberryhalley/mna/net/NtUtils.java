@@ -231,6 +231,8 @@ this.sizeAdmobNative = size;
     
     protected NtUtils loadAds() {
 
+        nativeLoadeds = 0;
+
         for (int i = 0; i < idsAudience.size(); i++) {
 
 
@@ -251,7 +253,6 @@ if(idTryingToShow.contains(nativeAd.getPlacementId())){
 
                 nativeLoadeds++;
 if(nativeLoadeds >= idsAudience.size()){
-    Log.e(TAG, "onMediaDownloaded: a si "+(intre != null));
     if (intre != null) {
         intre.OnSuccess();
 
@@ -302,10 +303,12 @@ if(nativeLoadeds >= idsAudience.size()){
             }
         }).build();
         nativeAd.loadAd();
+            if (AdManager.testAds)
+                Log.e("MAIN", "loadAds: loading native "+i);
+
 
         }
-        if (AdManager.testAds)
-            Log.e("MAIN", "loadAds: loading native 0");
+
 
         return this;
     }
@@ -315,7 +318,7 @@ if(nativeLoadeds >= idsAudience.size()){
 
 
     protected NtUtils loadAdmobNative() {
-
+        nativeLoadeds = 0;
 
   //      Log.e(TAG, "loadAdmobNative: "+idsnat.getValue() );
         AdLoader adLoader = new AdLoader.Builder(context, idsnat.getValue())
@@ -375,7 +378,7 @@ if(nativeLoadeds >= idsAudience.size()){
     }
 
     protected NtUtils loadMoPubNative() {
-
+        nativeLoadeds = 0;
         for (int i = 0; i < sizeAdmobNative; i++) {
 
 
@@ -468,7 +471,7 @@ if(nativeLoadeds >= idsAudience.size()){
     }
 
     protected NtUtils loadGeneral(boolean hasBannerNatives){
-        switch (AdManager.network){
+        switch (AdManager.natives_network){
             case AUDIENCE:
                if(hasBannerNatives){
                    loadBannerAds();
