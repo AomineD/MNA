@@ -19,6 +19,7 @@ import com.wineberryhalley.mna.base.TypeNetwork;
 
 import java.util.ArrayList;
 
+import static com.wineberryhalley.mna.net.AdManager.natives_network;
 import static com.wineberryhalley.mna.net.AdManager.ntUtils;
 import static com.wineberryhalley.mna.net.AdManager.ntUtilsBannerNat;
 
@@ -700,6 +701,8 @@ count = c;
             return;
         }
 
+        if(AdManager.testAds)
+        Log.e("MAIN", "loadNatives: "+natives_network.name()+" "+hasNativeAds() );
         if(hasNativeAds()){
 
         switch (AdManager.natives_network){
