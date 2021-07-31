@@ -269,6 +269,7 @@ trySetActivity();
                             public void onAdDismissedFullScreenContent() {
                                 super.onAdDismissedFullScreenContent();
                                 listener.OnDismissed();
+                                SubManager.resetF();
                             }
                         });
                         interstitialAd.show(activity);

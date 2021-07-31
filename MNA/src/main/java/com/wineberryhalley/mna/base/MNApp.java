@@ -8,6 +8,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.ironsource.mediationsdk.IronSource;
 import com.mopub.common.MoPub;
 import com.wineberryhalley.mna.net.AdManager;
 import com.wineberryhalley.mna.net.MopubMNA;
@@ -47,12 +48,20 @@ public class MNApp extends Application implements Application.ActivityLifecycleC
         if(AdManager.get().initialized() && AdManager.get().manage().isMoPub()){
             MoPub.onResume(activity);
         }
+
+        if(AdManager.get().initialized() && AdManager.get().manage().getActualNetwork() == TypeNetwork.IRON_SOURCE && !AdManager.get().manage().showingInterstitial()){
+            IronSource.onResume(activity);
+        }
     }
 
     @Override
     public void onActivityPaused(@NonNull Activity activity) {
         if(AdManager.get().initialized() && AdManager.get().manage().isMoPub()){
             MoPub.onPause(activity);
+        }
+
+        if(AdManager.get().initialized() && AdManager.get().manage().getActualNetwork() == TypeNetwork.IRON_SOURCE && !AdManager.get().manage().showingInterstitial()){
+            IronSource.onPause(activity);
         }
     }
 

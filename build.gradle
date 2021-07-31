@@ -21,6 +21,9 @@ allprojects {
         flatDir {
             dirs '/libs'
         }
+        maven {
+            url 'https://android-sdk.is.com/'
+        }
     }
 }
 

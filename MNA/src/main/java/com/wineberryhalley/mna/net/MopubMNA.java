@@ -423,6 +423,7 @@ listener.OnDismissed();
                     @Override
                     public void onInterstitialDismissed(MoPubInterstitial moPubInterstitial) {
                         listener.OnDismissed();
+                        SubManager.resetF();
                     }
                 });
 

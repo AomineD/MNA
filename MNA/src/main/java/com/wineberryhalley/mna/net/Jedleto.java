@@ -92,9 +92,12 @@ queue = Volley.newRequestQueue(context);
                       id_network = response.getString("type");
 
                        // Log.e("MAIN", "onResponse: "+network.name() );
-                        if(network != TypeNetwork.AUDIENCE && response.has("app_id")){
+                        if(network == TypeNetwork.UNITYADS && response.has("app_id")){
+                            AdManager.appId = response.getString("app_id");
+                        }else if(network == TypeNetwork.IRON_SOURCE && response.has("app_id") ){
                             AdManager.appId = response.getString("app_id");
                         }
+
                         AdManager.network = network;
                             ArrayList<AdMNA> array =  configAds(response.getJSONArray("data"));
 
@@ -117,6 +120,10 @@ queue = Volley.newRequestQueue(context);
                             AppLovinMNA.initialize();
                         }
                         else{
+
+                            if(network == TypeNetwork.IRON_SOURCE){
+                                IronMNA.initializeIron();
+                            }
 
                             AdMNA.initializeNormal();
 
@@ -343,6 +350,9 @@ a.put("get_ads", "a");
             case "5":
                 network = TypeNetwork.APPLOVIN;
                 break;
+            case "6":
+                network = TypeNetwork.IRON_SOURCE;
+                    break;
         }
         return network;
     }

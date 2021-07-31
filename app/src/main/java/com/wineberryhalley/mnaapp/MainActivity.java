@@ -19,6 +19,9 @@ import com.wineberryhalley.mna.base.RewardListener;
 import com.wineberryhalley.mna.net.AdManager;
 import com.wineberryhalley.mna.net.NtUtils;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class MainActivity extends AppCompatActivity implements InitializeListener {
 
     private View showIntersUn, showIntersFrec;
@@ -88,7 +91,20 @@ public class MainActivity extends AppCompatActivity implements InitializeListene
                 Log.e("MAIN", "OnError: "+erno );
             }
         });
-
+/*
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AdManager.get().destroyBannerAdIn(lin);
+                        Log.e(TAG, "run: rito" );
+                    }
+                });
+            }
+        }, 8000);
+*/
     }
 
     private String getText(){
@@ -170,12 +186,23 @@ AdManager.get().manage().showInterstitialAd(new InterstitialListener(){
         AdManager.get().manage().loadNatives(new NtUtils.OnNativeLoadInterface() {
             @Override
             public void OnSuccess() {
-              //  Log.e(TAG, "load: a" );
+                Log.e(TAG, "load: a "+(AdManager.get().manage().hasNativeAds()) );
                 if(AdManager.get().manage().hasNativeAds()){
 
                     NativeMNA a = findViewById(R.id.native_ad);
 
-                    AdManager.get().manage().showNativeIn(a);
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                           runOnUiThread(new Runnable() {
+                               @Override
+                               public void run() {
+                                   AdManager.get().manage().showNativeIn(a);
+                               }
+                           });
+                        }
+                    }, 8000);
+
 
                 }
             }

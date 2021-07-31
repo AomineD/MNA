@@ -5,5 +5,6 @@ public enum TypeNetwork {
     UNITYADS,
     ADMOB,
     MOPUB,
-    APPLOVIN
+    APPLOVIN,
+    IRON_SOURCE
 }

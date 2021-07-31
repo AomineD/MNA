@@ -20,6 +20,7 @@ public class AdManager {
     static boolean isInitializedAlready = false;
     static boolean nativesLoaded;
     static TypeNetwork mediation_mopub;
+    static boolean showingInterstitial = false;
 
     protected AdManager(){
 if(subManager == null){

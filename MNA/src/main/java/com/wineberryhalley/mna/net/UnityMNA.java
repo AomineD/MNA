@@ -355,9 +355,11 @@ public class UnityMNA extends AdMNA {
                     }
 
                     @Override
-                    public void onUnityAdsFailedToLoad(String s) {
-listener.OnError(s);
+                    public void onUnityAdsFailedToLoad(String placementId, UnityAds.UnityAdsLoadError error, String message) {
+                        listener.OnError(message);
                     }
+
+                   
                 });
             }
     }
@@ -382,6 +384,7 @@ listener.OnError(s);
                     @Override
                     public void OnClosed() {
                         listener.OnDismissed();
+                        SubManager.resetF();
                     }
 
                     @Override
@@ -403,8 +406,8 @@ listener.OnError(s);
                 }
 
                 @Override
-                public void onUnityAdsFailedToLoad(String s) {
-                    listener.OnError(s);
+                public void onUnityAdsFailedToLoad(String placementId, UnityAds.UnityAdsLoadError error, String message) {
+                    listener.OnError(message);
                 }
             });
         }
@@ -450,9 +453,9 @@ listener.OnError(s);
                     showInterstitialAd(rewardListener);
                 }
 
-                @Override
-                public void onUnityAdsFailedToLoad(String s) {
-                    rewardListener.OnError(s);
+                 @Override
+                public void onUnityAdsFailedToLoad(String placementId, UnityAds.UnityAdsLoadError error, String message) {
+                     rewardListener.OnError(message);
                 }
             });
         }

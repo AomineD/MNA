@@ -8,6 +8,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.ads.AdView;
+import com.ironsource.mediationsdk.IronSource;
+import com.ironsource.mediationsdk.IronSourceBannerLayout;
 import com.mopub.mobileads.MoPubView;
 import com.wineberryhalley.mna.base.BannerNativeMNA;
 import com.wineberryhalley.mna.base.InterstitialListener;
@@ -108,6 +110,20 @@ public class SubManager {
 
     }
 
+
+    private IronMNA getOfTypeIron(TypeAd typeAd){
+        IronMNA ironMNA = null;
+        for (AdMNA ad :
+                ads) {
+            if(ad.getType() == typeAd) {
+                ironMNA = new IronMNA(ad);
+                break;
+            }
+        }
+        return ironMNA;
+
+    }
+
     protected ArrayList<AdMNA> ads = new ArrayList<>();
 /** BANNER AD **/
     public void showBannerAd(LinearLayout linearLayout){
@@ -153,6 +169,12 @@ public class SubManager {
             }
             if(mopubMNA != null)
                 mopubMNA.showBannerAd(linearLayout);
+        }else if(AdManager.network == TypeNetwork.IRON_SOURCE){
+            IronMNA ironMNA = getOfTypeIron(TypeAd.BANNER);
+
+            if(ironMNA != null){
+                ironMNA.showBannerAd(linearLayout);
+            }
         }
 
     }
@@ -229,6 +251,14 @@ public class SubManager {
                 listener.OnError("No banners");
             }
 
+        }else if(AdManager.network == TypeNetwork.IRON_SOURCE){
+            IronMNA ironMNA = getOfTypeIron(TypeAd.BANNER);
+
+            if(ironMNA != null){
+                ironMNA.showBannerAd(linearLayout, listener);
+            }else{
+                listener.OnError("No banners");
+            }
         }
 
     }
@@ -258,6 +288,12 @@ public class SubManager {
             }
             if(mopubMNA != null)
                 mopubMNA.showBannerAd(relativeLayout);
+        }else if(AdManager.network == TypeNetwork.IRON_SOURCE){
+            IronMNA ironMNA = getOfTypeIron(TypeAd.BANNER);
+
+            if(ironMNA != null){
+                ironMNA.showBannerAd(relativeLayout);
+            }
         }
 
     }
@@ -301,6 +337,15 @@ public class SubManager {
 
             }
 
+        }else if(AdManager.network == TypeNetwork.IRON_SOURCE){
+            IronMNA ironMNA = getOfTypeIron(TypeAd.BANNER);
+
+            if(ironMNA != null){
+                ironMNA.showBannerAd(relativeLayout, listener);
+            }else {
+                listener.OnError("No banners");
+
+            }
         }
     }
 
@@ -342,6 +387,14 @@ public class SubManager {
                 listener.OnError("No interstitial");
 
             }
+        }else if(AdManager.network == TypeNetwork.IRON_SOURCE){
+            IronMNA ironMNA = getOfTypeIron(TypeAd.INTERSTICIAL);
+            if (ironMNA != null)
+                ironMNA.showInterstitalAdFrecuency(frec, listener);
+            else {
+                listener.OnError("No interstitial");
+
+            }
         }
     }
 
@@ -378,6 +431,14 @@ public class SubManager {
             MopubMNA mopubMNA  = getOfTypeMoPub(TypeAd.INTERSTICIAL);
             if (mopubMNA != null)
                 mopubMNA.showInterstitialAd(listener);
+            else {
+                listener.OnError("No interstitial");
+
+            }
+        }else if(AdManager.network == TypeNetwork.IRON_SOURCE){
+            IronMNA ironMNA = getOfTypeIron(TypeAd.INTERSTICIAL);
+            if (ironMNA != null)
+                ironMNA.showInterstitialAd(listener);
             else {
                 listener.OnError("No interstitial");
 
@@ -430,6 +491,16 @@ public class SubManager {
 
             }
 
+        } else if(AdManager.network == TypeNetwork.IRON_SOURCE){
+
+            IronMNA ironMNA = getOfTypeIron(TypeAd.REWARD);
+            if (ironMNA != null)
+                ironMNA.showRewardedAd(rewardListener);
+            else {
+                rewardListener.OnError("No interstitial");
+
+            }
+
         }
     }
 
@@ -472,7 +543,11 @@ public class SubManager {
             AdmobMNA admobMNA = getOfTypeAdmob(TypeAd.NATIVO);
 
             admobMNA.showBannerNativeIn(nm, listener);
-        }else {
+        }else if(natives_network == TypeNetwork.IRON_SOURCE){
+            IronMNA ironMNA = getOfTypeIron(TypeAd.NATIVO);
+            ironMNA.showBannerNativeIn(nm);
+        }
+        else {
             ArrayList<AudienceMNA> mna = getArrayOf(TypeAd.BANNER_NATIVO);
             if (mna.size() > 0) {
                 int get = getIndex();
@@ -503,6 +578,9 @@ public class SubManager {
 
             mopubMNA.showNativeIn(nm);
 
+        } else if(natives_network == TypeNetwork.IRON_SOURCE){
+                IronMNA ironMNA = getOfTypeIron(TypeAd.NATIVO);
+            ironMNA.showNativeIn(nm);
         }
         else{
 
@@ -676,6 +754,9 @@ if(ad.getType() == TypeAd.NATIVO){
                 }else if(v instanceof com.facebook.ads.AdView){
                     com.facebook.ads.AdView ad = (com.facebook.ads.AdView) v;
                     ad.destroy();
+                }else if(v instanceof IronSourceBannerLayout){
+                    IronSourceBannerLayout ad = (IronSourceBannerLayout) v;
+                    IronSource.destroyBanner(ad);
                 }
             }
             if(lin.getChildCount() > 0)
@@ -687,6 +768,14 @@ if(ad.getType() == TypeAd.NATIVO){
         return AdManager.network == TypeNetwork.MOPUB;
     }
 
+    public TypeNetwork getActualNetwork(){
+        return AdManager.network;
+    }
+
+    public boolean showingInterstitial()
+    {
+        return AdManager.showingInterstitial;
+    }
 
     private int count = 3;
     public SubManager setNativeCount(int c){
@@ -723,7 +812,11 @@ count = c;
 
                 ntUtils = NtUtils.getAdmobInstance(ChalaEdChala.context, moPub, count,listener);
                 break;
+            case IRON_SOURCE:
+                listener.OnSuccess();
+                break;
         }
+
         }
 
 
