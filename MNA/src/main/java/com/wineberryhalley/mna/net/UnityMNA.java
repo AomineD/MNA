@@ -19,8 +19,6 @@ import com.wineberryhalley.mna.base.MListener;
 import com.wineberryhalley.mna.base.RewardListener;
 import com.wineberryhalley.mna.base.UnityListener;
 
-import java.lang.reflect.InvocationTargetException;
-
 import static com.wineberryhalley.mna.net.AdManager.testAds;
 
 public class UnityMNA extends AdMNA {

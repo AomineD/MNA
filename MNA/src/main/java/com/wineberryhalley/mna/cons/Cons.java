@@ -1,15 +1,8 @@
 package com.wineberryhalley.mna.cons;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Base64;
 
-import com.wineberryhalley.mna.net.ChalaEdChala;
-
 import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 
 public class Cons {
     public static final String a_b_aw = "e_cn";

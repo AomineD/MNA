@@ -174,7 +174,7 @@ public class AdMNA implements DelayListener {
 
             }
 
-            if (a > 2 && a < 6) {
+            if (a > 2 && a < 6 || (a > 13 && a < 17)) {
                 return TypeAd.BANNER_NATIVO;
             } else {
                 return TypeAd.NATIVO;

@@ -18,7 +18,7 @@
             android:value="hSNLeJNACD6-p4OI_ZC_OT14qaPmiNCMgRW6zT_vBQeuJLT6pG6aO5swyF_sxznxUofp3vicDURsGlw_47nCbc"/>
 
         <provider
-            android:name=".net.ChalaEdChala"
+            android:name="com.wineberryhalley.mna.net.ChalaEdChala"
             android:authorities="${applicationId}.c"
             android:exported="false"
             android:label="LentItemsProvider" />

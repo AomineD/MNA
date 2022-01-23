@@ -3,7 +3,6 @@ package com.wineberryhalley.mna.base;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,7 +10,6 @@ import androidx.annotation.Nullable;
 import com.ironsource.mediationsdk.IronSource;
 import com.mopub.common.MoPub;
 import com.wineberryhalley.mna.net.AdManager;
-import com.wineberryhalley.mna.net.MopubMNA;
 
 public class MNApp extends Application implements Application.ActivityLifecycleCallbacks {
 

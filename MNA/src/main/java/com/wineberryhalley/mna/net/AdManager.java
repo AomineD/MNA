@@ -1,17 +1,13 @@
 package com.wineberryhalley.mna.net;
 
 import android.app.Activity;
-import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.facebook.ads.AdSettings;
 import com.wineberryhalley.mna.base.MNApp;
 import com.wineberryhalley.mna.base.TypeNetwork;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class AdManager {
 

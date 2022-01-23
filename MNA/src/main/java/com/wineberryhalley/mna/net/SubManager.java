@@ -58,6 +58,19 @@ public class SubManager {
 
     }
 
+    private ArrayList<AppLovinMNA> getApplovinArrayOf(TypeAd typeAd){
+        ArrayList<AppLovinMNA> arrayList = new ArrayList<>();
+        for (AdMNA ad :
+                ads) {
+            if(ad.getType() == typeAd) {
+                AppLovinMNA  audienceMNA = new AppLovinMNA(ad);
+                arrayList.add(audienceMNA);
+            }
+        }
+        return arrayList;
+
+    }
+
     private UnityMNA getOfTypeUnity(TypeAd typeAd){
         UnityMNA audienceMNA = null;
         for (AdMNA ad :
@@ -175,6 +188,14 @@ public class SubManager {
             if(ironMNA != null){
                 ironMNA.showBannerAd(linearLayout);
             }
+        }else if(AdManager.network == TypeNetwork.APPLOVIN){
+
+            AppLovinMNA appLovinMNA = getOfTypeAppLovin(TypeAd.BANNER);
+            if(appLovinMNA != null)
+                appLovinMNA.showBannerAd(linearLayout);
+
+
+
         }
 
     }
@@ -294,6 +315,13 @@ public class SubManager {
             if(ironMNA != null){
                 ironMNA.showBannerAd(relativeLayout);
             }
+        }else if(AdManager.network == TypeNetwork.APPLOVIN){
+
+            AppLovinMNA appLovinMNA = getOfTypeAppLovin(TypeAd.BANNER);
+            if(appLovinMNA != null)
+                appLovinMNA.showBannerAd(relativeLayout);
+
+
         }
 
     }
@@ -346,6 +374,15 @@ public class SubManager {
                 listener.OnError("No banners");
 
             }
+        }else if(AdManager.network == TypeNetwork.APPLOVIN){
+
+            AppLovinMNA appLovinMNA = getOfTypeAppLovin(TypeAd.BANNER);
+            if(appLovinMNA != null)
+                appLovinMNA.showBannerAd(relativeLayout, listener);
+            else{
+                listener.OnError("No banners");
+            }
+
         }
     }
 
@@ -395,6 +432,15 @@ public class SubManager {
                 listener.OnError("No interstitial");
 
             }
+        }else if(AdManager.network == TypeNetwork.APPLOVIN){
+            AppLovinMNA appLovinMNA = getOfTypeAppLovin(TypeAd.INTERSTICIAL);
+
+            if(appLovinMNA != null){
+                appLovinMNA.showInterstitalAdFrecuency(frec, listener);
+            }else
+                listener.OnError("No interstitial");
+
+
         }
     }
 
@@ -443,7 +489,14 @@ public class SubManager {
                 listener.OnError("No interstitial");
 
             }
-        }
+        }else if(AdManager.network == TypeNetwork.APPLOVIN){
+            AppLovinMNA appLovinMNA = getOfTypeAppLovin(TypeAd.INTERSTICIAL);
+
+            if(appLovinMNA != null)
+                appLovinMNA.showInterstitialAd(listener);
+            else
+                listener.OnError("No interstitial");
+            }
     }
 
 
@@ -517,6 +570,10 @@ public class SubManager {
             AdmobMNA admobMNA = getOfTypeAdmob(TypeAd.NATIVO);
 
             admobMNA.showBannerNativeIn(nm);
+        }else if(AdManager.natives_network == TypeNetwork.APPLOVIN){
+            AppLovinMNA admobMNA = getOfTypeAppLovin(TypeAd.BANNER_NATIVO);
+
+            admobMNA.showBannerNativeIn(nm);
         }else {
             ArrayList<AudienceMNA> mna = getArrayOf(TypeAd.BANNER_NATIVO);
             if (mna.size() > 0) {
@@ -546,6 +603,10 @@ public class SubManager {
         }else if(natives_network == TypeNetwork.IRON_SOURCE){
             IronMNA ironMNA = getOfTypeIron(TypeAd.NATIVO);
             ironMNA.showBannerNativeIn(nm);
+        }else if(AdManager.natives_network == TypeNetwork.APPLOVIN){
+            AppLovinMNA admobMNA = getOfTypeAppLovin(TypeAd.BANNER_NATIVO);
+
+            admobMNA.showBannerNativeIn(nm, listener);
         }
         else {
             ArrayList<AudienceMNA> mna = getArrayOf(TypeAd.BANNER_NATIVO);
@@ -581,6 +642,9 @@ public class SubManager {
         } else if(natives_network == TypeNetwork.IRON_SOURCE){
                 IronMNA ironMNA = getOfTypeIron(TypeAd.NATIVO);
             ironMNA.showNativeIn(nm);
+        }else if(natives_network == TypeNetwork.APPLOVIN){
+            AppLovinMNA appLovinMNA = getOfTypeAppLovin(TypeAd.NATIVO);
+            appLovinMNA.showNativeIn(nm);
         }
         else{
 
@@ -612,6 +676,9 @@ public class SubManager {
 
             mopubMNA.showNativeIn(nm, listener);
 
+        }else if(natives_network == TypeNetwork.APPLOVIN){
+            AppLovinMNA appLovinMNA = getOfTypeAppLovin(TypeAd.NATIVO);
+            appLovinMNA.showNativeIn(nm, listener);
         } else {
             ArrayList<AudienceMNA> mna = getArrayOf(TypeAd.NATIVO);
 
@@ -802,6 +869,14 @@ count = c;
                     ntUtils = NtUtils.getInstance(ChalaEdChala.context, mna, listener);
                 }
                 break;
+            case APPLOVIN:
+                ArrayList<AppLovinMNA> appLovinMNAS = getApplovinArrayOf(TypeAd.NATIVO);
+
+                if (appLovinMNAS.size() > 0) {
+
+                    ntUtils = NtUtils.getALInstance(ChalaEdChala.context, appLovinMNAS, listener);
+                }
+                break;
             case ADMOB:
                 AdmobMNA m = getOfTypeAdmob(TypeAd.NATIVO);
 
@@ -840,6 +915,18 @@ count = c;
                     }
 
                     ntUtilsBannerNat.setBannerNatives(mna);
+                    ntUtilsBannerNat.loadGeneral(true);
+                }
+            }else if (AdManager.natives_network == TypeNetwork.APPLOVIN){
+                ArrayList<AppLovinMNA> mna = getApplovinArrayOf(TypeAd.BANNER_NATIVO);
+                Log.e("MAIN", "loadBannerNatives: bien aqui "+mna.size() );
+
+                if (mna.size() > 0) {
+                    if(ntUtilsBannerNat == null ){
+                        ntUtilsBannerNat = NtUtils.getInstance(ChalaEdChala.context, listener);
+                    }
+
+                    ntUtilsBannerNat.setALBannerNatives(mna);
                     ntUtilsBannerNat.loadGeneral(true);
                 }
             }

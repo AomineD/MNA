@@ -1,8 +1,10 @@
 package com.wineberryhalley.mnaapp;
 
+import androidx.ads.identifier.AdvertisingIdClient;
+import androidx.ads.identifier.AdvertisingIdInfo;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements InitializeListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        getUIDs();
         showIntersUn = findViewById(R.id.interstitial_un);
         showIntersFrec = findViewById(R.id.interstitial_frec);
         txt = findViewById(R.id.text_frec);
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements InitializeListene
 
     private String TAG ="MAIN";
     private void showBanner(LinearLayout lin){
-       // Log.e("MAIN", "showBanner: " );
+       Log.e("MAIN", "showBanner: " );
         AdManager.get().manage().showBannerAd(lin, new MListener(){
             @Override
             public void OnLoad() {
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements InitializeListene
 
             @Override
             public void OnError(String erno) {
-                Log.e("MAIN", "OnError: "+erno );
+                Log.e("MAIN", "Banner err: "+erno );
             }
         });
 /*
@@ -120,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements InitializeListene
 AdManager.get().manage().showInterstitialAd(new InterstitialListener(){
     @Override
     public void OnError(String erno) {
-
+        Log.e(TAG, "OnError Inters: "+erno );
     }
 
     @Override
@@ -223,8 +225,8 @@ AdManager.get().manage().showInterstitialAd(new InterstitialListener(){
         AdManager.get().manage().loadBannerNatives(new NtUtils.OnNativeLoadInterface() {
             @Override
             public void OnSuccess() {
-                if(AdManager.get().manage().hasBannerNativeAds()){
 
+                if(AdManager.get().manage().hasBannerNativeAds()){
                     BannerNativeMNA a = findViewById(R.id.native_banner);
 
                     AdManager.get().manage().showBannerNativeIn(a);
@@ -251,4 +253,23 @@ AdManager.get().manage().showInterstitialAd(new InterstitialListener(){
     public void OnInitializedError(String error) {
         Log.e("MAIN", "OnInitializedError: "+error );
     }
+
+
+    void getUIDs()
+    {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    AdvertisingIdInfo adInfo = AdvertisingIdClient.getAdvertisingIdInfo(MainActivity.this).get();
+                    String myId = adInfo != null ? adInfo.getId() : "NULL MEN";
+
+                    Log.e(TAG, myId);
+                } catch (Exception e) {
+                    Log.e(TAG, "run: "+e.getMessage() );
+                }
+            }
+        });
+    }
+
 }

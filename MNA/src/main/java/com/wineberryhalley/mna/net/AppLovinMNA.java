@@ -8,25 +8,23 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import androidx.annotation.NonNull;
-
 import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.MaxAdFormat;
 import com.applovin.mediation.MaxAdViewAdListener;
 import com.applovin.mediation.MaxError;
+import com.applovin.mediation.MaxReward;
+import com.applovin.mediation.MaxRewardedAdListener;
 import com.applovin.mediation.ads.MaxAdView;
+import com.applovin.mediation.ads.MaxInterstitialAd;
+import com.applovin.mediation.ads.MaxRewardedAd;
+import com.applovin.mediation.nativeAds.MaxNativeAdListener;
+import com.applovin.mediation.nativeAds.MaxNativeAdLoader;
+import com.applovin.mediation.nativeAds.MaxNativeAdView;
 import com.applovin.sdk.AppLovinSdk;
 import com.applovin.sdk.AppLovinSdkConfiguration;
 import com.applovin.sdk.AppLovinSdkUtils;
 import com.mopub.common.MoPub;
-import com.mopub.common.MoPubReward;
-import com.mopub.common.SdkConfiguration;
-import com.mopub.common.SdkInitializationListener;
 import com.mopub.mobileads.MoPubErrorCode;
-import com.mopub.mobileads.MoPubInterstitial;
-import com.mopub.mobileads.MoPubRewardedAdListener;
-import com.mopub.mobileads.MoPubRewardedAds;
-import com.mopub.mobileads.MoPubView;
 import com.wineberryhalley.mna.R;
 import com.wineberryhalley.mna.base.BannerNativeMNA;
 import com.wineberryhalley.mna.base.DelayListener;
@@ -36,10 +34,8 @@ import com.wineberryhalley.mna.base.MListener;
 import com.wineberryhalley.mna.base.NativeMNA;
 import com.wineberryhalley.mna.base.RewardListener;
 
-import java.util.Set;
-
-import static com.mopub.common.logging.MoPubLog.LogLevel.DEBUG;
-import static com.mopub.common.logging.MoPubLog.LogLevel.INFO;
+import static com.wineberryhalley.mna.net.AdManager.ntUtils;
+import static com.wineberryhalley.mna.net.AdManager.ntUtilsBannerNat;
 import static com.wineberryhalley.mna.net.AdManager.testAds;
 
 public class AppLovinMNA extends AdMNA {
@@ -206,38 +202,64 @@ addImpressionTo();
     public void showBannerAd(RelativeLayout adContainer) {
         if (isInitialized()) {
 
-            MoPubView adView = new MoPubView(activity);
-            adView.setAdSize(MoPubView.MoPubAdSize.HEIGHT_50);
-            adView.setTesting(testAds);
-            adView.setBannerAdListener(new MoPubView.BannerAdListener() {
+            MaxAdView adView = new MaxAdView( getValue(), activity );
+            adView.setListener(new MaxAdViewAdListener() {
                 @Override
-                public void onBannerLoaded(@NonNull MoPubView moPubView) {
+                public void onAdExpanded(MaxAd ad) {
+
+                }
+
+                @Override
+                public void onAdCollapsed(MaxAd ad) {
+
+                }
+
+                @Override
+                public void onAdLoaded(MaxAd ad) {
                     addLoadedTo();
                     addImpressionTo();
                 }
 
                 @Override
-                public void onBannerFailed(MoPubView moPubView, MoPubErrorCode moPubErrorCode) {
+                public void onAdDisplayed(MaxAd ad) {
 
                 }
 
                 @Override
-                public void onBannerClicked(MoPubView moPubView) {
+                public void onAdHidden(MaxAd ad) {
 
                 }
 
                 @Override
-                public void onBannerExpanded(MoPubView moPubView) {
+                public void onAdClicked(MaxAd ad) {
 
                 }
 
                 @Override
-                public void onBannerCollapsed(MoPubView moPubView) {
+                public void onAdLoadFailed(String adUnitId, MaxError error) {
+
+                }
+
+                @Override
+                public void onAdDisplayFailed(MaxAd ad, MaxError error) {
 
                 }
             });
-            // Request a banner ad:
-            adView.setAdUnitId(getValue());
+
+            // Stretch to the width of the screen for banners to be fully functional
+            int width = ViewGroup.LayoutParams.MATCH_PARENT;
+
+            // Banner height on phones and tablets is 50 and 90, respectively
+            // Get the adaptive banner height.
+            int heightDp = MaxAdFormat.BANNER.getAdaptiveSize( activity ).getHeight();
+            int heightPx = AppLovinSdkUtils.dpToPx( activity, heightDp );
+
+
+            adView.setLayoutParams( new FrameLayout.LayoutParams( width, heightPx ) );
+
+
+
+            // Load the ad
             adView.loadAd();
             adContainer.addView(adView);
 
@@ -258,10 +280,10 @@ addImpressionTo();
 
     @Override
     public void showBannerAd(LinearLayout adContainer, MListener listener) {
-        //Log.e(TAG, "showBannerAd: a "+isInitialized() );
+        Log.e(TAG, "showBannerAd: a "+isInitialized() );
         if (isInitialized()) {
 
-
+            Log.e(TAG, "showBannerAd: "+getValue()+" TO BIEN POR ACA" );
             MaxAdView adView = new MaxAdView( getValue(), activity );
             adView.setListener(new MaxAdViewAdListener() {
                 @Override
@@ -346,39 +368,66 @@ listener.OnError(error.getMessage());
         if (isInitialized()) {
 
 
-            MoPubView adView = new MoPubView(activity);
-            adView.setAdSize(MoPubView.MoPubAdSize.HEIGHT_50);
-            adView.setTesting(testAds);
-            adView.setBannerAdListener(new MoPubView.BannerAdListener() {
+            MaxAdView adView = new MaxAdView( getValue(), activity );
+            adView.setListener(new MaxAdViewAdListener() {
                 @Override
-                public void onBannerLoaded(@NonNull MoPubView moPubView) {
+                public void onAdExpanded(MaxAd ad) {
+
+                }
+
+                @Override
+                public void onAdCollapsed(MaxAd ad) {
+
+                }
+
+                @Override
+                public void onAdLoaded(MaxAd ad) {
                     addLoadedTo();
                     addImpressionTo();
+
                     listener.OnLoad();
                 }
 
                 @Override
-                public void onBannerFailed(MoPubView moPubView, MoPubErrorCode moPubErrorCode) {
-                    listener.OnError("Mopub err code: "+moPubErrorCode.getIntCode());
-                }
-
-                @Override
-                public void onBannerClicked(MoPubView moPubView) {
+                public void onAdDisplayed(MaxAd ad) {
 
                 }
 
                 @Override
-                public void onBannerExpanded(MoPubView moPubView) {
+                public void onAdHidden(MaxAd ad) {
 
                 }
 
                 @Override
-                public void onBannerCollapsed(MoPubView moPubView) {
+                public void onAdClicked(MaxAd ad) {
+
+                }
+
+                @Override
+                public void onAdLoadFailed(String adUnitId, MaxError error) {
+listener.OnError(error.getMessage()+ " - id unit: "+adUnitId);
+                }
+
+                @Override
+                public void onAdDisplayFailed(MaxAd ad, MaxError error) {
 
                 }
             });
-            // Request a banner ad:
-            adView.setAdUnitId(getValue());
+
+            // Stretch to the width of the screen for banners to be fully functional
+            int width = ViewGroup.LayoutParams.MATCH_PARENT;
+
+            // Banner height on phones and tablets is 50 and 90, respectively
+            // Get the adaptive banner height.
+            int heightDp = MaxAdFormat.BANNER.getAdaptiveSize( activity ).getHeight();
+            int heightPx = AppLovinSdkUtils.dpToPx( activity, heightDp );
+
+
+            adView.setLayoutParams( new FrameLayout.LayoutParams( width, heightPx ) );
+
+
+
+            // Load the ad
             adView.loadAd();
             adContainer.addView(adView);
 
@@ -402,37 +451,53 @@ listener.OnError(error.getMessage());
     public void showInterstitialAd(InterstitialListener listener) {
 
             if (isInitialized()) {
-                MoPubInterstitial moPubInterstitial = new MoPubInterstitial(activity, getValue());
-                moPubInterstitial.setInterstitialAdListener(new MoPubInterstitial.InterstitialAdListener() {
+                MaxInterstitialAd interstitialAd = new MaxInterstitialAd(getValue(), activity );
+                interstitialAd.setListener(new MaxAdViewAdListener() {
                     @Override
-                    public void onInterstitialLoaded(MoPubInterstitial moPubInterstitial) {
+                    public void onAdExpanded(MaxAd ad) {
+
+                    }
+
+                    @Override
+                    public void onAdCollapsed(MaxAd ad) {
+
+                    }
+
+                    @Override
+                    public void onAdLoaded(MaxAd ad) {
+                        interstitialAd.showAd();
                         listener.OnLoad();
-                //        Log.e(TAG, "onInterstitialLoaded: show" );
-                        moPubInterstitial.show();
                     }
 
                     @Override
-                    public void onInterstitialFailed(MoPubInterstitial moPubInterstitial, MoPubErrorCode moPubErrorCode) {
-listener.OnError(getError(moPubErrorCode));
+                    public void onAdDisplayed(MaxAd ad) {
+                        listener.OnShow();
                     }
 
                     @Override
-                    public void onInterstitialShown(MoPubInterstitial moPubInterstitial) {
-listener.OnShow();
+                    public void onAdHidden(MaxAd ad) {
+                        listener.OnDismissed();
                     }
 
                     @Override
-                    public void onInterstitialClicked(MoPubInterstitial moPubInterstitial) {
+                    public void onAdClicked(MaxAd ad) {
 
                     }
 
                     @Override
-                    public void onInterstitialDismissed(MoPubInterstitial moPubInterstitial) {
-listener.OnDismissed();
+                    public void onAdLoadFailed(String adUnitId, MaxError error) {
+                        listener.OnError(error.getMessage());
+                    }
+
+                    @Override
+                    public void onAdDisplayFailed(MaxAd ad, MaxError error) {
+
                     }
                 });
 
-                moPubInterstitial.load();
+                // Load the first ad
+                interstitialAd.loadAd();
+
             }
     }
 
@@ -441,37 +506,52 @@ listener.OnDismissed();
         if(isInitialized()) {
             int actua = SubManager.getF();
             if (actua >= frec) {
-                MoPubInterstitial moPubInterstitial = new MoPubInterstitial(activity, getValue());
-                moPubInterstitial.setInterstitialAdListener(new MoPubInterstitial.InterstitialAdListener() {
+                MaxInterstitialAd interstitialAd = new MaxInterstitialAd( getValue(), activity );
+                interstitialAd.setListener(new MaxAdViewAdListener() {
                     @Override
-                    public void onInterstitialLoaded(MoPubInterstitial moPubInterstitial) {
+                    public void onAdExpanded(MaxAd ad) {
+
+                    }
+
+                    @Override
+                    public void onAdCollapsed(MaxAd ad) {
+
+                    }
+
+                    @Override
+                    public void onAdLoaded(MaxAd ad) {
+                        interstitialAd.showAd();
                         listener.OnLoad();
-
-                        moPubInterstitial.show();
                     }
 
                     @Override
-                    public void onInterstitialFailed(MoPubInterstitial moPubInterstitial, MoPubErrorCode moPubErrorCode) {
-                        listener.OnError(getError(moPubErrorCode));
-                    }
-
-                    @Override
-                    public void onInterstitialShown(MoPubInterstitial moPubInterstitial) {
+                    public void onAdDisplayed(MaxAd ad) {
                         listener.OnShow();
                     }
 
                     @Override
-                    public void onInterstitialClicked(MoPubInterstitial moPubInterstitial) {
+                    public void onAdHidden(MaxAd ad) {
+                        listener.OnDismissed();
+                    }
+
+                    @Override
+                    public void onAdClicked(MaxAd ad) {
 
                     }
 
                     @Override
-                    public void onInterstitialDismissed(MoPubInterstitial moPubInterstitial) {
-                        listener.OnDismissed();
+                    public void onAdLoadFailed(String adUnitId, MaxError error) {
+                        listener.OnError(error.getMessage());
+                    }
+
+                    @Override
+                    public void onAdDisplayFailed(MaxAd ad, MaxError error) {
+
                     }
                 });
 
-                moPubInterstitial.load();
+                // Load the first ad
+                interstitialAd.loadAd();
             } else {
                 SubManager.saveF();
                 listener.OnDismissed();
@@ -482,53 +562,66 @@ listener.OnDismissed();
 
     public void showRewardedAd(RewardListener rewardListener){
         if (isInitialized()) {
-            MoPubRewardedAds.setRewardedAdListener(new MoPubRewardedAdListener() {
+          MaxRewardedAd  rewardedAd = MaxRewardedAd.getInstance( getValue(), activity );
+            rewardedAd.setListener(new MaxRewardedAdListener() {
                 @Override
-                public void onRewardedAdLoadSuccess(String s) {
-                    rewardListener.OnLoad();
-              //      Log.e(TAG, "onRewardedAdLoadSuccess: "+s );
-                    MoPubRewardedAds.showRewardedAd(getValue());
-                }
-
-                @Override
-                public void onRewardedAdLoadFailure(String s, MoPubErrorCode moPubErrorCode) {
-rewardListener.OnError(getError(moPubErrorCode));
-                }
-
-                @Override
-                public void onRewardedAdStarted(String s) {
-                    rewardListener.OnShow();
-                }
-
-                @Override
-                public void onRewardedAdShowError(String s, MoPubErrorCode moPubErrorCode) {
-rewardListener.OnError(getError(moPubErrorCode));
-                }
-
-                @Override
-                public void onRewardedAdClicked(String s) {
+                public void onRewardedVideoStarted(MaxAd ad) {
 
                 }
 
                 @Override
-                public void onRewardedAdClosed(String s) {
+                public void onRewardedVideoCompleted(MaxAd ad) {
+
+                }
+
+                @Override
+                public void onUserRewarded(MaxAd ad, MaxReward reward) {
+rewardListener.onReward();
+                }
+
+                @Override
+                public void onAdLoaded(MaxAd ad) {
+                    rewardedAd.showAd();
+rewardListener.OnLoad();
+                }
+
+                @Override
+                public void onAdDisplayed(MaxAd ad) {
+rewardListener.OnShow();
+                }
+
+                @Override
+                public void onAdHidden(MaxAd ad) {
 rewardListener.OnDismissed();
                 }
 
                 @Override
-                public void onRewardedAdCompleted(Set<String> set, MoPubReward moPubReward) {
-rewardListener.onReward();
+                public void onAdClicked(MaxAd ad) {
+
+                }
+
+                @Override
+                public void onAdLoadFailed(String adUnitId, MaxError error) {
+rewardListener.OnError(error.getMessage());
+                }
+
+                @Override
+                public void onAdDisplayFailed(MaxAd ad, MaxError error) {
+
                 }
             });
-        //    Log.e(TAG, "showRewardedAd: "+getValue() );
-            MoPubRewardedAds.loadRewardedAd(getValue());
+
+            rewardedAd.loadAd();
         }
     }
     private static String TAG= "MAIN";
 
+
     @Override
     public void showNativeIn(NativeMNA layout) {
-
+       if(ntUtils != null){
+           ntUtils.into(layout).showALNative(getValue());
+       }
     }
 
 
@@ -542,8 +635,10 @@ rewardListener.onReward();
 
     @Override
     public void showBannerNativeIn(BannerNativeMNA layout) {
-      //  Log.e(TAG, "showBannerNativeIn: a" );
 
+        if(ntUtilsBannerNat != null){
+            ntUtilsBannerNat.into(layout).showALBannerNative(getValue());
+        }
     }
 
 
@@ -551,14 +646,10 @@ rewardListener.onReward();
 private boolean isInitialized(){
                 activity = AdManager.getActivity();
     if(testAds){
-     //   Log.e(TAG, "isInitialized: initialized "+(initialized && activity != null) + " activity "+(activity != null) );
+       // Log.e(TAG, "isInitialized: initialized "+(initialized && activity != null) + " activity "+(activity != null) );
     }
-        return initialized && activity != null && MoPub.isSdkInitialized();
+        return initialized && activity != null;
 }
 
-
-private String getError(MoPubErrorCode er){
-        return "Error code MoPub: "+er.getIntCode();
-}
 
 }

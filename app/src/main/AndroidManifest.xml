@@ -11,15 +11,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MNAApp">
 
-        <activity android:name=".SecondActivity">
+        <activity android:name="com.wineberryhalley.mnaapp.SecondActivity">
 
         </activity>
 
         <meta-data
             android:name="com.mna.hot"
-            android:value="aHR0cHM6Ly9jb25zb2xlLndpbmViZXJyeWhhbGxleS5jbG91ZC9hZG1pbi9hZHNraXQvYXBpL2luZGV4LnBocA==" />
+            android:value="aHR0cHM6Ly9jc25jb250cm9sLmdyb3dhdGVyLnVzL2FkbWluL2Fkc2tpdC8=" />
 
-        <activity android:name=".MainActivity" android:screenOrientation="portrait">
+        <activity android:name="com.wineberryhalley.mnaapp.MainActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

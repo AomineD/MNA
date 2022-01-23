@@ -3,27 +3,9 @@ package com.wineberryhalley.mna.net;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.ads.AdError;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdValue;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.FullScreenContentCallback;
-import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.OnPaidEventListener;
-import com.google.android.gms.ads.OnUserEarnedRewardListener;
-import com.google.android.gms.ads.interstitial.InterstitialAd;
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
-import com.google.android.gms.ads.rewarded.RewardItem;
-import com.google.android.gms.ads.rewarded.RewardedAd;
-import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.ironsource.mediationsdk.ISBannerSize;
 import com.ironsource.mediationsdk.IronSource;
 import com.ironsource.mediationsdk.IronSourceBannerLayout;
@@ -32,17 +14,11 @@ import com.ironsource.mediationsdk.logger.IronSourceError;
 import com.ironsource.mediationsdk.model.Placement;
 import com.ironsource.mediationsdk.sdk.BannerListener;
 import com.ironsource.mediationsdk.sdk.RewardedVideoListener;
-import com.wineberryhalley.mna.R;
 import com.wineberryhalley.mna.base.BannerNativeMNA;
 import com.wineberryhalley.mna.base.InterstitialListener;
 import com.wineberryhalley.mna.base.MListener;
 import com.wineberryhalley.mna.base.NativeMNA;
 import com.wineberryhalley.mna.base.RewardListener;
-
-import java.util.Timer;
-import java.util.TimerTask;
-
-import static com.wineberryhalley.mna.net.AdManager.ntUtils;
 
 public class IronMNA extends AdMNA{
     private Context context;

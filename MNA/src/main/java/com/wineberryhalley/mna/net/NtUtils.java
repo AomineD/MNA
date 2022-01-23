@@ -1,16 +1,10 @@
 package com.wineberryhalley.mna.net;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.GpsSatellite;
-import android.location.GpsStatus;
-import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
@@ -18,11 +12,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
 
+import com.applovin.mediation.MaxAd;
+import com.applovin.mediation.MaxError;
+import com.applovin.mediation.nativeAds.MaxNativeAdListener;
+import com.applovin.mediation.nativeAds.MaxNativeAdLoader;
+import com.applovin.mediation.nativeAds.MaxNativeAdView;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdError;
-import com.facebook.ads.AdSettings;
 import com.facebook.ads.MediaView;
 import com.facebook.ads.NativeAd;
 import com.facebook.ads.NativeAdListener;
@@ -46,15 +43,13 @@ import com.mopub.nativeads.ViewBinder;
 import com.squareup.picasso.Picasso;
 import com.wineberryhalley.mna.R;
 import com.wineberryhalley.mna.base.BannerNativeMNA;
-import com.wineberryhalley.mna.base.MNApp;
 import com.wineberryhalley.mna.base.NativeMNA;
-import com.wineberryhalley.mna.cons.Cons;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.Locale;
 import java.util.Random;
 
+import static com.wineberryhalley.mna.net.AdManager.getActivity;
 import static com.wineberryhalley.mna.net.AdManager.nativesLoaded;
 import static com.wineberryhalley.mna.net.AdManager.testAds;
 
@@ -475,8 +470,9 @@ if(nativeLoadeds >= idsAudience.size()){
             case AUDIENCE:
                if(hasBannerNatives){
                    loadBannerAds();
+               }else {
+                   loadAds();
                }
-                loadAds();
                 break;
             case MOPUB:
                 loadMoPubNative();
@@ -484,6 +480,13 @@ if(nativeLoadeds >= idsAudience.size()){
             case ADMOB:
                 loadAdmobNative();
                 break;
+            case APPLOVIN:
+                if(hasBannerNatives){
+                    loadBannerAdsAppLovin();
+                }else {
+                    loadNativeAds();
+                }
+                    break;
         }
 
         return this;
@@ -755,8 +758,12 @@ if(nativeLoadeds >= idsAudience.size()){
                 // clickables.add(sponsor);
                 clickables.add(action);
             }
-            
+            try {
                 nativeAd.registerViewForInteraction(banner_container, mediaView, iconView, clickables);
+            }catch (Exception e){
+
+            }
+
            
         }
     }
@@ -945,4 +952,249 @@ banner_container.setVisibility(View.VISIBLE);
     }
 
     private String TAG = "MAIN";
+
+    // APPLOVIN ================================== =======================================
+
+    private  ArrayList<AppLovinMNA> idsBannerNatApplovin = new ArrayList<>();
+    private ArrayList<AppLovinMNA> idsAppLovin = new ArrayList<>();
+    private ArrayList<BNativeAppLovin> bannerNativesArray = new ArrayList<>();
+    private ArrayList<NativeAppLovin> nativesArray = new ArrayList<>();
+
+    public static NtUtils getALInstance(Context c, ArrayList<AppLovinMNA> ad_n, OnNativeLoadInterface a) {
+        return new NtUtils(ad_n, c, a);
+    }
+
+
+    protected NtUtils setALBannerNatives(ArrayList<AppLovinMNA> banners){
+        this.idsBannerNatApplovin = banners;
+        return this;
+    }
+
+    protected NtUtils(ArrayList<AppLovinMNA> ad_app, Context c, OnNativeLoadInterface a) {
+        this.context = c;
+        this.idsAppLovin = ad_app;
+
+        this.intre2 = a;
+    }
+
+
+    protected NtUtils loadBannerAdsAppLovin(){
+
+        if(idsBannerNatApplovin.size() < 1 || getActivity() == null){
+            return this;
+        }
+
+        for (int i = 0; i < idsBannerNatApplovin.size(); i++) {
+
+AppLovinMNA adLovin = idsBannerNatApplovin.get(i);
+
+            MaxNativeAdLoader nativeAdLoader = new MaxNativeAdLoader( adLovin.getValue(), getActivity());
+
+            int finalI1 = i;
+            nativeAdLoader.setNativeAdListener(new MaxNativeAdListener()
+            {
+                @Override
+                public void onNativeAdLoaded(final MaxNativeAdView nativeAdView, final MaxAd ad)
+                {
+                    BNativeAppLovin N = new BNativeAppLovin();
+                    N.ad = ad;
+                    N.maxNativeAdView = nativeAdView;
+                    bannerNativesArray.add(N);
+
+                    banner_nativo_count++;
+
+                    if (idTryingToShow.contains(adLovin.getValue()) && banner_container != null) {
+                        populateBNativeAppLovin((ViewGroup) banner_container, nativeAdView);
+                        idTryingToShow.remove(adLovin.getValue());
+
+                    }
+                    if(banner_nativo_count >= idsBannerNatApplovin.size()){
+                        if (intre != null) {
+                            intre.OnSuccess();
+                        }
+                    }
+
+                    idsBannerNatApplovin.get(finalI1).addLoadedTo();
+                    idsBannerNatApplovin.get(finalI1).addImpressionTo();
+                    if (intre != null) {
+                        intre.OnImpression();
+                    }
+                    Log.e(TAG, "onNativeAdLoaded: cargo  "+banner_nativo_count +" ods "+ idsBannerNatApplovin.size() );
+                  //  layout.addView( nativeAdView );
+                }
+
+                @Override
+                public void onNativeAdLoadFailed(final String adUnitId, final MaxError error)
+                {
+                    if(testAds){
+                        Log.e(TAG, "onNativeAdLoadFailed: "+error.getMessage() );
+                    }
+                    banner_nativo_count++;
+
+                    if(banner_nativo_count >= idsBannerNatApplovin.size() && bannerNativesArray.size() > 0) {
+                        if (intre != null) {
+                            intre.OnSuccess();
+                        }
+                    }
+                    // We recommend retrying with exponentially higher delays up to a maximum delay
+                }
+
+                @Override
+                public void onNativeAdClicked(final MaxAd ad)
+                {
+                    // Optional click callback
+                }
+            } );
+
+            nativeAdLoader.loadAd();
+
+        }
+
+        if(AdManager.testAds)
+            Log.e("MAIN", "loadAds: loading banner native applovin");
+        return this;
+    }
+
+    public void showALBannerNative(String id){
+        if(bannerNativesArray.size() < 1){
+            return;
+        }
+        boolean show = false;
+        for (BNativeAppLovin ad:
+                bannerNativesArray) {
+            if(ad.ad.getAdUnitId().equalsIgnoreCase(id)){
+                populateBNativeAppLovin((ViewGroup) banner_container,ad.maxNativeAdView);
+                show = true;
+                break;
+
+            }
+        }
+
+        if(!show){
+            banner_container.setVisibility(View.GONE);
+            idTryingToShow.add(id);
+        }
+    }
+
+    public  void populateBNativeAppLovin(ViewGroup v, MaxNativeAdView ad){
+        banner_container.setVisibility(View.VISIBLE);
+        v.addView(ad);
+    }
+
+
+    static class BNativeAppLovin{
+        public  MaxNativeAdView maxNativeAdView;
+        public  MaxAd ad;
+    }
+
+    static class NativeAppLovin{
+        public  MaxNativeAdView maxNativeAdView;
+        public  MaxAd ad;
+    }
+
+    public  void populateNativeAppLovin(ViewGroup v, MaxNativeAdView ad){
+        banner_container.setVisibility(View.VISIBLE);
+        v.addView(ad);
+    }
+
+    protected NtUtils loadNativeAds() {
+
+        nativeLoadeds = 0;
+        if(getActivity() == null){
+            return this;
+        }
+
+        for (int i = 0; i < idsAppLovin.size(); i++) {
+
+            int finalI = i;
+final String idNat = idsAppLovin.get(finalI).getValue();
+            MaxNativeAdLoader nativeAdLoader = new MaxNativeAdLoader( idNat, getActivity());
+
+
+            nativeAdLoader.setNativeAdListener(new MaxNativeAdListener() {
+                @Override
+                public void onNativeAdLoaded(MaxNativeAdView maxNativeAdView, MaxAd maxAd) {
+                    NativeAppLovin n = new NativeAppLovin();
+                    n.ad = maxAd;
+                    n.maxNativeAdView = maxNativeAdView;
+                    nativesArray.add(n);
+                    if(idTryingToShow.contains(idNat)){
+
+                        populateNativeAppLovin((ViewGroup) banner_container, maxNativeAdView);
+                        idTryingToShow.remove(idNat);
+                        //   Log.e(TAG, "onMediaDownloaded: si" );
+                    }
+
+                    idsAppLovin.get(finalI).addLoadedTo();
+                    idsAppLovin.get(finalI).addImpressionTo();
+                    if (intre != null) {
+                        intre.OnImpression();
+                    }
+                    nativeLoadeds++;
+                    if(nativeLoadeds >= idsAppLovin.size()){
+                        if (intre != null) {
+                            intre.OnSuccess();
+
+                        }
+                    }
+                }
+
+                @Override
+                public void onNativeAdLoadFailed(String s, MaxError maxError) {
+                    nativeLoadeds++;
+                    if(nativeLoadeds >= idsAppLovin.size()){
+                        if (intre != null && idsAppLovin.size() > 0) {
+                            intre.OnSuccess();
+                        }
+                    }
+
+                    if (testAds)
+                        Log.e("MAIN", "NATIVOS onError: " + maxError.getMessage() + " el index => "+finalI+" "+idsAppLovin.get(finalI));
+
+                    if (intre != null)
+                        intre.OnFail(maxError.getMessage() + " el index => "+finalI, finalI);
+
+                }
+
+                @Override
+                public void onNativeAdClicked(MaxAd maxAd) {
+                    super.onNativeAdClicked(maxAd);
+                }
+            });
+
+            nativeAdLoader.loadAd();
+
+            if (AdManager.testAds)
+                Log.e("MAIN", "loadAds: loading native "+i);
+
+
+        }
+
+
+        return this;
+    }
+
+
+    public void showALNative(String id){
+        if(nativesArray.size() < 1){
+            return;
+        }
+        boolean show = false;
+        for (NativeAppLovin ad:
+                nativesArray) {
+            if(ad.ad.getAdUnitId().equalsIgnoreCase(id)){
+                populateNativeAppLovin((ViewGroup) banner_container,ad.maxNativeAdView);
+                show = true;
+                break;
+
+            }
+        }
+
+        if(!show){
+            banner_container.setVisibility(View.GONE);
+            idTryingToShow.add(id);
+        }
+    }
+
+
 }

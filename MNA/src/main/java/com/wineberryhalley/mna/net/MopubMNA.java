@@ -3,7 +3,6 @@ package com.wineberryhalley.mna.net;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -18,16 +17,6 @@ import com.mopub.mobileads.MoPubInterstitial;
 import com.mopub.mobileads.MoPubRewardedAdListener;
 import com.mopub.mobileads.MoPubRewardedAds;
 import com.mopub.mobileads.MoPubView;
-import com.mopub.nativeads.MoPubNative;
-import com.mopub.nativeads.MoPubRecyclerAdapter;
-import com.mopub.nativeads.MoPubStaticNativeAdRenderer;
-import com.mopub.nativeads.ViewBinder;
-import com.unity3d.ads.IUnityAdsListener;
-import com.unity3d.ads.IUnityAdsLoadListener;
-import com.unity3d.ads.UnityAds;
-import com.unity3d.services.banners.BannerErrorInfo;
-import com.unity3d.services.banners.BannerView;
-import com.unity3d.services.banners.UnityBannerSize;
 import com.wineberryhalley.mna.R;
 import com.wineberryhalley.mna.base.BannerNativeMNA;
 import com.wineberryhalley.mna.base.DelayListener;
@@ -36,7 +25,6 @@ import com.wineberryhalley.mna.base.InterstitialListener;
 import com.wineberryhalley.mna.base.MListener;
 import com.wineberryhalley.mna.base.NativeMNA;
 import com.wineberryhalley.mna.base.RewardListener;
-import com.wineberryhalley.mna.base.UnityListener;
 
 import java.util.Set;
 
