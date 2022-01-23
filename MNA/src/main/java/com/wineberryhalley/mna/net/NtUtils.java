@@ -1079,6 +1079,7 @@ AppLovinMNA adLovin = idsBannerNatApplovin.get(i);
     public  void populateBNativeAppLovin(ViewGroup v, MaxNativeAdView ad){
         banner_container.setVisibility(View.VISIBLE);
         v.removeAllViews();
+        ad.removeAllViews();
         v.addView(ad);
     }
 
@@ -1098,6 +1099,7 @@ AppLovinMNA adLovin = idsBannerNatApplovin.get(i);
     public  void populateNativeAppLovin(ViewGroup v, MaxNativeAdView ad){
         banner_container.setVisibility(View.VISIBLE);
         v.removeAllViews();
+        ad.removeAllViews();
         v.addView(ad);
     }
 
