@@ -145,12 +145,12 @@ this.sizeAdmobNative = size;
 
 
     public NtUtils into(BannerNativeMNA bn) {
-        this.banner_container = bn.getView(AdManager.natives_network);
+        this.banner_container =  bn.getView(AdManager.natives_network);
         return this;
     }
 
     public NtUtils into(NativeMNA bn) {
-        this.banner_container = bn.getView(AdManager.natives_network);
+        this.banner_container =  bn.getView(AdManager.natives_network);
         return this;
     }
 
@@ -1078,22 +1078,26 @@ AppLovinMNA adLovin = idsBannerNatApplovin.get(i);
 
     public  void populateBNativeAppLovin(ViewGroup v, MaxNativeAdView ad){
         banner_container.setVisibility(View.VISIBLE);
+        v.removeAllViews();
         v.addView(ad);
     }
 
 
-    static class BNativeAppLovin{
+    public class BNativeAppLovin{
         public  MaxNativeAdView maxNativeAdView;
         public  MaxAd ad;
+        public  MaxNativeAdLoader nativeAdLoader;
     }
 
-    static class NativeAppLovin{
+    public class NativeAppLovin{
         public  MaxNativeAdView maxNativeAdView;
         public  MaxAd ad;
+        public  MaxNativeAdLoader nativeAdLoader;
     }
 
     public  void populateNativeAppLovin(ViewGroup v, MaxNativeAdView ad){
         banner_container.setVisibility(View.VISIBLE);
+        v.removeAllViews();
         v.addView(ad);
     }
 
@@ -1193,6 +1197,32 @@ final String idNat = idsAppLovin.get(finalI).getValue();
         if(!show){
             banner_container.setVisibility(View.GONE);
             idTryingToShow.add(id);
+        }
+    }
+
+    void destroyNativ(String id){
+        for (NativeAppLovin ad:
+                nativesArray) {
+            if(ad.ad.getAdUnitId().equalsIgnoreCase(id)){
+
+                ad.nativeAdLoader.destroy(ad.ad);
+
+                break;
+
+            }
+        }
+    }
+
+    void destroyBNativ(String id){
+        for (BNativeAppLovin ad:
+                bannerNativesArray) {
+            if(ad.ad.getAdUnitId().equalsIgnoreCase(id)){
+
+                ad.nativeAdLoader.destroy(ad.ad);
+
+                break;
+
+            }
         }
     }
 
