@@ -919,7 +919,6 @@ count = c;
                 }
             }else if (AdManager.natives_network == TypeNetwork.APPLOVIN){
                 ArrayList<AppLovinMNA> mna = getApplovinArrayOf(TypeAd.BANNER_NATIVO);
-                Log.e("MAIN", "loadBannerNatives: bien aqui "+mna.size() );
 
                 if (mna.size() > 0) {
                     if(ntUtilsBannerNat == null ){
