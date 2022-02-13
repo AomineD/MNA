@@ -19,6 +19,7 @@ import com.wineberryhalley.mna.base.RewardListener;
 import com.wineberryhalley.mna.base.TypeAd;
 import com.wineberryhalley.mna.base.TypeNetwork;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import static com.wineberryhalley.mna.net.AdManager.natives_network;
@@ -554,6 +555,14 @@ public class SubManager {
 
             }
 
+        }else if(AdManager.network == TypeNetwork.APPLOVIN){
+            AppLovinMNA appLovinMNA = getOfTypeAppLovin(TypeAd.REWARD);
+            if (appLovinMNA != null)
+                appLovinMNA.showRewardedAd(rewardListener);
+            else {
+                rewardListener.OnError("No interstitial");
+
+            }
         }
     }
 
