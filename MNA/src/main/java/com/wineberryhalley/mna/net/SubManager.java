@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.ironsource.mediationsdk.IronSource;
 import com.ironsource.mediationsdk.IronSourceBannerLayout;
@@ -25,6 +26,8 @@ import java.util.ArrayList;
 import static com.wineberryhalley.mna.net.AdManager.natives_network;
 import static com.wineberryhalley.mna.net.AdManager.ntUtils;
 import static com.wineberryhalley.mna.net.AdManager.ntUtilsBannerNat;
+
+import androidx.annotation.Nullable;
 
 public class SubManager {
     protected SubManager(){
@@ -385,6 +388,156 @@ public class SubManager {
             }
 
         }
+    }
+
+
+
+
+
+    /** BANNER AD **/
+    public void showBannerAdSize(LinearLayout linearLayout, @Nullable AdSize adSize){
+
+        if(AdManager.network == TypeNetwork.AUDIENCE) {
+            AudienceMNA audienceMNA = null;
+            for (AdMNA ad :
+                    ads) {
+                if(ad.getType() == TypeAd.BANNER) {
+                    audienceMNA = new AudienceMNA(ad);
+                }
+            }
+            if(audienceMNA != null)
+                audienceMNA.showBannerAd(linearLayout);
+
+        }else if(AdManager.network == TypeNetwork.UNITYADS){
+            UnityMNA unityMNA = null;
+            for (AdMNA ad :
+                    ads) {
+                if(ad.getType() == TypeAd.BANNER) {
+                    unityMNA = new UnityMNA(ad);
+                }
+            }
+            if(unityMNA != null)
+                unityMNA.showBannerAd(linearLayout);
+        }else if(AdManager.network == TypeNetwork.ADMOB){
+            AdmobMNA admobMNA = null;
+            for (AdMNA ad :
+                    ads) {
+                if(ad.getType() == TypeAd.BANNER) {
+                    admobMNA = new AdmobMNA(ad);
+                }
+            }
+            if(admobMNA != null)
+                admobMNA.showBannerAd(linearLayout, adSize);
+        }else if(AdManager.network == TypeNetwork.MOPUB){
+            MopubMNA mopubMNA = null;
+            for (AdMNA ad :
+                    ads) {
+                if(ad.getType() == TypeAd.BANNER) {
+                    mopubMNA = new MopubMNA(ad);
+                }
+            }
+            if(mopubMNA != null)
+                mopubMNA.showBannerAd(linearLayout);
+        }else if(AdManager.network == TypeNetwork.IRON_SOURCE){
+            IronMNA ironMNA = getOfTypeIron(TypeAd.BANNER);
+
+            if(ironMNA != null){
+                ironMNA.showBannerAd(linearLayout);
+            }
+        }else if(AdManager.network == TypeNetwork.APPLOVIN){
+
+            AppLovinMNA appLovinMNA = getOfTypeAppLovin(TypeAd.BANNER);
+            if(appLovinMNA != null)
+                appLovinMNA.showBannerAd(linearLayout);
+
+
+
+        }
+
+    }
+
+    public void showBannerAdSize(LinearLayout linearLayout, @Nullable AdSize adSize, MListener listener){
+
+        if(AdManager.network == TypeNetwork.AUDIENCE) {
+            AudienceMNA audienceMNA = null;
+            for (AdMNA ad :
+                    ads) {
+                if(ad.getType() == TypeAd.BANNER) {
+                    audienceMNA = new AudienceMNA(ad);
+                    break;
+                }
+            }
+            if(audienceMNA != null)
+                audienceMNA.showBannerAd(linearLayout, listener);
+            else{
+                listener.OnError("No banners");
+            }
+
+        }else if(AdManager.network == TypeNetwork.UNITYADS){
+            UnityMNA unityMNA = null;
+            for (AdMNA ad :
+                    ads) {
+                if(ad.getType() == TypeAd.BANNER) {
+                    unityMNA = new UnityMNA(ad);
+                    break;
+                }
+            }
+            if(unityMNA != null)
+                unityMNA.showBannerAd(linearLayout, listener);
+            else{
+                listener.OnError("No banners");
+            }
+        }else if(AdManager.network == TypeNetwork.ADMOB){
+
+            AdmobMNA admobMNA = null;
+            for (AdMNA ad :
+                    ads) {
+                if(ad.getType() == TypeAd.BANNER) {
+                    admobMNA = new AdmobMNA(ad);
+                    break;
+                }
+            }
+            if(admobMNA != null)
+                admobMNA.showBannerAd(linearLayout, adSize,listener);
+            else{
+                listener.OnError("No banners");
+            }
+
+        }else if(AdManager.network == TypeNetwork.MOPUB){
+
+            MopubMNA mopubMNA = null;
+            for (AdMNA ad :
+                    ads) {
+                if(ad.getType() == TypeAd.BANNER) {
+                    mopubMNA = new MopubMNA(ad);
+                    break;
+                }
+            }
+            if(mopubMNA != null)
+                mopubMNA.showBannerAd(linearLayout, listener);
+            else{
+                listener.OnError("No banners");
+            }
+
+        }else if(AdManager.network == TypeNetwork.APPLOVIN){
+
+            AppLovinMNA appLovinMNA = getOfTypeAppLovin(TypeAd.BANNER);
+            if(appLovinMNA != null)
+                appLovinMNA.showBannerAd(linearLayout, listener);
+            else{
+                listener.OnError("No banners");
+            }
+
+        }else if(AdManager.network == TypeNetwork.IRON_SOURCE){
+            IronMNA ironMNA = getOfTypeIron(TypeAd.BANNER);
+
+            if(ironMNA != null){
+                ironMNA.showBannerAd(linearLayout, listener);
+            }else{
+                listener.OnError("No banners");
+            }
+        }
+
     }
 
 /** =======================================================> **/

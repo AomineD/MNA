@@ -95,6 +95,30 @@ adView.setAdListener(new AdListener(){
         adContainer.addView(adView);
     }
 
+
+    public void showBannerAd(LinearLayout adContainer, AdSize adSize) {
+        AdView adView = new AdView(context);
+
+        adView.setAdUnitId(getValue());
+        adView.setAdSize(adSize);
+        adView.setAdListener(new AdListener(){
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                addLoadedTo();
+            }
+
+            @Override
+            public void onAdImpression() {
+                super.onAdImpression();
+                addImpressionTo();
+            }
+        });
+
+        adView.loadAd(new AdRequest.Builder().build());
+        adContainer.addView(adView);
+    }
+
     @Override
     public void showBannerAd(RelativeLayout adContainer) {
         AdView adView = new AdView(context);
@@ -125,6 +149,37 @@ adView.setAdListener(new AdListener(){
        // Log.e(TAG, "showBannerAd: "+getValue() );
         adView.setAdUnitId(getValue());
         adView.setAdSize(AdSize.BANNER);
+        adView.setAdListener(new AdListener(){
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                addLoadedTo();
+                listener.OnLoad();
+            }
+
+            @Override
+            public void onAdFailedToLoad(LoadAdError loadAdError) {
+                super.onAdFailedToLoad(loadAdError);
+                listener.OnError(loadAdError.getMessage());
+            }
+
+            @Override
+            public void onAdImpression() {
+                super.onAdImpression();
+                addImpressionTo();
+            }
+        });
+
+        adView.loadAd(new AdRequest.Builder().build());
+        adContainer.addView(adView);
+
+    }
+
+    public void showBannerAd(LinearLayout adContainer,AdSize adSize, MListener listener) {
+        AdView adView = new AdView(context);
+        // Log.e(TAG, "showBannerAd: "+getValue() );
+        adView.setAdUnitId(getValue());
+        adView.setAdSize(adSize);
         adView.setAdListener(new AdListener(){
             @Override
             public void onAdLoaded() {
