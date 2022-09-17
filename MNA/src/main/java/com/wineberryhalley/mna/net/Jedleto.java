@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Debug;
 import android.util.Log;
 
 import androidx.annotation.RestrictTo;
@@ -32,6 +33,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import static androidx.annotation.RestrictTo.Scope.LIBRARY;
+import static com.wineberryhalley.mna.cons.Cons.nendmoete;
 
 @RestrictTo(LIBRARY)
 public class Jedleto {
@@ -58,8 +60,8 @@ queue = Volley.newRequestQueue(context);
 
             a_ = Cons.getD(a_);
 
-            if(!a_.endsWith("api/index.php")){
-                a_ = a_+"/api/index.php";
+            if(!a_.endsWith(nendmoete())){
+                a_ = a_+nendmoete();
             }
           //  Log.e(TAG, "Jedleto: "+a_ );
 
@@ -98,7 +100,15 @@ queue = Volley.newRequestQueue(context);
                             AdManager.appId = response.getString("app_id");
                         }
 
-                        AdManager.network = network;
+                        if(response.has("app_openad")){
+                            SubManager.open_ad = response.getJSONObject("app_openad").getString("value");
+                            if(AdManager.testAds)
+                            Log.e(TAG, "onResponse: HAS OPEN AD -> "+SubManager.open_ad);
+                        }else if(AdManager.testAds){
+                            Log.e(TAG, "onResponse: dont have open ad "+response.toString() );
+                        }
+
+                       AdManager.network = network;
                             ArrayList<AdMNA> array =  configAds(response.getJSONArray("data"));
 
                             if(response.has("native_ads")){

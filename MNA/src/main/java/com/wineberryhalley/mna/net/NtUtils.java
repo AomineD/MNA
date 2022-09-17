@@ -1153,6 +1153,8 @@ banner_container.setVisibility(View.VISIBLE);
         }
     }
 
+
+
     void destroyNativ(String id){
         for (NativeAppLovin ad:
                 nativesArray) {

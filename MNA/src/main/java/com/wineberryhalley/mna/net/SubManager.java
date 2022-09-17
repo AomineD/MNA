@@ -35,6 +35,11 @@ public class SubManager {
 
     }
 
+    public String getOpenAdID(){
+        return open_ad;
+    }
+
+    static String open_ad;
 
     private AudienceMNA getOfType(TypeAd typeAd){
         AudienceMNA audienceMNA = null;
@@ -862,8 +867,9 @@ public class SubManager {
 
 
     protected void clearAds(){
-        if(ads != null && ads.size() > 0)
-        ads.clear();
+        if(ads != null && ads.size() > 0) {
+            ads.clear();
+        }
     }
 
     static void saveF(){
@@ -988,8 +994,9 @@ if(ad.getType() == TypeAd.NATIVO){
                     IronSource.destroyBanner(ad);
                 }
             }
-            if(lin.getChildCount() > 0)
-            lin.removeAllViews();
+            if(lin.getChildCount() > 0) {
+                lin.removeAllViews();
+            }
         }
     }
 
