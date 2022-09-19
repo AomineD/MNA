@@ -331,15 +331,18 @@ a.put("get_ads", "a");
     private<T> ArrayList<T> configAds(JSONArray objectArray) throws JSONException {
 
         ArrayList<AdMNA> adMNAS = new ArrayList<>();
-
+        if(AdManager.testAds){
+            Log.e(TAG, "configAds: arraySize -> "+objectArray.length() );
+        }
         for (int i = 0; i < objectArray.length(); i++) {
             JSONObject jsonObject = objectArray.getJSONObject(i);
 
             AdMNA adMNA = new Gson().fromJson(jsonObject.toString(), AdMNA.class);
+            if(AdManager.testAds){
+                Log.e(TAG, "configAds: Type -> "+adMNA.getAd_type().toString()+" ID -> "+adMNA.getValue()+ " jsonObject -> "+jsonObject.toString() );
+            }
             if(adMNA.getValue() != null && !adMNA.getValue().isEmpty()){
-                if(AdManager.testAds){
-                    Log.e(TAG, "configAds: "+adMNA.getAd_type().toString()+" -> "+adMNA.getValue() );
-                }
+
                 adMNAS.add(adMNA);
             }
         }
