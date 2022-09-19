@@ -111,8 +111,13 @@ queue = Volley.newRequestQueue(context);
                         }
 
                        AdManager.network = network;
+                            if(AdManager.testAds){
+                                Log.e(TAG, "onResponse: Before array" );
+                            }
                             ArrayList<AdMNA> array =  configAds(response.getJSONArray("data"));
-
+                        if(AdManager.testAds){
+                            Log.e(TAG, "onResponse: After array -> "+array.size() );
+                        }
                             if(response.has("native_ads")){
                                 array.addAll(configAds(response.getJSONArray("native_ads")));
                             }
@@ -337,9 +342,12 @@ a.put("get_ads", "a");
         for (int i = 0; i < objectArray.length(); i++) {
             JSONObject jsonObject = objectArray.getJSONObject(i);
 
+            if(AdManager.testAds){
+                Log.e(TAG, "configAds: index: "+i+" jsonObject -> "+jsonObject.toString() );
+            }
             AdMNA adMNA = new Gson().fromJson(jsonObject.toString(), AdMNA.class);
             if(AdManager.testAds){
-                Log.e(TAG, "configAds: Type -> "+adMNA.getAd_type().toString()+" ID -> "+adMNA.getValue()+ " jsonObject -> "+jsonObject.toString() );
+                Log.e(TAG, "configAds: Type -> "+adMNA.getAd_type().toString()+" ID -> "+adMNA.getValue());
             }
             if(adMNA.getValue() != null && !adMNA.getValue().isEmpty()){
 
