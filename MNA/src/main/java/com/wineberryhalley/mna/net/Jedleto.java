@@ -102,9 +102,11 @@ queue = Volley.newRequestQueue(context);
 
                         if(response.has("app_openad")){
                             SubManager.open_ad = response.getJSONObject("app_openad").getString("value");
-                            if(AdManager.testAds)
-                            Log.e(TAG, "onResponse: HAS OPEN AD -> "+SubManager.open_ad);
-                        }else if(AdManager.testAds){
+                            if(AdManager.testAds) {
+                                Log.e(TAG, "onResponse: HAS OPEN AD -> " + SubManager.open_ad);
+                            }
+                            }
+                            else if(AdManager.testAds){
                             Log.e(TAG, "onResponse: dont have open ad "+response.toString() );
                         }
 
@@ -335,6 +337,9 @@ a.put("get_ads", "a");
 
             AdMNA adMNA = new Gson().fromJson(jsonObject.toString(), AdMNA.class);
             if(adMNA.getValue() != null && !adMNA.getValue().isEmpty()){
+                if(AdManager.testAds){
+                    Log.e(TAG, "configAds: "+adMNA.getAd_type().toString()+" -> "+adMNA.getValue() );
+                }
                 adMNAS.add(adMNA);
             }
         }

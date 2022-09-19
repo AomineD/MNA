@@ -1,6 +1,7 @@
 package com.wineberryhalley.mna.net;
 
 import android.app.Activity;
+import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.facebook.ads.AdSettings;
@@ -85,7 +86,7 @@ static String appId = "";
         if (MNApp.mnApp != null && MNApp.mnApp.getCurrent() != null) {
 return MNApp.mnApp.getCurrent();
         } else {
-            // Log.e("MAIN", "getActivity: paso" );
+             Log.e("MAIN", "getActivity: No activity" );
             return null;
         }
     }
