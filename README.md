@@ -8,9 +8,9 @@ MultiNetworkAds
 
 It is an Android Library connected to a web API for change remotely actual Application Network Ad.
 
-Supports:
+Supports:  
 ->Admob  
 ->Audience Network  
 ->ironSource  
 ->Applovin  
-->MoPub (Obsolete)  
+->Unity Ads  
