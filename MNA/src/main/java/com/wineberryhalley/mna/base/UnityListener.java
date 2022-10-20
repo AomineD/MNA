@@ -2,15 +2,16 @@ package com.wineberryhalley.mna.base;
 
 import android.util.Log;
 
+import com.unity3d.ads.IUnityAdsLoadListener;
+import com.unity3d.ads.IUnityAdsShowListener;
 import com.unity3d.ads.UnityAds;
-import com.unity3d.ads.mediation.IUnityAdsExtendedListener;
 
-public class UnityListener implements IUnityAdsExtendedListener {
+public class UnityListener implements IUnityAdsLoadListener, IUnityAdsShowListener {
     public TypeAd getTypeAd() {
         return typeAd;
     }
 
-    private TypeAd typeAd;
+    private final TypeAd typeAd;
 
     public UnityListener(TypeAd typeAd){
         this.typeAd = typeAd;
@@ -36,45 +37,44 @@ public class UnityListener implements IUnityAdsExtendedListener {
 
     }
 
+
     @Override
-    public void onUnityAdsClick(String s) {
+    public void onUnityAdsAdLoaded(String placementId) {
+        OnLoad();
+    }
+
+    @Override
+    public void onUnityAdsFailedToLoad(String placementId, UnityAds.UnityAdsLoadError error, String message) {
+        OnError(message);
+    }
+
+    @Override
+    public void onUnityAdsShowFailure(String placementId, UnityAds.UnityAdsShowError error, String message) {
 
     }
 
     @Override
-    public void onUnityAdsPlacementStateChanged(String s, UnityAds.PlacementState placementState, UnityAds.PlacementState placementState1) {
-        Log.e("MAIN", "onUnityAdsPlacementStateChanged: "+placementState.name() );
+    public void onUnityAdsShowStart(String placementId) {
+        OnShow();
     }
 
     @Override
-    public void onUnityAdsReady(String s) {
-OnLoad();
+    public void onUnityAdsShowClick(String placementId) {
+
     }
 
     @Override
-    public void onUnityAdsStart(String s) {
-OnShow();
-    }
-
-    @Override
-    public void onUnityAdsFinish(String s, UnityAds.FinishState finishState) {
-        if(typeAd == TypeAd.INTERSTICIAL) {
+    public void onUnityAdsShowComplete(String placementId, UnityAds.UnityAdsShowCompletionState state) {
+        if(getTypeAd() == TypeAd.INTERSTICIAL) {
             OnClosed();
-            UnityAds.removeListener(this);
-        }else if(typeAd == TypeAd.REWARD){
-            if(finishState == UnityAds.FinishState.COMPLETED){
+        }else if(getTypeAd() == TypeAd.REWARD){
+            if(state == UnityAds.UnityAdsShowCompletionState.COMPLETED){
                 OnReward();
-            }else if(finishState == UnityAds.FinishState.SKIPPED){
+            }else if(state == UnityAds.UnityAdsShowCompletionState.SKIPPED){
                 OnClosed();
             }else{
-                OnError(s);
+                OnError("States - >"+state.name());
             }
-            UnityAds.removeListener(this);
         }
-    }
-
-    @Override
-    public void onUnityAdsError(UnityAds.UnityAdsError unityAdsError, String s) {
-OnError(s);
     }
 }

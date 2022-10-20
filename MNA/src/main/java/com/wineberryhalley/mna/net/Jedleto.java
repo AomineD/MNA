@@ -38,7 +38,7 @@ import static com.wineberryhalley.mna.cons.Cons.nendmoete;
 @RestrictTo(LIBRARY)
 public class Jedleto {
 
-    private Context context;
+    private final Context context;
     private RequestQueue queue;
     private String a_ = "";
     private String k_ = "";
@@ -80,105 +80,91 @@ queue = Volley.newRequestQueue(context);
         AdManager.isInitializedAlready = false;
 
 
-        StringRequest jsonArrayRequest = new StringRequest(Request.Method.POST, a_, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String responsea) {
+        StringRequest jsonArrayRequest = new StringRequest(Request.Method.POST, a_, responsea -> {
 
-           //   Log.e("MAIN", "MultiResponse "+responsea );
-                try {
-                    JSONObject response = new JSONObject(responsea);
-                   // Log.e("MAIN", "onResponse: "+response.has("status") );
-                    if(success(response)) {
-                        TypeNetwork  network = getOf(response.getString("type"));
-                        AdManager.natives_network = getOf(response.getString("native_type"));
-                      id_network = response.getString("type");
+       //   Log.e("MAIN", "MultiResponse "+responsea );
+            try {
+                JSONObject response = new JSONObject(responsea);
+               // Log.e("MAIN", "onResponse: "+response.has("status") );
+                if(success(response)) {
+                    TypeNetwork  network = getOf(response.getString("type"));
+                    AdManager.natives_network = getOf(response.getString("native_type"));
+                  id_network = response.getString("type");
 
-                       // Log.e("MAIN", "onResponse: "+network.name() );
-                        if(network == TypeNetwork.UNITYADS && response.has("app_id")){
-                            AdManager.appId = response.getString("app_id");
-                        }else if(network == TypeNetwork.IRON_SOURCE && response.has("app_id") ){
-                            AdManager.appId = response.getString("app_id");
-                        }
-
-                        if(response.has("app_openad")){
-                            SubManager.open_ad = response.getJSONObject("app_openad").getString("value");
-                            if(AdManager.testAds) {
-                                Log.e(TAG, "onResponse: HAS OPEN AD -> " + SubManager.open_ad);
-                            }
-                            }
-                            else if(AdManager.testAds){
-                            Log.e(TAG, "onResponse: dont have open ad "+response.toString() );
-                        }
-
-                       AdManager.network = network;
-                            if(AdManager.testAds){
-                                Log.e(TAG, "onResponse: Before array" );
-                            }
-                            ArrayList<AdMNA> array =  configAds(response.getJSONArray("data"));
-                        if(AdManager.testAds){
-                            Log.e(TAG, "onResponse: After array -> "+array.size() );
-                        }
-                            if(response.has("native_ads")){
-                                array.addAll(configAds(response.getJSONArray("native_ads")));
-                            }
-
-                            AdManager.addAds(array);
-
-                   OnLoad();
-                        isLoaded = true;
-                        AdManager.isInitializedAlready = true;
-                        if(AdManager.network == TypeNetwork.UNITYADS){
-                            UnityMNA.initialize();
-
-                        }else if(AdManager.network == TypeNetwork.MOPUB){
-                                  if(array.size() > 0)
-                         MopubMNA.initialize(array.get(0).getValue());
-                        }else if(AdManager.network == TypeNetwork.APPLOVIN){
-                            AppLovinMNA.initialize();
-                        }
-                        else{
-
-                            if(network == TypeNetwork.IRON_SOURCE){
-                                IronMNA.initializeIron();
-                            }
-
-                            AdMNA.initializeNormal();
-
-                        }
-                     //   Log.e("MAIN", "onResponse: "+response.toString() );
-                    }else{
-                     //   AdMNA.initializeError(response.getString("data"));
-                        AdManager.isInitializedAlready = true;
-                        OnError(response.getString("data"));
+                   // Log.e("MAIN", "onResponse: "+network.name() );
+                    if(network == TypeNetwork.UNITYADS && response.has("app_id")){
+                        AdManager.appId = response.getString("app_id");
+                    }else if(network == TypeNetwork.IRON_SOURCE && response.has("app_id") ){
+                        AdManager.appId = response.getString("app_id");
                     }
 
-                } catch (JSONException e) {
-                    //Log.e("MAIN", "onResponse BY GENRE: "+e.getMessage());
-                    //  e.printStackTrace();
-                 //   AdMNA.initializeError(e.getMessage());
-                    AdManager.isInitializedAlready = true;
-                    OnError(e.getMessage());
+                    if(response.has("app_openad")){
+                        SubManager.open_ad = response.getJSONObject("app_openad").getString("value");
+                        if(AdManager.testAds) {
+                            Log.e(TAG, "onResponse: HAS OPEN AD -> " + SubManager.open_ad);
+                        }
+                        }
+                        else if(AdManager.testAds){
+                        Log.e(TAG, "onResponse: dont have open ad "+response );
+                    }
 
+                   AdManager.network = network;
+                        if(AdManager.testAds){
+                            Log.e(TAG, "onResponse: Before array" );
+                        }
+                        ArrayList<AdMNA> array =  configAds(response.getJSONArray("data"));
+                    if(AdManager.testAds){
+                        Log.e(TAG, "onResponse: After array -> "+array.size() );
+                    }
+                        if(response.has("native_ads")){
+                            array.addAll(configAds(response.getJSONArray("native_ads")));
+                        }
+
+                        AdManager.addAds(array);
+
+               OnLoad();
+                    isLoaded = true;
+                    AdManager.isInitializedAlready = true;
+                    if(AdManager.network == TypeNetwork.UNITYADS){
+                        UnityMNA.initialize();
+
+                    }else if(AdManager.network == TypeNetwork.MOPUB){
+                              if(array.size() > 0)
+                     MopubMNA.initialize(array.get(0).getValue());
+                    }else if(AdManager.network == TypeNetwork.APPLOVIN){
+                        AppLovinMNA.initialize();
+                    }
+                    else{
+
+                        if(network == TypeNetwork.IRON_SOURCE){
+                            IronMNA.initializeIron();
+                        }
+
+                        AdMNA.initializeNormal();
+
+                    }
+                }else{
+                    AdManager.isInitializedAlready = true;
+                    OnError(response.getString("data"));
                 }
 
-
-             //   Log.e(TAG, "onResponse: ho home "+AdManager.isInitializedAlready );
-
-
-                queue.getCache().clear();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            //    AdMNA.initializeError(error.getMessage());
+            } catch (JSONException e) {
                 AdManager.isInitializedAlready = true;
-                OnError(error.getMessage());
-                queue.getCache().clear();
+                OnError(e.getMessage());
 
             }
+
+
+            queue.getCache().clear();
+        }, error -> {
+        //    AdMNA.initializeError(error.getMessage());
+            AdManager.isInitializedAlready = true;
+            OnError(error.getMessage());
+            queue.getCache().clear();
+
         }){
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
 Map<String, String>  a = map();
 a.put("get_ads", "a");
                 return a;
@@ -191,44 +177,38 @@ a.put("get_ads", "a");
 
     protected void addImpression(String id_ad){
 
-        StringRequest jsonArrayRequest = new StringRequest(Request.Method.POST, a_, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String responsea) {
+        StringRequest jsonArrayRequest = new StringRequest(Request.Method.POST, a_, responsea -> {
 
-                //    Log.e("MAIN", "onResponse: "+responsea );
-                try {
-                    JSONObject response = new JSONObject(responsea);
-                    // Log.e("MAIN", "onResponse: "+response.has("status") );
-                    if(success(response)) {
+            //    Log.e("MAIN", "onResponse: "+responsea );
+            try {
+                JSONObject response = new JSONObject(responsea);
+                // Log.e("MAIN", "onResponse: "+response.has("status") );
+                if(success(response)) {
 
 
-                        OnLoad();
-                    }else{
-                        OnError(response.getString("data"));
-                    }
-
-                } catch (JSONException e) {
-                    //Log.e("MAIN", "onResponse BY GENRE: "+e.getMessage());
-                    //  e.printStackTrace();
-                    OnError(e.getMessage());
+                    OnLoad();
+                }else{
+                    OnError(response.getString("data"));
                 }
 
-
-
-
-
-
-                queue.getCache().clear();
+            } catch (JSONException e) {
+                //Log.e("MAIN", "onResponse BY GENRE: "+e.getMessage());
+                //  e.printStackTrace();
+                OnError(e.getMessage());
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                OnError(error.getMessage());
-                queue.getCache().clear();
-            }
+
+
+
+
+
+
+            queue.getCache().clear();
+        }, error -> {
+            OnError(error.getMessage());
+            queue.getCache().clear();
         }){
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 Map<String, String>  a = map();
                 a.put("addimpr", "a");
                 a.put("_usr", ChalaEdChala.getUniqueId());
@@ -247,44 +227,35 @@ a.put("get_ads", "a");
 
     protected void addLoad(String id_ad){
 
-        StringRequest jsonArrayRequest = new StringRequest(Request.Method.POST, a_, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String responsea) {
+        StringRequest jsonArrayRequest = new StringRequest(Request.Method.POST, a_, responsea -> {
 
-                //    Log.e("MAIN", "onResponse: "+responsea );
-                try {
-                    JSONObject response = new JSONObject(responsea);
-                    // Log.e("MAIN", "onResponse: "+response.has("status") );
-                    if(success(response)) {
+            try {
+                JSONObject response = new JSONObject(responsea);
+                // Log.e("MAIN", "onResponse: "+response.has("status") );
+                if(success(response)) {
 
 
-                        OnLoad();
-                    }else{
-                        OnError(response.getString("data"));
-                    }
-
-                } catch (JSONException e) {
-                    //Log.e("MAIN", "onResponse BY GENRE: "+e.getMessage());
-                    //  e.printStackTrace();
-                    OnError(e.getMessage());
+                    OnLoad();
+                }else{
+                    OnError(response.getString("data"));
                 }
 
-
-
-
-
-
-                queue.getCache().clear();
+            } catch (JSONException e) {
+                OnError(e.getMessage());
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                OnError(error.getMessage());
-                queue.getCache().clear();
-            }
+
+
+
+
+
+
+            queue.getCache().clear();
+        }, error -> {
+            OnError(error.getMessage());
+            queue.getCache().clear();
         }){
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 Map<String, String>  a = map();
                 a.put("addload", "a");
                 a.put("_usr", ChalaEdChala.getUniqueId());
@@ -347,7 +318,7 @@ a.put("get_ads", "a");
             }
             AdMNA adMNA = new Gson().fromJson(jsonObject.toString(), AdMNA.class);
             if(AdManager.testAds){
-                Log.e(TAG, "configAds: Type -> "+adMNA.getAd_type().toString()+" ID -> "+adMNA.getValue());
+                Log.e(TAG, "configAds: Type -> "+ adMNA.getAd_type() +" ID -> "+adMNA.getValue());
             }
             if(adMNA.getValue() != null && !adMNA.getValue().isEmpty()){
 
@@ -385,13 +356,8 @@ a.put("get_ads", "a");
 
     private TypeNetwork getMediation(String response) {
         TypeNetwork network = TypeNetwork.ADMOB;
-        switch (response){
-            case "0":
-                network = TypeNetwork.ADMOB;
-                break;
-            case "1":
-                network = TypeNetwork.AUDIENCE;
-                break;
+        if ("1".equals(response)) {
+            network = TypeNetwork.AUDIENCE;
         }
         return network;
     }

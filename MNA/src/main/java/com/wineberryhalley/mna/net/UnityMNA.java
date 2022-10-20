@@ -6,7 +6,7 @@ import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.unity3d.ads.IUnityAdsListener;
+import com.unity3d.ads.IUnityAdsInitializationListener;
 import com.unity3d.ads.IUnityAdsLoadListener;
 import com.unity3d.ads.UnityAds;
 import com.unity3d.services.banners.BannerErrorInfo;
@@ -22,14 +22,11 @@ import com.wineberryhalley.mna.base.UnityListener;
 import static com.wineberryhalley.mna.net.AdManager.testAds;
 
 public class UnityMNA extends AdMNA {
-    private Context context;
     private static boolean initialized = false;
     private static boolean getting = false;
-    private static int c_un_count = 0;
-  static Activity activity = null;
+     Activity activity = null;
     static InitializeListener initializeListener;
     public UnityMNA(AdMNA adMNA) {
-        context = ChalaEdChala.context;
         config(adMNA);
 
         try {
@@ -49,61 +46,37 @@ public class UnityMNA extends AdMNA {
 
 
     static void initialize(){
-            activity = AdManager.getActivity();
+        Activity activity = AdManager.getActivity();
 
             try {
                 initializeListener = (InitializeListener) activity;
             }catch (Exception e){
-                Log.e(TAG, "err: no listener" );
+                Log.e("MAIN", "err: no listener" );
             }
 
 
 
         if (!initialized && !getting) {
-            UnityAds.addListener(new IUnityAdsListener() {
+            // Initialize the SDK:
+            UnityAds.initialize(ChalaEdChala.context, AdManager.appId, testAds, new IUnityAdsInitializationListener() {
                 @Override
-                public void onUnityAdsReady(String s) {
-
-
-                    c_un_count++;
-                    if(testAds){
-                        Log.e(TAG, "onUnityAdsReady: "+s );
-                    }
-
-                    if(c_un_count > 3 && !initialized) {
+                public void onInitializationComplete() {
                         initialized = true;
 
 
                         if (initializeListener != null) {
                             initializeListener.OnInitialized();
                         }
-                    }
-                }
-
-
-                @Override
-                public void onUnityAdsStart(String s) {
-                    if(testAds)
-                        Log.e(TAG, "onUnityAdsStart: "+s );
                 }
 
                 @Override
-                public void onUnityAdsFinish(String s, UnityAds.FinishState finishState) {
-
-                }
-
-                @Override
-                public void onUnityAdsError(UnityAds.UnityAdsError unityAdsError, String s) {
-
-                    //Log.e("MAIN", "onUnityAdsError: "+s );
+                public void onInitializationFailed(UnityAds.UnityAdsInitializationError error, String message) {
                     getting = false;
                     if(initializeListener != null){
-                        initializeListener.OnInitializedError(s);
+                        initializeListener.OnInitializedError(message);
                     }
                 }
             });
-            // Initialize the SDK:
-            UnityAds.initialize(ChalaEdChala.context, AdManager.appId, testAds);
             getting = true;
         }
     }
@@ -142,17 +115,7 @@ public class UnityMNA extends AdMNA {
             adContainer.addView(adView);
 
         }else if(activity != null){
-            showWithDelay(new DelayListener() {
-                @Override
-                public void OnReady() {
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            showBannerAd(adContainer);
-                        }
-                    });
-                }
-            });
+            showWithDelay(() -> activity.runOnUiThread(() -> showBannerAd(adContainer)));
         }
     }
 
@@ -191,17 +154,7 @@ public class UnityMNA extends AdMNA {
             adContainer.addView(adView);
 
         }else if(activity != null){
-            showWithDelay(new DelayListener() {
-                @Override
-                public void OnReady() {
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            showBannerAd(adContainer);
-                        }
-                    });
-                }
-            });
+            showWithDelay(() -> activity.runOnUiThread(() -> showBannerAd(adContainer)));
         }
     }
 
@@ -242,17 +195,7 @@ public class UnityMNA extends AdMNA {
              adContainer.addView(adView);
 
         }else if(activity != null){
-            showWithDelay(new DelayListener() {
-                @Override
-                public void OnReady() {
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            showBannerAd(adContainer, listener);
-                        }
-                    });
-                }
-            });
+            showWithDelay(() -> activity.runOnUiThread(() -> showBannerAd(adContainer, listener)));
         }
 
     }
@@ -294,17 +237,7 @@ public class UnityMNA extends AdMNA {
             adContainer.addView(adView);
 
         }else if(activity != null){
-            showWithDelay(new DelayListener() {
-                @Override
-                public void OnReady() {
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            showBannerAd(adContainer, listener);
-                        }
-                    });
-                }
-            });
+            showWithDelay(() -> activity.runOnUiThread(() -> showBannerAd(adContainer, listener)));
         }
     }
 
@@ -312,15 +245,17 @@ public class UnityMNA extends AdMNA {
     public void showInterstitialAd(InterstitialListener listener) {
 
         if(testAds) {
-        //    Log.e(TAG, "showInterstitialAd: first "+(isInitialized())+" second: "+(UnityAds.isReady (getValue())) );
+        Log.e(TAG, "showInterstitialAd: first "+(isInitialized()));
         }
-            if (isInitialized() && UnityAds.isReady (getValue())) {
+            if (isInitialized() && UnityAds.isInitialized ()) {
 
-
-                UnityAds.addListener(new UnityListener(getType()){
+                if(testAds){
+                    Log.e(TAG, "showInterstitialAd: showing interstitial "+getType().name()+" value: "+getValue()+" in activity "+activity.getClass().getSimpleName() );
+                }
+                UnityAds.show (activity, getValue(), new UnityListener(getType()){
                     @Override
                     public void OnLoad() {
-                     addLoadedTo();
+                        addLoadedTo();
                     }
 
                     @Override
@@ -339,11 +274,8 @@ public class UnityMNA extends AdMNA {
                         listener.OnError(fail);
                     }
                 });
-                if(testAds){
-                    Log.e(TAG, "showInterstitialAd: showing interstitial "+getType().name()+" value: "+getValue()+" in activity "+activity.getClass().getSimpleName() );
-                }
-                UnityAds.show (activity, getValue());
-            }else if(isInitialized() && !UnityAds.isReady (getValue())){
+
+            }else if(isInitialized() && !UnityAds.isInitialized ()){
                 listener.OnError("still not load "+getName());
                 UnityAds.load(getValue(), new IUnityAdsLoadListener() {
                     @Override
@@ -364,10 +296,10 @@ public class UnityMNA extends AdMNA {
 
     @Override
     public void showInterstitalAdFrecuency(int frec, InterstitialListener listener) {
-        if(isInitialized() && UnityAds.isReady (getValue())) {
+        if(isInitialized() && UnityAds.isInitialized ()) {
             int actua = SubManager.getF();
             if (actua >= frec) {
-                UnityAds.addListener(new UnityListener(getType()){
+                UnityAds.show (activity, getValue(), new UnityListener(getType()){
                     @Override
                     public void OnLoad() {
                         addLoadedTo();
@@ -390,12 +322,11 @@ public class UnityMNA extends AdMNA {
                         listener.OnError(fail);
                     }
                 });
-                UnityAds.show (activity, getValue());
             } else {
                 SubManager.saveF();
                 listener.OnDismissed();
             }
-        }else if(isInitialized() && !UnityAds.isReady (getValue())){
+        }else if(isInitialized() && !UnityAds.isInitialized ()){
             UnityAds.load(getValue(), new IUnityAdsLoadListener() {
                 @Override
                 public void onUnityAdsAdLoaded(String s) {
@@ -413,9 +344,9 @@ public class UnityMNA extends AdMNA {
 
 
     public void showRewardedAd(RewardListener rewardListener){
-        if (isInitialized() && UnityAds.isReady (getValue())) {
+        if (isInitialized() && UnityAds.isInitialized ()) {
 
-            UnityAds.addListener(new UnityListener(getType()){
+            UnityAds.show (activity, getValue(), new UnityListener(getType()){
                 @Override
                 public void OnLoad() {
                     addLoadedTo();
@@ -442,8 +373,7 @@ public class UnityMNA extends AdMNA {
                     rewardListener.onReward();
                 }
             });
-            UnityAds.show (activity, getValue());
-        }else if(isInitialized() && !UnityAds.isReady (getValue())){
+        }else if(isInitialized() && !UnityAds.isInitialized ()){
             UnityAds.load(getValue(), new IUnityAdsLoadListener() {
                 @Override
                 public void onUnityAdsAdLoaded(String s) {
@@ -458,7 +388,7 @@ public class UnityMNA extends AdMNA {
             });
         }
     }
-    private static String TAG= "MAIN";
+    private final String TAG= "MAIN";
 
 
     @Override
@@ -468,7 +398,7 @@ public class UnityMNA extends AdMNA {
     }
 
 private BannerView getSmallBanner(Activity activity){
-        UnityBannerSize size = null;
+        UnityBannerSize size;
 
             size = UnityBannerSize.getDynamicSize(activity);
    // Log.e(TAG, "getSmallBanner: "+size.getWidth() );
