@@ -1,10 +1,9 @@
 plugins {
     id 'com.android.library'
+    id 'maven-publish'
 }
 
-apply plugin: 'com.github.dcendents.android-maven'
-
-group = 'com.wine.lib'
+group = 'com.github.AomineD'
 version = '1.0.0'
 
 android {
@@ -45,7 +44,7 @@ dependencies {
 
     implementation 'com.facebook.android:audience-network-sdk:6.8.0'
     implementation 'com.android.volley:volley:1.2.1'
-    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'com.google.code.gson:gson:2.9.0'
 
 
 
@@ -81,4 +80,18 @@ dependencies {
 
     // Unity Ads
     implementation 'com.unity3d.ads:unity-ads:4.4.1'
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.github.AomineD'
+                artifactId = 'MNA'
+                version = '1.0'
+            }
+        }
+    }
 }
