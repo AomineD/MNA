@@ -4,7 +4,6 @@ plugins {
 
 android {
     compileSdkVersion 33
-    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.wineberryhalley.mnaapp"
@@ -42,5 +41,5 @@ dependencies {
     // Used for the calls to addCallback() in the snippets on this page.
     implementation 'com.google.guava:guava:28.0-android'
 
-    implementation project(":MNA");
+    implementation project(":MNA")
 }

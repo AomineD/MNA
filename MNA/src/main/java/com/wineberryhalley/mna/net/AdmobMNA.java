@@ -30,10 +30,12 @@ import com.wineberryhalley.mna.base.MListener;
 import com.wineberryhalley.mna.base.NativeMNA;
 import com.wineberryhalley.mna.base.RewardListener;
 
+import static com.wineberryhalley.mna.net.AdManager.cacheInterstitial;
 import static com.wineberryhalley.mna.net.AdManager.ntUtils;
 
 public class AdmobMNA extends AdMNA{
     private Context context;
+    private InterstitialAd interstitialAd;
     static Activity activity = null;
     public AdmobMNA(AdMNA adMNA){
         context = ChalaEdChala.context;
@@ -251,6 +253,12 @@ adView.setAdListener(new AdListener(){
 
     @Override
     public void showInterstitialAd(InterstitialListener listener) {
+
+        if(interstitialIsCached()){
+            showIntersCached(listener);
+            return;
+        }
+
         if(activity != null) {
             InterstitialAd.load(context, getValue(), new AdRequest.Builder().build(), new InterstitialAdLoadCallback() {
 
@@ -258,76 +266,94 @@ adView.setAdListener(new AdListener(){
                 public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
                     super.onAdLoaded(interstitialAd);
                     addLoadedTo();
-                    interstitialAd.setOnPaidEventListener(new OnPaidEventListener() {
-                        @Override
-                        public void onPaidEvent(AdValue adValue) {
-                            Log.e("MAIN", "onPaidEvent: " + adValue.getCurrencyCode());
-                        }
-                    });
-                    interstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
-                        @Override
-                        public void onAdShowedFullScreenContent() {
-                            super.onAdShowedFullScreenContent();
-                            addImpressionTo();
-                            listener.OnShow();
-                        }
-
-                        @Override
-                        public void onAdDismissedFullScreenContent() {
-                            super.onAdDismissedFullScreenContent();
-                            listener.OnDismissed();
-                        }
-                    });
-                    interstitialAd.show(activity);
-
+                    AdmobMNA.this.interstitialAd = interstitialAd;
+                    if(!cacheInterstitial){
+                        showInters(listener);
+                    }
                 }
 
                 @Override
                 public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                     super.onAdFailedToLoad(loadAdError);
-                    listener.OnError(loadAdError.getMessage());
+                    if (listener != null) {
+                        listener.OnError(loadAdError.getMessage());
+                    }
                 }
             });
-        }else{
-            listener.OnError("No activity to show intersticial");
+        }else {
+            if (listener != null){
+                listener.OnError("No activity to show intersticial");
+            }
 trySetActivity();
         }
         }
+
+    @Override
+    protected boolean interstitialIsCached() {
+        return interstitialAd != null;
+    }
+
+    @Override
+    protected void reloadInterstitialCached() {
+        super.reloadInterstitialCached();
+        showInterstitialAd(null);
+    }
+
+    @Override
+    public void showIntersCached(InterstitialListener listener){
+        if(interstitialIsCached()){
+            showInters(listener);
+        }else{
+            listener.OnError("No interstitial cached");
+        }
+    }
+
+    private void showInters(InterstitialListener listener){
+        trySetActivity();
+        if(activity != null) {
+            listener.OnError("no activity");
+            return;
+        }
+
+        interstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+            @Override
+            public void onAdShowedFullScreenContent() {
+                super.onAdShowedFullScreenContent();
+                addImpressionTo();
+                listener.OnShow();
+            }
+
+            @Override
+            public void onAdDismissedFullScreenContent() {
+                super.onAdDismissedFullScreenContent();
+                interstitialAd = null;
+                listener.OnDismissed();
+                reloadInterstitialCached();
+                SubManager.resetF();
+            }
+        });
+        interstitialAd.show(activity);
+    }
 
     @Override
     public void showInterstitalAdFrecuency(int frec, InterstitialListener listener) {
         int actua = SubManager.getF();
         if(actua >= frec) {
             if(activity != null) {
+                if(interstitialIsCached()){
+                    showIntersCached(listener);
+                    return;
+                }
                 InterstitialAd.load(context, getValue(), new AdRequest.Builder().build(), new InterstitialAdLoadCallback() {
 
                     @Override
                     public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
                         super.onAdLoaded(interstitialAd);
                         addLoadedTo();
-                        interstitialAd.setOnPaidEventListener(new OnPaidEventListener() {
-                            @Override
-                            public void onPaidEvent(AdValue adValue) {
-                                Log.e("MAIN", "onPaidEvent: " + adValue.getCurrencyCode());
-                            }
-                        });
-                        interstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
-                            @Override
-                            public void onAdShowedFullScreenContent() {
-                                super.onAdShowedFullScreenContent();
-                                addImpressionTo();
-                                listener.OnShow();
-                            }
-
-                            @Override
-                            public void onAdDismissedFullScreenContent() {
-                                super.onAdDismissedFullScreenContent();
-                                listener.OnDismissed();
-                                SubManager.resetF();
-                            }
-                        });
-                        interstitialAd.show(activity);
-
+                        AdmobMNA.this.interstitialAd = interstitialAd;
+                        if(!cacheInterstitial){
+                            showInters(listener);
+                        }
                     }
 
                     @Override

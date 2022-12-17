@@ -107,6 +107,16 @@ public class AdMNA implements DelayListener {
        setAd_type(a.getAd_type());
     }
 
+    protected void showIntersCached(InterstitialListener listener){
+
+    }
+
+    protected void reloadInterstitialCached(){
+
+    }
+
+    protected boolean interstitialIsCached(){return  false;}
+
     public void showBannerAd(LinearLayout adContainer){
 
     }

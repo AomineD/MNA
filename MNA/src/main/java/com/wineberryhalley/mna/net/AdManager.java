@@ -18,6 +18,7 @@ public class AdManager {
     static boolean nativesLoaded;
     static TypeNetwork mediation_mopub;
     static boolean showingInterstitial = false;
+    static boolean cacheInterstitial = false;
 
     protected AdManager(){
 if(subManager == null){
@@ -26,7 +27,9 @@ if(subManager == null){
     }
 
 
-
+    public void cacheInterstitial(boolean enableCache){
+        cacheInterstitial = enableCache;
+    }
 
 
 
@@ -66,9 +69,9 @@ if(subManager == null){
     }
 
     public void destroyBannerAdIn(LinearLayout linearLayout){
-    if(subManager != null){
-        subManager.destroyAd(linearLayout);
-    }
+        if(subManager != null){
+            subManager.destroyAd(linearLayout);
+        }
     }
 
     static void addAds(ArrayList<AdMNA> mnaAds){
@@ -79,7 +82,7 @@ if(subManager == null){
         subManager.ads.addAll(mnaAds);
     }
 
-static String appId = "";
+    static String appId = "";
 
     static Activity getActivity() {
 
