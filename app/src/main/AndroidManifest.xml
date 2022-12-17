@@ -19,7 +19,8 @@
             android:name="com.mna.hot"
             android:value="aHR0cHM6Ly9jc25jb250cm9sLmdyb3dhdGVyLnVzL2FkbWluL2Fkc2tpdC8=" />
 
-        <activity android:name="com.wineberryhalley.mnaapp.MainActivity" android:screenOrientation="portrait">
+        <activity android:name="com.wineberryhalley.mnaapp.MainActivity" android:screenOrientation="portrait"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
