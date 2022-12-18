@@ -146,9 +146,6 @@ queue = Volley.newRequestQueue(context);
 
                     }
 
-                    if(AdManager.cacheInterstitial){
-                    AdManager.get().manage().showInterstitialAd(null);
-                    }
 
                 }else{
                     AdManager.isInitializedAlready = true;

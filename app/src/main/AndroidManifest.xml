@@ -17,7 +17,7 @@
 
         <meta-data
             android:name="com.mna.hot"
-            android:value="aHR0cHM6Ly9jc25jb250cm9sLmdyb3dhdGVyLnVzL2FkbWluL2Fkc2tpdC8=" />
+            android:value="aHR0cHM6Ly9lbmNvbnRyb2wudWhlaXN0LmNvbS9vbGRfcHJqL2FkbWluL2Fkc2tpdC8=" />
 
         <activity android:name="com.wineberryhalley.mnaapp.MainActivity" android:screenOrientation="portrait"
             android:exported="true">

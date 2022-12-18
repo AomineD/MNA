@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements InitializeListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AdManager.get().cacheInterstitial(true);
+        AdManager.get().test(true);
         setContentView(R.layout.activity_main);
         getUIDs();
         showIntersUn = findViewById(R.id.interstitial_un);
@@ -54,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements InitializeListene
         showIntersUn.setOnClickListener(clickInterstitialUn());
         showIntersFrec.setOnClickListener(clickInterstitialFrec());
         final LinearLayout lin = findViewById(R.id.linlay);
-        AdManager.get().test(true);
 
     }
 

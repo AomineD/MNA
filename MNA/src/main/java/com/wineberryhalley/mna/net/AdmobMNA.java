@@ -255,13 +255,7 @@ adView.setAdListener(new AdListener(){
     @Override
     public void showInterstitialAd(InterstitialListener listener) {
 
-        if(testAds){
-            Log.e(TAG, "interstitialIsCached: "+(interstitialIsCached()) );
-        }
-
-
-
-        if(interstitialIsCached()){
+        if(interstitialIsCached() && cacheInterstitial){
             showIntersCached(listener);
             return;
         }
@@ -333,12 +327,12 @@ trySetActivity();
 
     private void showInters(InterstitialListener listener){
         if(testAds){
-            Log.e(TAG, "showInters: cached showing..." );
+            Log.e(TAG, "showInters: inter showing..." );
         }
 
 
         trySetActivity();
-        if(activity != null) {
+        if(activity == null) {
             listener.OnError("no activity");
             return;
         }
@@ -354,12 +348,15 @@ trySetActivity();
             @Override
             public void onAdDismissedFullScreenContent() {
                 super.onAdDismissedFullScreenContent();
-                if(testAds)
-                Log.e(TAG, "onAdDismissedFullScreenContent: nulling..." );
-
+                if(testAds) {
+                    Log.e(TAG, "onAdDismissedFullScreenContent: nulling...");
+                }
                 interstitialAd = null;
                 listener.OnDismissed();
-                reloadInterstitialCached();
+                if(cacheInterstitial) {
+                    Log.e(TAG, "onAdDismissedFullScreenContent: cache reloading..." );
+                    reloadInterstitialCached();
+                }
                 SubManager.resetF();
             }
         });

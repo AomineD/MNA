@@ -33,6 +33,27 @@ import androidx.annotation.Nullable;
 public class SubManager {
 
     protected ArrayList<AdMNA> ads = new ArrayList<>();
+    private ArrayList<AdmobMNA> admobAds = new ArrayList<>();
+
+    public void initOn(){
+        switch (AdManager.network){
+            case ADMOB:
+                admobAds.addAll(getAllMy());
+                break;
+            case APPLOVIN:
+
+                break;
+        }
+    }
+
+    private ArrayList<AdmobMNA> getAllMy(){
+        ArrayList<AdmobMNA> admobMNA = new ArrayList<>();
+        for (AdMNA ad :
+                ads) {
+                admobMNA.add(new AdmobMNA(ad));
+        }
+        return admobMNA;
+    }
 
     protected SubManager(){
 
@@ -97,15 +118,15 @@ public class SubManager {
 
     private AdmobMNA getOfTypeAdmob(TypeAd typeAd){
         AdmobMNA admobMNA = null;
-        for (AdMNA ad :
-                ads) {
+        for (AdmobMNA ad :
+                admobAds) {
             if(ad.getType() == typeAd) {
-                admobMNA = new AdmobMNA(ad);
+                admobMNA = ad;
                 break;
             }
         }
-        return admobMNA;
 
+        return admobMNA;
     }
 
     private MopubMNA getOfTypeMoPub(TypeAd typeAd){
@@ -1105,11 +1126,15 @@ count = c;
 
     public void cacheInterstitial() {
         if(cacheInterstitial){
-            for (AdMNA ad:
-                 ads) {
-
+            Log.e("MAIN", "cacheInterstitial: vez "+admobAds.size() );
+            for (int i =0; i < admobAds.size(); i++) {
+                AdmobMNA ad = admobAds.get(i);
+                Log.e("MAIN", "cacheInterstitial: "+ad.getType() );
                 if(ad.getType() == TypeAd.INTERSTICIAL) {
-                    ad.reloadInterstitialCached();
+              //      Log.e("MAIN", "cacheInterstitial: load bro "+ad.getValue() );
+
+                    admobAds.get(i).reloadInterstitialCached();
+                    break;
                 }
 
             }
