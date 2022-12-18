@@ -279,6 +279,7 @@ adView.setAdListener(new AdListener(){
                     }
 
                     AdmobMNA.this.interstitialAd = interstitialAd;
+                    //Log.e(TAG, "onAdLoaded: "+(AdmobMNA.this.interstitialAd != null) );
                     if(!cacheInterstitial){
                         showInters(listener);
                     }
@@ -307,6 +308,9 @@ trySetActivity();
 
     @Override
     protected boolean interstitialIsCached() {
+        if(testAds) {
+            Log.e(TAG, "interstitialIsCachedReached: "+(interstitialAd != null) );
+        }
         return interstitialAd != null;
     }
 
@@ -350,6 +354,9 @@ trySetActivity();
             @Override
             public void onAdDismissedFullScreenContent() {
                 super.onAdDismissedFullScreenContent();
+                if(testAds)
+                Log.e(TAG, "onAdDismissedFullScreenContent: nulling..." );
+
                 interstitialAd = null;
                 listener.OnDismissed();
                 reloadInterstitialCached();
