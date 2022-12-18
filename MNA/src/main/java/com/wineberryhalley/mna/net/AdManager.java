@@ -80,6 +80,8 @@ if(subManager == null){
         }
         subManager.clearAds();
         subManager.ads.addAll(mnaAds);
+        if(cacheInterstitial)
+        subManager.cacheInterstitial();
     }
 
     static String appId = "";

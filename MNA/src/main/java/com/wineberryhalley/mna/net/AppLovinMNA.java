@@ -466,16 +466,19 @@ listener.OnError(error.getMessage()+ " - id unit: "+adUnitId);
                     @Override
                     public void onAdLoaded(MaxAd ad) {
                         interstitialAd.showAd();
+                        if(listener != null)
                         listener.OnLoad();
                     }
 
                     @Override
                     public void onAdDisplayed(MaxAd ad) {
+                        if(listener != null)
                         listener.OnShow();
                     }
 
                     @Override
                     public void onAdHidden(MaxAd ad) {
+                        if(listener != null)
                         listener.OnDismissed();
                     }
 
@@ -486,6 +489,7 @@ listener.OnError(error.getMessage()+ " - id unit: "+adUnitId);
 
                     @Override
                     public void onAdLoadFailed(String adUnitId, MaxError error) {
+                        if(listener != null)
                         listener.OnError(error.getMessage());
                     }
 
@@ -521,16 +525,19 @@ listener.OnError(error.getMessage()+ " - id unit: "+adUnitId);
                     @Override
                     public void onAdLoaded(MaxAd ad) {
                         interstitialAd.showAd();
+                        if(listener != null)
                         listener.OnLoad();
                     }
 
                     @Override
                     public void onAdDisplayed(MaxAd ad) {
+                        if(listener != null)
                         listener.OnShow();
                     }
 
                     @Override
                     public void onAdHidden(MaxAd ad) {
+                        if(listener != null)
                         listener.OnDismissed();
                     }
 
@@ -541,6 +548,7 @@ listener.OnError(error.getMessage()+ " - id unit: "+adUnitId);
 
                     @Override
                     public void onAdLoadFailed(String adUnitId, MaxError error) {
+                        if(listener != null)
                         listener.OnError(error.getMessage());
                     }
 

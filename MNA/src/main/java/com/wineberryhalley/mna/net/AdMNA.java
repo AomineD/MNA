@@ -1,5 +1,7 @@
 package com.wineberryhalley.mna.net;
 
+import static com.wineberryhalley.mna.net.AdManager.cacheInterstitial;
+
 import android.app.Activity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,6 +20,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class AdMNA implements DelayListener {
+
+
 
     public String getId() {
         return id;
@@ -111,7 +115,7 @@ public class AdMNA implements DelayListener {
 
     }
 
-    protected void reloadInterstitialCached(){
+    public void reloadInterstitialCached(){
 
     }
 
@@ -236,6 +240,7 @@ InitializeListener initializeListener = null;
         if(initializeListener != null){
             initializeListener.OnInitialized();
         }
+
     }
 
     static void initializeError(String erno){

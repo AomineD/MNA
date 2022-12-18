@@ -23,6 +23,7 @@ import com.wineberryhalley.mna.base.TypeNetwork;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import static com.wineberryhalley.mna.net.AdManager.cacheInterstitial;
 import static com.wineberryhalley.mna.net.AdManager.natives_network;
 import static com.wineberryhalley.mna.net.AdManager.ntUtils;
 import static com.wineberryhalley.mna.net.AdManager.ntUtilsBannerNat;
@@ -30,11 +31,12 @@ import static com.wineberryhalley.mna.net.AdManager.ntUtilsBannerNat;
 import androidx.annotation.Nullable;
 
 public class SubManager {
+
+    protected ArrayList<AdMNA> ads = new ArrayList<>();
+
     protected SubManager(){
 
-
     }
-
     public String getOpenAdID(){
         return open_ad;
     }
@@ -146,7 +148,7 @@ public class SubManager {
 
     }
 
-    protected ArrayList<AdMNA> ads = new ArrayList<>();
+
 /** BANNER AD **/
     public void showBannerAd(LinearLayout linearLayout){
 
@@ -1097,6 +1099,19 @@ count = c;
                     ntUtilsBannerNat.setALBannerNatives(mna);
                     ntUtilsBannerNat.loadGeneral(true);
                 }
+            }
+        }
+    }
+
+    public void cacheInterstitial() {
+        if(cacheInterstitial){
+            for (AdMNA ad:
+                 ads) {
+
+                if(ad.getType() == TypeAd.INTERSTICIAL) {
+                    ad.reloadInterstitialCached();
+                }
+
             }
         }
     }

@@ -125,6 +125,7 @@ queue = Volley.newRequestQueue(context);
                OnLoad();
                     isLoaded = true;
                     AdManager.isInitializedAlready = true;
+
                     if(AdManager.network == TypeNetwork.UNITYADS){
                         UnityMNA.initialize();
 
@@ -136,13 +137,19 @@ queue = Volley.newRequestQueue(context);
                     }
                     else{
 
+
+
                         if(network == TypeNetwork.IRON_SOURCE){
                             IronMNA.initializeIron();
                         }
-
                         AdMNA.initializeNormal();
 
                     }
+
+                    if(AdManager.cacheInterstitial){
+                    AdManager.get().manage().showInterstitialAd(null);
+                    }
+
                 }else{
                     AdManager.isInitializedAlready = true;
                     OnError(response.getString("data"));

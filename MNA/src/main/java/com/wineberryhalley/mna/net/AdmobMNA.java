@@ -32,6 +32,7 @@ import com.wineberryhalley.mna.base.RewardListener;
 
 import static com.wineberryhalley.mna.net.AdManager.cacheInterstitial;
 import static com.wineberryhalley.mna.net.AdManager.ntUtils;
+import static com.wineberryhalley.mna.net.AdManager.testAds;
 
 public class AdmobMNA extends AdMNA{
     private Context context;
@@ -266,6 +267,11 @@ adView.setAdListener(new AdListener(){
                 public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
                     super.onAdLoaded(interstitialAd);
                     addLoadedTo();
+
+                    if(testAds){
+                        Log.e(TAG, "onAdLoaded: loaded ad, is cached? "+cacheInterstitial);
+                    }
+
                     AdmobMNA.this.interstitialAd = interstitialAd;
                     if(!cacheInterstitial){
                         showInters(listener);
@@ -275,6 +281,11 @@ adView.setAdListener(new AdListener(){
                 @Override
                 public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                     super.onAdFailedToLoad(loadAdError);
+
+                    if(testAds){
+                        Log.e(TAG, "onAdFailedToLoad: is cached? "+cacheInterstitial+" error -> "+loadAdError.getMessage() );
+                    }
+
                     if (listener != null) {
                         listener.OnError(loadAdError.getMessage());
                     }
@@ -294,8 +305,10 @@ trySetActivity();
     }
 
     @Override
-    protected void reloadInterstitialCached() {
-        super.reloadInterstitialCached();
+    public void reloadInterstitialCached() {
+        if(testAds) {
+            Log.e(TAG, "reloadInterstitialCached: loading...");
+        }
         showInterstitialAd(null);
     }
 
@@ -350,6 +363,11 @@ trySetActivity();
                     public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
                         super.onAdLoaded(interstitialAd);
                         addLoadedTo();
+
+                        if(testAds){
+                            Log.e(TAG, "onAdLoaded: loaded ad, is cached? "+cacheInterstitial);
+                        }
+
                         AdmobMNA.this.interstitialAd = interstitialAd;
                         if(!cacheInterstitial){
                             showInters(listener);
@@ -359,6 +377,9 @@ trySetActivity();
                     @Override
                     public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                         super.onAdFailedToLoad(loadAdError);
+                        if(testAds){
+                            Log.e(TAG, "onAdFailedToLoad: is cached? "+cacheInterstitial+" error -> "+loadAdError.getMessage() );
+                        }
                         listener.OnError(loadAdError.getMessage());
                     }
                 });
