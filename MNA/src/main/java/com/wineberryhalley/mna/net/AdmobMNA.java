@@ -255,6 +255,12 @@ adView.setAdListener(new AdListener(){
     @Override
     public void showInterstitialAd(InterstitialListener listener) {
 
+        if(testAds){
+            Log.e(TAG, "interstitialIsCached: "+(interstitialIsCached()) );
+        }
+
+
+
         if(interstitialIsCached()){
             showIntersCached(listener);
             return;
@@ -322,6 +328,11 @@ trySetActivity();
     }
 
     private void showInters(InterstitialListener listener){
+        if(testAds){
+            Log.e(TAG, "showInters: cached showing..." );
+        }
+
+
         trySetActivity();
         if(activity != null) {
             listener.OnError("no activity");
