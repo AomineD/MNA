@@ -21,9 +21,9 @@ public class AdManager {
     static boolean cacheInterstitial = false;
 
     protected AdManager(){
-if(subManager == null){
-    subManager = new SubManager();
-}
+        if(subManager == null){
+            subManager = new SubManager();
+        }
     }
 
 

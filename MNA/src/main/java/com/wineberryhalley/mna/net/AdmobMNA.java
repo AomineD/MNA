@@ -76,6 +76,9 @@ public class AdmobMNA extends AdMNA{
 
     @Override
     public void showBannerAd(LinearLayout adContainer) {
+        if(StorageCache.isAdLoadedRecently(getValue())){
+           return;
+        }
         AdView adView = new AdView(context);
 
         adView.setAdUnitId(getValue());
@@ -85,6 +88,7 @@ adView.setAdListener(new AdListener(){
     public void onAdLoaded() {
         super.onAdLoaded();
         addLoadedTo();
+        StorageCache.adLoaded(getValue());
     }
 
     @Override
@@ -100,6 +104,11 @@ adView.setAdListener(new AdListener(){
 
 
     public void showBannerAd(LinearLayout adContainer, AdSize adSize) {
+
+        if(StorageCache.isAdLoadedRecently(getValue())){
+            return;
+        }
+
         AdView adView = new AdView(context);
 
         adView.setAdUnitId(getValue());
@@ -109,6 +118,7 @@ adView.setAdListener(new AdListener(){
             public void onAdLoaded() {
                 super.onAdLoaded();
                 addLoadedTo();
+                StorageCache.adLoaded(getValue());
             }
 
             @Override
@@ -124,6 +134,11 @@ adView.setAdListener(new AdListener(){
 
     @Override
     public void showBannerAd(RelativeLayout adContainer) {
+
+        if(StorageCache.isAdLoadedRecently(getValue())){
+            return;
+        }
+
         AdView adView = new AdView(context);
 
         adView.setAdUnitId(getValue());
@@ -133,6 +148,7 @@ adView.setAdListener(new AdListener(){
             public void onAdLoaded() {
                 super.onAdLoaded();
                 addLoadedTo();
+                StorageCache.adLoaded(getValue());
             }
 
             @Override
@@ -148,6 +164,11 @@ adView.setAdListener(new AdListener(){
 
     @Override
     public void showBannerAd(LinearLayout adContainer, MListener listener) {
+
+        if(StorageCache.isAdLoadedRecently(getValue())){
+            return;
+        }
+
         AdView adView = new AdView(context);
        // Log.e(TAG, "showBannerAd: "+getValue() );
         adView.setAdUnitId(getValue());
@@ -157,6 +178,7 @@ adView.setAdListener(new AdListener(){
             public void onAdLoaded() {
                 super.onAdLoaded();
                 addLoadedTo();
+                StorageCache.adLoaded(getValue());
                 listener.OnLoad();
             }
 
@@ -179,6 +201,11 @@ adView.setAdListener(new AdListener(){
     }
 
     public void showBannerAd(LinearLayout adContainer,AdSize adSize, MListener listener) {
+
+        if(StorageCache.isAdLoadedRecently(getValue())){
+            return;
+        }
+
         AdView adView = new AdView(context);
         // Log.e(TAG, "showBannerAd: "+getValue() );
         adView.setAdUnitId(getValue());
@@ -189,6 +216,7 @@ adView.setAdListener(new AdListener(){
                 super.onAdLoaded();
                 addLoadedTo();
                 listener.OnLoad();
+                StorageCache.adLoaded(getValue());
             }
 
             @Override
@@ -211,6 +239,9 @@ adView.setAdListener(new AdListener(){
 
     @Override
     public void showBannerAd(RelativeLayout adContainer, MListener listener) {
+        if(StorageCache.isAdLoadedRecently(getValue())){
+            return;
+        }
         AdView adView = new AdView(context);
 
         adView.setAdUnitId(getValue());
@@ -221,6 +252,7 @@ adView.setAdListener(new AdListener(){
                 super.onAdLoaded();
                 addLoadedTo();
                 listener.OnLoad();
+                StorageCache.adLoaded(getValue());
             }
 
             @Override

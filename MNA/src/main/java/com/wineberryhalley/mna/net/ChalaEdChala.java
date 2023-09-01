@@ -25,6 +25,7 @@ public class ChalaEdChala extends ContentProvider {
     public boolean onCreate() {
         context = getContext();
         AudienceNetworkAds.initialize(context);
+        new StorageCache(context);
 jedleto = new Jedleto();
 jedleto.loadData();
        // Log.e("MAIN", "onCreate: go home" );
