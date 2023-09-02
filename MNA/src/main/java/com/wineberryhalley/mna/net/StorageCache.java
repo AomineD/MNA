@@ -12,7 +12,7 @@ public class StorageCache {
     public static boolean isAdLoadedRecently(String ad_unit){
         long millis = System.currentTimeMillis();
         long savedMills = sharedPreferences.getLong("mna_ad_"+ad_unit, 0);
-        return millis > savedMills;
+        return millis > savedMills && savedMills > 0;
     }
 
     public static void adLoaded(String ad_unit){
