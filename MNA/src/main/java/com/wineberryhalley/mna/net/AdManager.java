@@ -20,6 +20,8 @@ public class AdManager {
     static boolean showingInterstitial = false;
     static boolean cacheInterstitial = false;
 
+    static boolean preventMultipleBannerLoad = false;
+
     protected AdManager(){
         if(subManager == null){
             subManager = new SubManager();
@@ -56,6 +58,10 @@ public class AdManager {
 
     public boolean checkIfLoad(){
         return new Non().isLoaded();
+    }
+
+    public void preventMultipleBannerLoad(){
+        preventMultipleBannerLoad = true;
     }
 
     public void test(boolean isTestAds){

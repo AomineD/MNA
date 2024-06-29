@@ -32,6 +32,7 @@ import com.wineberryhalley.mna.base.RewardListener;
 
 import static com.wineberryhalley.mna.net.AdManager.cacheInterstitial;
 import static com.wineberryhalley.mna.net.AdManager.ntUtils;
+import static com.wineberryhalley.mna.net.AdManager.preventMultipleBannerLoad;
 import static com.wineberryhalley.mna.net.AdManager.testAds;
 
 public class AdmobMNA extends AdMNA{
@@ -76,7 +77,8 @@ public class AdmobMNA extends AdMNA{
 
     @Override
     public void showBannerAd(LinearLayout adContainer) {
-        if(StorageCache.isAdLoadedRecently(getValue())){
+
+        if(StorageCache.isAdLoadedRecently(getValue()) && preventMultipleBannerLoad){
 
             if(testAds){
                 Log.e(TAG, "showBannerAd: isAdLoadedRecently "+getValue() );
@@ -84,6 +86,7 @@ public class AdmobMNA extends AdMNA{
 
            return;
         }
+
         AdView adView = new AdView(context);
 
         adView.setAdUnitId(getValue());
@@ -115,7 +118,7 @@ adView.setAdListener(new AdListener(){
 
     public void showBannerAd(LinearLayout adContainer, AdSize adSize) {
 
-        if(StorageCache.isAdLoadedRecently(getValue())){
+        if(StorageCache.isAdLoadedRecently(getValue()) && preventMultipleBannerLoad){
             return;
         }
 
@@ -145,7 +148,7 @@ adView.setAdListener(new AdListener(){
     @Override
     public void showBannerAd(RelativeLayout adContainer) {
 
-        if(StorageCache.isAdLoadedRecently(getValue())){
+        if(StorageCache.isAdLoadedRecently(getValue())  && preventMultipleBannerLoad){
             return;
         }
 
@@ -175,7 +178,7 @@ adView.setAdListener(new AdListener(){
     @Override
     public void showBannerAd(LinearLayout adContainer, MListener listener) {
 
-        if(StorageCache.isAdLoadedRecently(getValue())){
+        if(StorageCache.isAdLoadedRecently(getValue())  && preventMultipleBannerLoad){
             return;
         }
 
@@ -212,7 +215,7 @@ adView.setAdListener(new AdListener(){
 
     public void showBannerAd(LinearLayout adContainer,AdSize adSize, MListener listener) {
 
-        if(StorageCache.isAdLoadedRecently(getValue())){
+        if(StorageCache.isAdLoadedRecently(getValue())  && preventMultipleBannerLoad){
             return;
         }
 
@@ -249,7 +252,7 @@ adView.setAdListener(new AdListener(){
 
     @Override
     public void showBannerAd(RelativeLayout adContainer, MListener listener) {
-        if(StorageCache.isAdLoadedRecently(getValue())){
+        if(StorageCache.isAdLoadedRecently(getValue()) && preventMultipleBannerLoad){
             return;
         }
         AdView adView = new AdView(context);
