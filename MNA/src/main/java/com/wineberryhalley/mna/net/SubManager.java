@@ -173,6 +173,10 @@ public class SubManager {
 /** BANNER AD **/
     public void showBannerAd(LinearLayout linearLayout){
 
+        if(AdManager.testAds){
+            Log.e("MNA", "showBannerAd: "+AdManager.network.name() );
+        }
+
         if(AdManager.network == TypeNetwork.AUDIENCE) {
             AudienceMNA audienceMNA = null;
             for (AdMNA ad :
@@ -202,8 +206,17 @@ public class SubManager {
                     admobMNA = new AdmobMNA(ad);
                 }
             }
-            if(admobMNA != null)
+            if(admobMNA != null) {
+                if(AdManager.testAds){
+                    Log.e("MNA", "showBannerAd: admobMNA is OK" );
+                }
+
                 admobMNA.showBannerAd(linearLayout);
+            }else if(AdManager.testAds){
+                Log.e("MNA", "showBannerAd: admobMNA is null" );
+            }
+
+
         }else if(AdManager.network == TypeNetwork.MOPUB){
             MopubMNA mopubMNA = null;
             for (AdMNA ad :

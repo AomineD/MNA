@@ -71,12 +71,17 @@ public class AdmobMNA extends AdMNA{
    return "";
     }
 
-    private String TAG = "MAIN";
+    private String TAG = "MNA";
 
 
     @Override
     public void showBannerAd(LinearLayout adContainer) {
         if(StorageCache.isAdLoadedRecently(getValue())){
+
+            if(testAds){
+                Log.e(TAG, "showBannerAd: isAdLoadedRecently "+getValue() );
+            }
+
            return;
         }
         AdView adView = new AdView(context);
@@ -100,6 +105,11 @@ adView.setAdListener(new AdListener(){
 
         adView.loadAd(new AdRequest.Builder().build());
         adContainer.addView(adView);
+
+        if(testAds){
+            Log.e(TAG, "showBannerAd: loading ad now... "+getValue() );
+        }
+
     }
 
 
